@@ -1,28 +1,29 @@
-.BoundaryGrid{
-    /* height: 600px; */
-    /* background-color: aqua; */
-  display: grid;
-  margin-top: 150px;
-  border-style: solid;
-  border-color: aqua;
-  padding: 5px;
-     align-items: center;
-     justify-content: center;
-     size: 50px;
-     grid-template-columns: 150px 150px 150px 150px 150px;
-     grid-gap: 1rem;
-     color: aliceblue;
-     /* grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));  */
-     /*creates resposnsive layout that changes based on side of browser */
-
+.grid {
+	width: 300px;
+	height: 300px;
+	border: solid black 1px;
+	display: flex;
+	flex-wrap: wrap;
 }
 
-
-
-.aliens{
-    background-color: rgb(255, 0, 0);
+.grid div {
+	width: 20px;
+	height: 20px;
 }
 
-body{
-    background-color: black;
+.invader {
+	background-color: purple;
+	border-radius: 10px;
+}
+
+.shooter {
+	background-color: green;
+}
+
+.laser {
+	background-color: orange;
+}
+
+.boom {
+	background-color: red;
 }
