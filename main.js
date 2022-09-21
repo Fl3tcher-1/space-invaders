@@ -40,9 +40,9 @@ let alien7 = document.getElementById("alien7")
 let alien8 = document.getElementById("alien8")
 let alien9 = document.getElementById("alien9")
 
-divs.push(alien0,alien1,alien2,alien3)
+divs.push(alien0,alien1,alien2)
 
-var div = document.getElementById("alien0")
+// var div = document.getElementById("alien0")
 
 // console.log(divs)
 // console.log(div)
