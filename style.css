@@ -1,14 +1,28 @@
+.parent{
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    color: aliceblue;
+    border-style: double;
+    border-color: aqua;
+    margin: auto;
+    margin-top: 100px;
+    width: 1300px;
+    height: 800px;
+}
+
 .BoundaryGrid{
+    height: 200px;
     /* height: 600px; */
     /* background-color: aqua; */
   display: grid;
-  margin-top: 150px;
-  border-style: solid;
-  border-color: aqua;
+  margin-top: 0;
+  /* border-style: solid;
+  border-color: aqua; */
   padding: 5px;
      align-items: center;
      justify-content: center;
-     size: 50px;
+     /* size: 50px; */
      grid-template-columns: 150px 150px 150px 150px 150px;
      grid-gap: 1rem;
      color: aliceblue;
@@ -17,10 +31,16 @@
 
 }
 
-
-
 .aliens{
+    /* line-height: 0%; */
+    /* font-size: 0px; */
+    /* width: 0px; */
+    
+    border-bottom: 20px solid #000;
+    border-left: 10px solid #000;
+     border-right: 10px solid #000;
     background-color: rgb(255, 0, 0);
+    color: red;
 }
 
 body{
