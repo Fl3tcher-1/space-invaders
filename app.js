@@ -1,14 +1,14 @@
 const grid = document.querySelector('.grid')
 const resultsDisplay = document.querySelector('.results')
-let currentShooterIndex = 202
-let width = 15
+let currentShooterIndex = 385
+let width = 20
 let direction = 1
 let invadersId
 let goingRight = true
 let aliensRemoved = []
 let results = 0
 
-for (let i = 0; i < 225; i++) {
+for (let i = 0; i < 400; i++) {
   const square = document.createElement('div')
   grid.appendChild(square)
 }
@@ -17,14 +17,16 @@ const squares = Array.from(document.querySelectorAll('.grid div'))
 
 const alienInvaders = [
   0,1,2,3,4,5,6,7,8,9,
-  15,16,17,18,19,20,21,22,23,24,
-  30,31,32,33,34,35,36,37,38,39
+  40,41,42,43,44,45,46,47,48,49,
+  80,81,82,83,84,85,86,87,88,89,
+
 ]
 
 function draw() {
   for (let i = 0; i < alienInvaders.length; i++) {
     if(!aliensRemoved.includes(i)) {
       squares[alienInvaders[i]].classList.add('invader')
+     
     }
   }
 }
@@ -97,7 +99,7 @@ function moveInvaders() {
     clearInterval(invadersId)
   }
 }
-invadersId = setInterval(moveInvaders, 600)
+invadersId = setInterval(moveInvaders, 100)
 
 function shoot(e) {
   let laserId
@@ -112,7 +114,7 @@ function shoot(e) {
       squares[currentLaserIndex].classList.remove('invader')
       squares[currentLaserIndex].classList.add('boom')
 
-      setTimeout(()=> squares[currentLaserIndex].classList.remove('boom'), 300)
+      setTimeout(()=> squares[currentLaserIndex].classList.remove('boom'), 200)
       clearInterval(laserId)
 
       const alienRemoved = alienInvaders.indexOf(currentLaserIndex)
@@ -127,6 +129,16 @@ function shoot(e) {
   switch(e.key) {
     case 'ArrowUp':
       laserId = setInterval(moveLaser, 100)
+  }
+}
+
+function toggleAnimation(){
+  if(!toggle){
+    toggle = true;
+    window.requestAnimationFrame(step);
+  }else{
+    toggle = false;
+    cancelAnimationFrame(stepID)
   }
 }
 
