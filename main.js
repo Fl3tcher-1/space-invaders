@@ -40,7 +40,7 @@ let alien7 = document.getElementById("alien7")
 let alien8 = document.getElementById("alien8")
 let alien9 = document.getElementById("alien9")
 
-divs.push(alien0,alien1,alien2)
+divs.push(alien0,alien1,alien2,alien3)
 
 // var div = document.getElementById("alien0")
 
@@ -48,12 +48,11 @@ divs.push(alien0,alien1,alien2)
 // console.log(div)
 
 
-myVar = setInterval(moveDiv, 40)
+myVar = setInterval(moveDiv, 30)
 let margin =0
 
 // let l = window.screen.width
 let w = 700
-
 for (let i =0; i <divs.length-1; i++ ){
     div = divs[i]
     console.log(i, div.id)
@@ -67,6 +66,7 @@ function moveDiv(id){
     // let div = document.getElementById(id)
     // console.log(div)
     // console.log(l,w)
+    console.log(w,margin)
     if( margin == w){
         margin = 0 +"px"
     } else{
