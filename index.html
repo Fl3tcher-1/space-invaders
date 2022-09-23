@@ -10,26 +10,28 @@
 
 </head>
 <body>
-  <h1 class="results">0</h1>
+  <h1 class="results">Space Invaders</h1>
 <br>
 </div>
 <div class="centered">
   <div style="width: 600px;">
-    <div style="float: left; width: 100px;">Left Stuff</div>
+    <div style="float: left; width: 100px;">`Time:${t}`</div>
     <div style="float: left; width: 400px;">
         <div class="grid"></div>
     </div>
     <div style="float: right; width: 10px;">
       <div style="display:flex; flex-direction: column; justify-content: center; align-items: center"></div>
       <br>
-      <button onclick="toggleAnimation()">Stop</button>  
+      <button id="btnStop" > Type 's' to STOP</button>  
       <br>
       <br>
-        <input type="button" value="Restart" id="btnRestart"/>
+      <div class="restartContinue canSee">
+        <button id="btnRestart">Type 'b' to BEGIN</button>
         <br>
         <br>
-        <input type="button" value="Resume" id="btnResume"/>
+        <button id="btnContinue">Type 'c' to CONTINUE</button>
         <br>
+      </div>
   </div>
     <br style="clear: left;" />
    </div>
