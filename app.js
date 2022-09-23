@@ -1,12 +1,72 @@
-const grid = document.querySelector('.grid')
-const resultsDisplay = document.querySelector('.results')
-let currentShooterIndex = 385
-let width = 20
-let direction = 1
-let invadersId
-let goingRight = true
-let aliensRemoved = []
-let results = 0
+
+/*This is the pattern of a 'game loop':
+
+let previous = getCurrentTime();
+let lag = 0.0;
+while (true)
+{
+  let current = getCurrentTime();
+  let elapsed = current - previous;
+  previous = current;
+  lag += elapsed;
+
+  processInput();
+
+  while (lag >= 16)
+  {
+ update();
+ lag -= 16;
+  }
+ 
+  render();
+
+}
+*/
+
+/*keyboard codes:
+s:          83 for 'stop'
+b:          66 for 'begin again'
+c:          67 for 'continue'
+left arrow: 37
+up arrow:   38
+right arrow:39
+down arrow: 40
+*/
+
+
+function update() {
+  // Update the state of the world for the elapsed time since last render
+}
+
+function draw() {
+  // Draw the state of the world
+}
+
+
+// function loop() {
+
+//   moveInvaders()
+
+//   window.requestAnimationFrame(loop)
+// }
+
+// window.requestAnimationFrame(loop)
+
+
+//To ensure users of different browsers can get the same experience
+var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+let fps = 60;
+const grid = document.querySelector('.grid');
+const resultsDisplay = document.querySelector('.results');
+let currentShooterIndex = 390;
+let width = 20;
+let direction = 1;
+let invadersId;
+let goingRight = true;
+let aliensRemoved = [];
+let results = 0;
+let isPlaying = true;
+let tries = 3;
 
 for (let i = 0; i < 400; i++) {
   const square = document.createElement('div')
@@ -23,12 +83,12 @@ const alienInvaders = [
 ]
 
 function draw() {
-  for (let i = 0; i < alienInvaders.length; i++) {
-    if(!aliensRemoved.includes(i)) {
-      squares[alienInvaders[i]].classList.add('invader')
-     
+    for (let i = 0; i < alienInvaders.length; i++) {
+      if(!aliensRemoved.includes(i)) {
+        squares[alienInvaders[i]].classList.add('invader')
+       
+      }
     }
-  }
 }
 
 draw()
@@ -42,8 +102,11 @@ function remove() {
 squares[currentShooterIndex].classList.add('shooter')
 
 
+
 function moveShooter(e) {
+  if(isPlaying){
   squares[currentShooterIndex].classList.remove('shooter')
+
   switch(e.key) {
     case 'ArrowLeft':
       if (currentShooterIndex % width !== 0) currentShooterIndex -=1
@@ -54,9 +117,15 @@ function moveShooter(e) {
   }
   squares[currentShooterIndex].classList.add('shooter')
 }
+}
 document.addEventListener('keydown', moveShooter)
 
+var time_passed_since_last_render = Date.now() - window.last_render;
+
 function moveInvaders() {
+  if(isPlaying){
+  window.last_render = Date.now()
+
   const leftEdge = alienInvaders[0] % width === 0
   const rightEdge = alienInvaders[alienInvaders.length - 1] % width === width -1
   remove()
@@ -86,19 +155,27 @@ function moveInvaders() {
   if (squares[currentShooterIndex].classList.contains('invader', 'shooter')) {
     resultsDisplay.innerHTML = 'GAME OVER'
     clearInterval(invadersId)
+    isPlaying = false
+    tries -= 1
   }
 
   for (let i = 0; i < alienInvaders.length; i++) {
     if(alienInvaders[i] > (squares.length)) {
       resultsDisplay.innerHTML = 'GAME OVER'
       clearInterval(invadersId)
+      isPlaying = false
+      tries -= 1
     }
   }
   if (aliensRemoved.length === alienInvaders.length) {
     resultsDisplay.innerHTML = 'YOU WIN'
     clearInterval(invadersId)
+    isPlaying = false
+    tries -= 1
   }
 }
+}
+
 invadersId = setInterval(moveInvaders, 100)
 
 function shoot(e) {
@@ -127,19 +204,44 @@ function shoot(e) {
 
   }
   switch(e.key) {
-    case 'ArrowUp':
+    case ' ':
       laserId = setInterval(moveLaser, 100)
   }
 }
-
-function toggleAnimation(){
-  if(!toggle){
-    toggle = true;
-    window.requestAnimationFrame(step);
-  }else{
-    toggle = false;
-    cancelAnimationFrame(stepID)
-  }
+//stop, resume, restart buttons
+function toggleMenu(){
+  window.addEventListener(
+    "keydown",
+    (event) => {
+      const keyName = event.key;
+      switch (keyName){
+        case "s": //stop and show restart and continue buttons
+          var show = document.querySelector(".restartContinue")
+          var stop = document.getElementById('btnStop')
+          stop.style.display='none'//hide the Stop button
+          show.classList.toggle("canSee");
+          if(isPlaying){ //stop game by setting isPlaying to 'false'
+            isPlaying = false
+          }else{
+            isPlaying = true
+          }
+          break 
+        case "b": //hide restart and continue buttons and BEGIN AGAIN
+          window.location.reload();
+          
+        case "c": //hide restart and continue buttons and CONTINUE
+          var show = document.querySelector(".restartContinue")
+          show.classList.toggle("canSee"); 
+          var stop = document.getElementById('btnStop')
+          stop.style.display='block'//show the Stop button
+          isPlaying = true //continue game by setting isPlaying to 'true'
+       }
+  })
 }
+
+
+toggleMenu()
+
+
 
 document.addEventListener('keydown', shoot)
