@@ -13,6 +13,36 @@
 	justify-content: center;
 	align-items: center;
 }
+#btnStop{
+	background-color: white;
+	border: solid #1bafdb 2px;
+	color: #1bafdb;
+	width: 200px;
+	height: 40px;
+	font-weight: bolder;
+	display:block
+}
+.canSee{
+	display:none
+}
+
+#btnRestart{
+	background-color: #1bafdb;
+	border: solid #1bafdb 2px;
+	color: white;
+	width: 200px;
+	height: 30px;
+	font-weight: bolder;
+}
+
+#btnContinue{
+	background-color: #1bafdb;
+	border:#1bafdb;
+	color: white;
+	width: 200px;
+	height: 30px;
+	font-weight: bolder;
+}
 
 .results{
 	margin-top: 100px;
