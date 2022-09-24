@@ -55,7 +55,6 @@ function draw() {
 
 //To ensure users of different browsers can get the same experience
 var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-let fps = 60;
 const grid = document.querySelector('.grid');
 const resultsDisplay = document.querySelector('.results');
 let currentShooterIndex = 390;
@@ -153,6 +152,8 @@ function moveInvaders() {
   draw()
 
   if (squares[currentShooterIndex].classList.contains('invader', 'shooter')) {
+    squares[currentShooterIndex].classList.add('deadShooter')
+    squares[currentShooterIndex].classList.remove('invader')
     resultsDisplay.innerHTML = 'GAME OVER'
     clearInterval(invadersId)
     isPlaying = false
@@ -208,6 +209,10 @@ function shoot(e) {
       laserId = setInterval(moveLaser, 100)
   }
 }
+
+document.addEventListener('keydown', shoot) //invoking the 'shoot' function
+
+
 //stop, resume, restart buttons
 function toggleMenu(){
   window.addEventListener(
@@ -239,9 +244,37 @@ function toggleMenu(){
   })
 }
 
+toggleMenu() //invoking the 'toggleMenu' function
 
-toggleMenu()
+//This is the TIMER
 
+//var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+// Update the count down every 1 second
+var x = setInterval(function() {
+  
+  // Get today's date and time
+  //var now = new Date().getTime();
+  // Find the distance between now and the count down date
+  //var distance = countDownDate - now;
 
+//2 minutes per game in nanoseconds
+  var distance = 120000;
 
-document.addEventListener('keydown', shoot)
+  // Time calculations for days, hours, minutes and seconds
+  //var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor(distance/ (1000 * 60));
+  var seconds = Math.floor(distance/ 1000);
+
+  // Display the result in the element with id="demo"
+  document.getElementById("countdown").innerHTML = "Time left: " + minutes + " m " + seconds + " sec ";
+
+  // If the count down is finished, write some text
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "GAME OVER";
+    isPlaying = false
+  }
+}, 1000);
+
+x()
