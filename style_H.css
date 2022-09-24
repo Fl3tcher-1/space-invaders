@@ -13,7 +13,16 @@
 	justify-content: center;
 	align-items: center;
 }
-#btnStop{
+#start{
+	background-color: white;
+	border: solid gold;
+	color: black;
+	width: 200px;
+	height: 40px;
+	font-weight: bolder;
+	display:block
+}
+#btnStop {
 	background-color: white;
 	border: solid #1bafdb 2px;
 	color: #1bafdb;
@@ -59,6 +68,9 @@
 }
 .shooter {
 	background-color: green;
+}
+.deadShooter{
+	background-color:grey;
 }
 .laser {
 	background-color: orange;
