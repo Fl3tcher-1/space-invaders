@@ -50,9 +50,8 @@ let minusW = -500
 
  div= boundaryGrid
 
-    
+ 
     function moveDiv(){
-
         
         // if pause pressed{
             // increment =0 
