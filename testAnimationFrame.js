@@ -1,121 +1,76 @@
 
 
-// let frameID;
-// const getDiv = document.getElementsByClassName("frame");
-// const smoothAnimation = () => {
-//   getDiv[0].insertAdjacentHTML("afterend", "<div class='frame'></div>");
-//   frameID = requestAnimationFrame(smoothAnimation);
-// };
-
-// const onStart = () => {
-//   frameID = requestAnimationFrame(smoothAnimation);
-// };
-
-// const onStop = () => {
-//   cancelAnimationFrame(frameID);
-// };
-
-// let div
-
 let aliens = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
 const body = document.body
 
+// let box = document.getElementById("box")
+// let box2= document.getElementById("box220")
+// let startGame = document.getElementById("start")
+// let stopGame = document.getElementById("stop")
 
-// for(alien in aliens){
+let parentDiv = document.getElementById("parent") //gets parent div that holds aliens
+let parentBoundary = getComputedStyle(parentDiv) //allows parsing style values from parent
+let marginLeft = parentBoundary.marginLeft //stores various margins
+let marginRight = parentBoundary.width
+// let marginTop =parentBoundary.marginTop
+let marginBot =parentBoundary.height
 
-//     let div = document.createElement("div")
-//     // div.style.backgroundColor = "blue"
-//     div.classList.add("aliens")
-//     // div.className = "aliens"
-//     div.innerText = `alien${alien}`
-//     div.id = div.innerText
-//     div.style.fontSize = "30px"
-//     boundaryGrid.appendChild(div)
-//     // body.appendChild(div)
+console.log(marginLeft, marginRight, marginBot)
 
-// }
-let box = document.getElementById("box")
-let box2= document.getElementById("box220")
-let startGame = document.getElementById("start")
-let stopGame = document.getElementById("stop")
+//inits starting alien positions and then updates in loop
+alienStart = 0
+alienTop = 0
+alienStartPosition = 25
+alienSpeed =2
+alienDescendSpeed =10
+horizontalMovementLimit =(marginRight.replace(/\D/g,''))/2 -150 //trims off "px" leaving only numerical values
 
-boxStart = 0
-boxTop = 0
-boxPos = 100
-boxVelocity =2
-boxDownSpeed =10
-limit =500
+let verticalMovementLimit = marginBot.replace(/\D/g,'')-200
+
 
 let gameRunning=true
 
-let alien = document.getElementById("alien0")
+// let alien = document.getElementById("alien0")
 // console.log(alien)
 
-let alienDivs = document.getElementsByClassName("aliens")
+let alienDivs = document.getElementsByClassName("aliens") //gets all aliens
 console.log(alienDivs[4])
 console.log(alienDivs.length)
 
 
-
-// function init(){
-//     div = document.getElementById("div")
-//     // context = canvas.getContext(`2d`)
-//     // requestAnimationFrame(gameloop)
-// }
-
-
-// requestAnimationFrame(gameloop)
-// startGame.addEventListener("click", function(){
-//     gameRunning = true
-//     gameState(gameRunning)
-// })
-// // console.log(gameRunning)
-
-// function gameState(gameRunning){
-
-//     stopGame.addEventListener("click", function(){
-//     gameRunning = false
-//     cancelAnimationFrame(gameloop)
-// })
-
-// if(gameRunning) {
-//     gameloop
-//     requestAnimationFrame(gameloop)
-
-// } 
-
-// }
-
-
-
-
-
+//game loop
 function gameloop(){
-    update()
-    draw()
-    requestAnimationFrame(gameloop)
+    update() //first updates postion values
+    draw() //draws updated postion values
+    requestAnimationFrame(gameloop) //calls requestanimationframe and parses itself allowing the function to be re-run again
 }
 
+//updates position values
 function update(){
-    boxPos += boxVelocity
-    // console.log(boxPos)
-      if (boxPos >= limit || boxPos <= boxStart) boxVelocity = -boxVelocity, boxTop +=boxDownSpeed;
+    alienStartPosition += alienSpeed //updates starting position with the speed of movement
+
+    console.log("top",alienTop, "limit",verticalMovementLimit)
+
+    //checks if at either edge of allowed horizontal movement, if true it will update vertical postion and flip horizontal counter from + to- & from - to+
+      if (alienStartPosition >= horizontalMovementLimit || alienStartPosition <= alienStart +25) alienSpeed = -alienSpeed, alienTop +=alienDescendSpeed;
       
 }
 
+//draws visible change in position
 function draw(){
-    // alien.style.left =boxPos +"px"
-    // box.style.left = boxPos +"px"
-    // box.style.top = boxTop +"px"
-    // box2.style.left =boxPos +"px"
+    // alien.style.left =alienStartPosition +"px"
+    // box.style.left = alienStartPosition +"px"
+    // box.style.top = alienTop +"px"
+    // box2.style.left =alienStartPosition +"px"
     
-    // alienDivs[0].style.left =boxPos +"px"
+    // alienDivs[0].style.left =alienStartPosition +"px"
     // context.fillStyle=color
     // context.fillRect(100,50,200,175)
-    for(let i =0; i < alienDivs.length; i ++){
-        alienDivs[i].style.left =boxPos + "px"
-        alienDivs[i].style.top = boxTop +"px"
+    
+    for(let i =0; i < alienDivs.length; i ++){ //runs a loop for every alien and changes top & left margin based on values from update()
+        alienDivs[i].style.left =alienStartPosition + "px"
+        alienDivs[i].style.top = alienTop +"px"
     }
 }
 

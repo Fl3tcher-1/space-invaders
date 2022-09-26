@@ -74,11 +74,17 @@
     /* width: 0px; */
     /* font-size: 10px; */
     
-    border-bottom: 20px solid #000;
+    /* border-bottom: 20px solid #000;
     border-left: 10px solid #000;
      border-right: 10px solid #000;
     background-color: rgb(255, 0, 0);
     color: red;
+    position: relative; */
+    width: 0;
+	height: 0;
+	border-left: 25px solid transparent;
+	border-right: 25px solid transparent;
+	border-top: 50px solid rgb(255, 0, 0);
     position: relative;
 }
 
