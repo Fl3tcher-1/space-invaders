@@ -14,13 +14,15 @@ let parentBoundary = getComputedStyle(parentDiv) //allows parsing style values f
 
 let player = document.getElementById("player")
 let PlayerStyleFetch = getComputedStyle(player)
+let playerLeftMargin = PlayerStyleFetch.marginLeft .replace("px", '')
+console.log(playerLeftMargin)
 
 let marginLeft = parentBoundary.marginLeft //stores various margins
 let marginRight = parentBoundary.width
 // let marginTop =parentBoundary.marginTop
 let marginBot =parentBoundary.height
 
-console.log(marginLeft, marginRight, marginBot)
+// console.log(marginLeft, marginRight, marginBot)
 
 //inits starting alien positions and then updates in loop
 alienStart = 0
@@ -29,26 +31,15 @@ alienStartPosition = 25
 alienSpeed =2
 alienDescendSpeed =10
 
-playerStart = 0
+playerStart = Number(playerLeftMargin)
 playerMovement =8
 horizontalMovementLimit =(marginRight.replace(/\D/g,''))/2 -150 //trims off "px" leaving only numerical values
 
 let verticalMovementLimit = marginBot.replace(/\D/g,'')-200
 
 
-let gameRunning=true
-
-// let alien = document.getElementById("alien0")
-// console.log(alien)
-
 let alienDivs = document.getElementsByClassName("aliens") //gets all aliens
 
-console.log(player)
-
-// player.style.left =200 +"px"
-
-
-//game loop
 let key
 
 document.addEventListener('keydown', function(e){ //lstens for key presses and assigns them to a variable
@@ -59,8 +50,9 @@ document.addEventListener('keyup', function(e){ // if no keys pressed re-assigns
     key = ""
 })
 
-
+//gameloop
 function gameloop(){
+    console.log(playerStart)
     
     move()
     update() //first updates postion values

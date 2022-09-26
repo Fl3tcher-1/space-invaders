@@ -74,11 +74,12 @@
 	border-left: 25px solid transparent;
 	border-right: 25px solid transparent;
 	height: 0;
-    position: relative;
-	/* width: 125px;
+    /* position: relative; */
+	width: 125px;
     position: absolute;
-    bottom: 100px; */
-    /* margin-left: 30%; */
+    bottom: 100px;
+    /* margin-left: 50%; */
+
 }
 
 body{
