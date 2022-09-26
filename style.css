@@ -1,4 +1,4 @@
-#box {
+/* #box {
     background-color: red;
     height: 50px;
     left: 150px;
@@ -14,7 +14,7 @@
     position: relative;
     top: 10px;
     width: 50px;
-}
+} */
 
 .container{
     display: flex;
@@ -48,25 +48,6 @@
     
 }
 
-.BoundaryGrid{
-    /* height: 200px; */
-    /* height: 600px; */
-    /* background-color: aqua; */
-  /* display: grid; */
-  /* margin-top: 0; */
-  /* border-style: solid;
-  border-color: aqua; */
-  /* padding: 5px; */
-     /* align-items: center; */
-     /* justify-content: center; */
-     /* size: 50px; */
-     /* grid-template-columns: 150px 150px 150px 150px 150px; */
-     /* grid-gap: 1rem; */
-     /* color: aliceblue; */
-     /* grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));  */
-     /*creates resposnsive layout that changes based on side of browser */
-
-}
 
 .aliens{
     /* line-height: 0%; */
@@ -86,6 +67,18 @@
 	border-right: 25px solid transparent;
 	border-top: 50px solid rgb(255, 0, 0);
     position: relative;
+}
+
+.player{
+    border-bottom: 50px solid rgb(0, 26, 255);
+	border-left: 25px solid transparent;
+	border-right: 25px solid transparent;
+	height: 0;
+    position: relative;
+	/* width: 125px;
+    position: absolute;
+    bottom: 100px; */
+    /* margin-left: 30%; */
 }
 
 body{
