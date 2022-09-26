@@ -40,12 +40,12 @@ let box2= document.getElementById("box220")
 let startGame = document.getElementById("start")
 let stopGame = document.getElementById("stop")
 
-boxStart = 100
-boxTop = 100
+boxStart = 0
+boxTop = 0
 boxPos = 100
 boxVelocity =2
 boxDownSpeed =10
-limit =600
+limit =500
 
 let gameRunning=true
 
@@ -115,6 +115,7 @@ function draw(){
     // context.fillRect(100,50,200,175)
     for(let i =0; i < alienDivs.length; i ++){
         alienDivs[i].style.left =boxPos + "px"
+        alienDivs[i].style.top = boxTop +"px"
     }
 }
 
