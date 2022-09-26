@@ -54,7 +54,7 @@ let alien = document.getElementById("alien0")
 
 let alienDivs = document.getElementsByClassName("aliens")
 console.log(alienDivs[4])
-console.log()
+console.log(alienDivs.length)
 
 
 
@@ -106,15 +106,16 @@ function update(){
 
 function draw(){
     // alien.style.left =boxPos +"px"
-    box.style.left = boxPos +"px"
-    box.style.top = boxTop +"px"
-    box2.style.left =boxPos +"px"
-    // alienDivs.forEach((e) =>{
-    //     console.log(e)
-    // })
-    alienDivs[0].style.left =boxPos +"px"
+    // box.style.left = boxPos +"px"
+    // box.style.top = boxTop +"px"
+    // box2.style.left =boxPos +"px"
+    
+    // alienDivs[0].style.left =boxPos +"px"
     // context.fillStyle=color
     // context.fillRect(100,50,200,175)
+    for(let i =0; i < alienDivs.length; i ++){
+        alienDivs[i].style.left =boxPos + "px"
+    }
 }
 
 requestAnimationFrame(gameloop)
