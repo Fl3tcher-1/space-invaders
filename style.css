@@ -1,20 +1,10 @@
-/* #box {
-    background-color: red;
-    height: 50px;
-    left: 150px;
-    position: absolute;
-    top: 10px;
-    width: 50px;
-}
 
-.box2{
-    background-color: red;
-    height: 50px;
-    left: 150px;
-    position: relative;
-    top: 10px;
-    width: 50px;
-} */
+.info{
+    color: aliceblue;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+}
 
 .container{
     display: flex;
@@ -25,16 +15,12 @@
     color: aliceblue;
 }
 .parent{
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    /* color: aliceblue; */
     border-style: double;
     border-color: aqua;
     margin: auto;
-    margin-top: 100px;
+    margin-top: 10px;
     width: 1300px;
-    height: 800px;
+    height: 600px;
 }
 
 .parent > .BoundaryGrid{
@@ -50,17 +36,6 @@
 
 
 .aliens{
-    /* line-height: 0%; */
-    /* font-size: 0px; */
-    /* width: 0px; */
-    /* font-size: 10px; */
-    
-    /* border-bottom: 20px solid #000;
-    border-left: 10px solid #000;
-     border-right: 10px solid #000;
-    background-color: rgb(255, 0, 0);
-    color: red;
-    position: relative; */
     width: 0;
 	height: 0;
 	border-left: 25px solid transparent;
@@ -78,7 +53,7 @@
 	width: 125px;
     position: absolute;
     bottom: 100px;
-    /* margin-left: 50%; */
+    /* margin-left: 30%; */
 
 }
 
