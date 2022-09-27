@@ -3,13 +3,18 @@ let aliens = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 const body = document.body
 
 let boundaryGrid = document.createElement ("div")
+let parent = document.getElementById("parent")
+console.log(parent)
 // boundaryGrid.width = "500px"
 // boundaryGrid.height = "500px"
 boundaryGrid.className ="BoundaryGrid"
 boundaryGrid.id ="boundaryGrid"
 // boundaryGrid.innerText = "grid"
+parent.append(boundaryGrid)
 
-body.append(boundaryGrid)
+
+// body.append(boundaryGrid)
+
 
 for(alien in aliens){
 
@@ -25,54 +30,57 @@ for(alien in aliens){
 
 }
 
-let speed = 10
-let direction =1
+// let speed = 10
+let direction =1 //inits movement direction
 
-let divs =[]
-let alien0 = document.getElementById("alien0")
-let alien1 = document.getElementById("alien1")
-let alien2 = document.getElementById("alien2")
-let alien3 = document.getElementById("alien3")
-let alien4 = document.getElementById("alien4")
-let alien5 = document.getElementById("alien5")
-let alien6 = document.getElementById("alien6")
-let alien7 = document.getElementById("alien7")
-let alien8 = document.getElementById("alien8")
-let alien9 = document.getElementById("alien9")
+myVar = setInterval(moveDiv, 30) // sets speed of movement
 
-divs.push(alien0,alien1,alien2,alien3)
+let margin =0 //sets margin to be based on starting position (centered div)
+let boundaryStyle = getComputedStyle(boundaryGrid) //allows the parsing of margins
+ let topMarginInit = boundaryStyle.marginTop //gets the top margin of start position
+ let topMargin = topMarginInit.replace(/\D/g,'') //removes px leaving only numbers
+ topMargin = Number(topMargin) //convert to number
 
-var div = document.getElementById("alien0")
+ let increment = 20
 
-// console.log(divs)
-// console.log(div)
-
-
-myVar = setInterval(moveDiv, 40)
-let margin =0
 
 // let l = window.screen.width
-let w = 700
+let w = 500
+let minusW = -500
 
-for (let i =0; i <divs.length-1; i++ ){
-    div = divs[i]
-    console.log(i, div.id)
-    // moveDiv(div.id)
+ div= boundaryGrid
+
+ 
+    function moveDiv(){
+        
+        // if pause pressed{
+            // increment =0 
+        // }
     
+    div.style.marginLeft =margin + "px"
 
-}
-console.log(div)
+    // console.log("negative margin", margin - minusW)
+    // console.log( "margin -w ",margin -w)
 
-function moveDiv(id){
-    // let div = document.getElementById(id)
-    // console.log(div)
-    // console.log(l,w)
-    if( margin == w){
-        margin = 0 +"px"
-    } else{
-        div.style.marginLeft =margin + "px"
+    //checks if current margin is == specified margins and swaps directions accordingly
+    if (w-margin == increment){ 
+        direction =-1
+         topMargin +=increment
+        div.style.marginTop = topMargin +"px"
+        console.log("iohiuagfiugauifwhuaifh")
+    } else if( margin - minusW == increment){
+        direction =1
+         topMargin += increment
+        div.style.marginTop = topMargin +"px"
     }
-    margin +=10
+
+    // changes margin values based on movement direction
+    if (direction ==1){
+        margin +=increment
+    } else if (direction ==-1){
+        margin -=increment
+    } 
+
 }
 
 
