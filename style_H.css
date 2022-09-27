@@ -13,20 +13,21 @@
 	justify-content: center;
 	align-items: center;
 }
-#start{
+#btnStart{
 	background-color: white;
 	border: solid gold;
-	color: black;
-	width: 200px;
+	color: gold;
+	width: 150px;
 	height: 40px;
 	font-weight: bolder;
 	display:block
+	
 }
 #btnStop {
 	background-color: white;
 	border: solid #1bafdb 2px;
 	color: #1bafdb;
-	width: 200px;
+	width: 150px;
 	height: 40px;
 	font-weight: bolder;
 	display:block

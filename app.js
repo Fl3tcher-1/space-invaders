@@ -64,7 +64,7 @@ let invadersId;
 let goingRight = true;
 let aliensRemoved = [];
 let results = 0;
-let isPlaying = true;
+let isPlaying = false;
 let tries = 3;
 
 for (let i = 0; i < 400; i++) {
@@ -183,9 +183,13 @@ function shoot(e) {
   let laserId
   let currentLaserIndex = currentShooterIndex
   function moveLaser() {
-    squares[currentLaserIndex].classList.remove('laser')
-    currentLaserIndex -= width
-    squares[currentLaserIndex].classList.add('laser')
+    if(currentLaserIndex >= 0 && currentLaserIndex <= 19 ) {
+      squares[currentLaserIndex].classList.remove('laser')
+    }else{
+      squares[currentLaserIndex].classList.remove('laser')
+      currentLaserIndex -= width
+      squares[currentLaserIndex].classList.add('laser')
+    }
 
     if (squares[currentLaserIndex].classList.contains('invader')) {
       squares[currentLaserIndex].classList.remove('laser')
@@ -198,8 +202,8 @@ function shoot(e) {
       const alienRemoved = alienInvaders.indexOf(currentLaserIndex)
       aliensRemoved.push(alienRemoved)
       results++
-      resultsDisplay.innerHTML = results
-      console.log(aliensRemoved)
+      resultsDisplay.innerHTML = results;
+     // aliensRemoved.style.display='block';
 
     }
 
@@ -240,6 +244,9 @@ function toggleMenu(){
           var stop = document.getElementById('btnStop')
           stop.style.display='block'//show the Stop button
           isPlaying = true //continue game by setting isPlaying to 'true'
+          
+        case "t":
+          isPlaying = true;
        }
   })
 }
@@ -257,8 +264,8 @@ var x = setInterval(function() {
   // Find the distance between now and the count down date
   //var distance = countDownDate - now;
 
-//2 minutes per game in nanoseconds
-  var distance = 120000;
+//4 minutes per game in nanoseconds
+  var distance = 240000;
 
   // Time calculations for days, hours, minutes and seconds
   //var days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -277,4 +284,4 @@ var x = setInterval(function() {
   }
 }, 1000);
 
-x()
+clearInterval(x)
