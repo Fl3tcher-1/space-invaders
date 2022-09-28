@@ -11,36 +11,21 @@
 </head>
 <body>
   <h1 class="results">Space Invaders</h1>
-<p id="countdown" class="centered"></p>
-</div>
-<div class="centered" style="display:flex; flex-direction: column; justify-content: center; align-items: center">
-  <div style="width: 600px;">
-    <div style="float: left; width: 170px;">
-      <br>
-    <div id="start" style="float: left; width: 1px;">
-    <button id="btnStart" > Type 't' to START</button> 
-    </div>
-    </div>
-    <div style="float: left; width: 400px;">
-        <div class="grid"></div>
-    </div>
-    <div style="float: right; width: 5px;">
-      <div style="display:flex; flex-direction: column; justify-content: center; align-items: center"></div>
-      <br>
-      <button id="btnStop" > Type 's' to STOP</button>  
-      <br>
-      <br>
-      <div class="restartContinue canSee">
-        <button id="btnRestart">Type 'b' to BEGIN</button>
-        <br>
-        <br>
-        <button id="btnContinue">Type 'c' to CONTINUE</button>
-        <br>
-      </div>
-  </div>
-    <br style="clear: left;" />
-   </div>
+<center>
+<table>
+  <tr>
+    <td style="float: left; width: 620px;"><left><button id="btnStart" style="float: left; width: 200px;"> Type 't' to START</button></left> </td>
+    <td><right><button id="btnStop" style="float: left; width: 200px;"> Type 's' to STOP</button></right></td>
+  </tr>
 
+  <tr>
+    <td style="float: right; width: 420px;"><center><div class="grid"></div></center></td>
+    <td><right><button class="restartContinue canSee" id="btnRestart" style="float: left; width: 200px;">Type 'n' for NEW</button></right></td>
+    <td><div style="width: 20px;"></div></td>
+    <td><right><button class="restartContinue canSee" id="btnContinue" style="float: left; width: 200px;">Type 'c' to CONTINUE</button></right></td>
+  </tr>
+</table>
+</center>
   <script src="app.js"></script>
 </body>
 </html>
