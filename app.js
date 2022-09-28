@@ -38,12 +38,12 @@ window.requestAnimationFrame(move);
 */
 
 
-function update() {
+/*function update() {
   // Update the state of the world for the elapsed time since last render
 }
 function draw() {
   // Draw the state of the world
-}
+}*/
 
 
 // function loop() {
@@ -147,20 +147,35 @@ function moveInvaders() {
     squares[currentShooterIndex].classList.add('deadShooter')
     squares[currentShooterIndex].classList.remove('invader')
     resultsDisplay.innerHTML = 'GAME OVER'//player has lost
+    document.getElementById('btnStop').style.display='none'//hide the Stop button
+    window.addEventListener("keydown", function (e){
+      if( e.key =="t"){
+        window.location.reload();
+      }
+    })
+
     clearInterval(invadersId)
-    isPlaying = false
+    // isPlaying = false
     tries -= 1
   }
   for (let i = 0; i < alienInvaders.length; i++) {
     if(alienInvaders[i] > (squares.length)) {//if aliens have reached grid's bottom
       resultsDisplay.innerHTML = 'GAME OVER'//player has lost
+      document.getElementById('btnStop').style.display='none'//hide the Stop button
+      window.addEventListener("keydown", function (e){
+        if( e.key =="t"){
+          window.location.reload();
+        }
+      })
+      // window.location.reload();
       clearInterval(invadersId)
-      isPlaying = false
+      // isPlaying = false
       tries -= 1
     }
   }
   if (aliensRemoved.length === alienInvaders.length) {//if all aliens have been shot
     resultsDisplay.innerHTML = 'YOU WIN'//player wins
+    document.getElementById('btnStop').style.display='none'//hide the Stop button
     clearInterval(invadersId)
     isPlaying = false
     tries -= 1
@@ -210,10 +225,13 @@ function toggleMenu(){
       const keyName = event.key;
       switch (keyName){
         case "s": //stop and show restart and continue buttons
-          var show = document.querySelector(".restartContinue")
+          var show1 = document.getElementById("btnContinue")
+          var show2 = document.getElementById("btnRestart")
           var stop = document.getElementById('btnStop')
-          stop.style.display='none'//hide the Stop button
-          show.classList.toggle("canSee");
+          stop.classList.remove("btnStop")//hide the Stop button
+          stop.classList.add("btnStopHide")//hide the Stop button
+          show1.classList.toggle("canSee");
+          show2.classList.toggle("canSee");
           if(isPlaying){ //stop game by setting isPlaying to 'false'
             isPlaying = false
           }else{
@@ -221,13 +239,16 @@ function toggleMenu(){
           }
           break 
         case "b": //hide restart and continue buttons and BEGIN AGAIN
+          document.getElementById('btnStop').classList.remove("btnStopHide")
           window.location.reload();
           
         case "c": //hide restart and continue buttons and CONTINUE
-          var show = document.querySelector(".restartContinue")
-          show.classList.toggle("canSee"); 
-          var stop = document.getElementById('btnStop')
-          stop.style.display='block'//show the Stop button
+          var show1 = document.getElementById("btnContinue")
+          var show2 = document.getElementById("btnRestart")
+          show1.classList.toggle("canSee");
+          show2.classList.toggle("canSee");
+          document.getElementById('btnStop').classList.remove("btnStopHide")
+          document.getElementById('btnStop').classList.add("btnStop")//show the Stop button
           isPlaying = true //continue game by setting isPlaying to 'true'
           
         case "t":
