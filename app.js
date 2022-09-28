@@ -238,7 +238,7 @@ function toggleMenu(){
             isPlaying = true
           }
           break 
-        case "b": //hide restart and continue buttons and BEGIN AGAIN
+        case "n": //hide restart and continue buttons and BEGIN AGAIN
           document.getElementById('btnStop').classList.remove("btnStopHide")
           window.location.reload();
           
