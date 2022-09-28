@@ -1,0 +1,8 @@
+#image{
+    height: 150px;
+    width: 191px;
+    /* background-image: './resources/dragon_sprites.png';
+    background: './resources/dragon_sprites.png'; */
+   background-image: url("/resources/dragon_sprites.png");
+   /* background-color: aqua; */
+}

@@ -6,15 +6,16 @@
     justify-content: center;
 }
 
-.container{
+/* .container{
     display: flex;
     gap: 5px;
     margin: 0;
     padding: 10px;
     justify-content: center;
     color: aliceblue;
-}
+} */
 .parent{
+    position: relative;
     border-style: double;
     border-color: aqua;
     margin: auto;
@@ -25,6 +26,7 @@
 
 .parent > .BoundaryGrid{
     display: grid;
+    /* position: absolute; */
     grid-template-columns: 150px 150px 150px 150px 150px;
     margin-top: 10px;
     padding: 0%;
@@ -45,16 +47,22 @@
 }
 
 .player{
-    border-bottom: 50px solid rgb(0, 26, 255);
+    position: absolute;
+    /* border-bottom: 50px solid rgb(0, 26, 255);
 	border-left: 25px solid transparent;
-	border-right: 25px solid transparent;
-	height: 0;
+	border-right: 25px solid transparent; */
+	/* height: 0; */
     /* position: relative; */
 	width: 125px;
-    position: absolute;
-    bottom: 100px;
+    bottom: 0;
+    /* bottom: -300px; */
     /* margin-left: 30%; */
 
+}
+#dragon{
+    height: 150px;
+    width: 191px;
+    background-image: url("/resources/dragon_sprites.png");
 }
 
 body{
