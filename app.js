@@ -23,34 +23,35 @@ while (true)
 }
 */
 
-/*keyboard codes:
-s:          83 for 'stop'
-b:          66 for 'begin again'
-c:          67 for 'continue'
-left arrow: 37
-up arrow:   38
-right arrow:39
-down arrow: 40
+/*move element until screen width -100px:
+xpos = 0;
+function move(){
+  xpos = xpos + 5;
+  box.style.transform = `translateX(${xpos}px)`;
+  let ww = document.body.clientWidth - 100;
+  if(xpos < ww){
+    requestAnimationFrame(move);
+  }
+}
+
+window.requestAnimationFrame(move);
 */
 
 
 function update() {
   // Update the state of the world for the elapsed time since last render
 }
-
 function draw() {
   // Draw the state of the world
 }
 
 
 // function loop() {
-
 //   moveInvaders()
-
 //   window.requestAnimationFrame(loop)
 // }
-
 // window.requestAnimationFrame(loop)
+
 
 
 //To ensure users of different browsers can get the same experience
@@ -58,30 +59,25 @@ var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAni
 const grid = document.querySelector('.grid');
 const resultsDisplay = document.querySelector('.results');
 let currentShooterIndex = 390;
-let width = 20;
+let width = 20;//gives the number of 'div' inside each row of the 'grid'
 let direction = 1;
 let invadersId;
 let goingRight = true;
-let aliensRemoved = [];
-let results = 0;
+let aliensRemoved = [];//stick dead invaders in here
+let results = 0;//the score
 let isPlaying = false;
-let tries = 3;
-
+let tries = 3;//number of player's lives
 for (let i = 0; i < 400; i++) {
   const square = document.createElement('div')
   grid.appendChild(square)
 }
-
-const squares = Array.from(document.querySelectorAll('.grid div'))
-
-const alienInvaders = [
+const squares = Array.from(document.querySelectorAll('.grid div'))//
+const alienInvaders = [//starting position of invaders
   0,1,2,3,4,5,6,7,8,9,
+  20,21,22,23,24,25,26,27,28,29,
   40,41,42,43,44,45,46,47,48,49,
-  80,81,82,83,84,85,86,87,88,89,
-
 ]
-
-function draw() {
+function draw() {//draw all invaders at beginning of game
     for (let i = 0; i < alienInvaders.length; i++) {
       if(!aliensRemoved.includes(i)) {
         squares[alienInvaders[i]].classList.add('invader')
@@ -89,87 +85,82 @@ function draw() {
       }
     }
 }
+draw()//invoke draw
 
-draw()
-
-function remove() {
+function remove() {//invader is removed when shot or it has reached grid's left or right edge
   for (let i = 0; i < alienInvaders.length; i++) {
     squares[alienInvaders[i]].classList.remove('invader')
   }
 }
 
-squares[currentShooterIndex].classList.add('shooter')
-
-
+squares[currentShooterIndex].classList.add('shooter') //draw shooter at start of game
 
 function moveShooter(e) {
   if(isPlaying){
-  squares[currentShooterIndex].classList.remove('shooter')
-
+  squares[currentShooterIndex].classList.remove('shooter')//erase shooter
   switch(e.key) {
     case 'ArrowLeft':
-      if (currentShooterIndex % width !== 0) currentShooterIndex -=1
+      if (currentShooterIndex % width !== 0) currentShooterIndex -=1//check left border e.g. (0, or 20, or 40, or 60) / 20 = (0,2,4,6) and no decimals
       break
     case 'ArrowRight' :
-      if (currentShooterIndex % width < width -1) currentShooterIndex +=1
+      if (currentShooterIndex % width < width -1) currentShooterIndex +=1 //check right border e.g. (19, or 39, or 59, or 79) / 20 = (0.95,1.95,2.95,3.95) and (0*20 = 0 => 19 reminder)
       break
   }
-  squares[currentShooterIndex].classList.add('shooter')
+  squares[currentShooterIndex].classList.add('shooter')//paint shooter
 }
 }
-document.addEventListener('keydown', moveShooter)
+
+document.addEventListener('keydown', moveShooter)//invoke moveShooter
 
 var time_passed_since_last_render = Date.now() - window.last_render;
 
 function moveInvaders() {
   if(isPlaying){
   window.last_render = Date.now()
-
-  const leftEdge = alienInvaders[0] % width === 0
-  const rightEdge = alienInvaders[alienInvaders.length - 1] % width === width -1
-  remove()
-
-  if (rightEdge && goingRight) {
+  const leftEdge = alienInvaders[0] % width === 0//define left edge as modulus = 0
+  const rightEdge = alienInvaders[alienInvaders.length - 1] % width === width -1//define right edge as modulus = 19
+  remove()//remove invaders from grid
+  if (rightEdge && goingRight) {//if invaders have reached grid's right edge
     for (let i = 0; i < alienInvaders.length; i++) {
-      alienInvaders[i] += width +1
+      //console.log('before alien[i]:',alienInvaders[i] )
+      alienInvaders[i] += width +1//+= ensures that all aliens are processed; move invaders down and left
+      //console.log('after alien[i]:',alienInvaders[i] )
       direction = -1
       goingRight = false
     }
   }
-
-  if(leftEdge && !goingRight) {
+  if(leftEdge && !goingRight) {//if invaders have reached grid's left edge
     for (let i = 0; i < alienInvaders.length; i++) {
-      alienInvaders[i] += width -1
+      //console.log('before alien[i]:',alienInvaders[i] )
+      alienInvaders[i] += width -1//+= ensures that all aliens are processed; move invaders down and right
+      //console.log('after alien[i]:',alienInvaders[i] )
       direction = 1
       goingRight = true
     }
   }
-
-  for (let i = 0; i < alienInvaders.length; i++) {
-    alienInvaders[i] += direction
+  for (let i = 0; i < alienInvaders.length; i++) {//else if invaders are inside the grid
+    alienInvaders[i] += direction//assign new position to all invaders
   }
+  draw()//paint invaders at their new position
 
-  draw()
-
-  if (squares[currentShooterIndex].classList.contains('invader', 'shooter')) {
+  if (squares[currentShooterIndex].classList.contains('invader', 'shooter')) {//check if shooter was captured
     squares[currentShooterIndex].classList.add('deadShooter')
     squares[currentShooterIndex].classList.remove('invader')
-    resultsDisplay.innerHTML = 'GAME OVER'
+    resultsDisplay.innerHTML = 'GAME OVER'//player has lost
     clearInterval(invadersId)
     isPlaying = false
     tries -= 1
   }
-
   for (let i = 0; i < alienInvaders.length; i++) {
-    if(alienInvaders[i] > (squares.length)) {
-      resultsDisplay.innerHTML = 'GAME OVER'
+    if(alienInvaders[i] > (squares.length)) {//if aliens have reached grid's bottom
+      resultsDisplay.innerHTML = 'GAME OVER'//player has lost
       clearInterval(invadersId)
       isPlaying = false
       tries -= 1
     }
   }
-  if (aliensRemoved.length === alienInvaders.length) {
-    resultsDisplay.innerHTML = 'YOU WIN'
+  if (aliensRemoved.length === alienInvaders.length) {//if all aliens have been shot
+    resultsDisplay.innerHTML = 'YOU WIN'//player wins
     clearInterval(invadersId)
     isPlaying = false
     tries -= 1
@@ -177,36 +168,31 @@ function moveInvaders() {
 }
 }
 
-invadersId = setInterval(moveInvaders, 100)
+invadersId = setInterval(moveInvaders, 100)//invoke moveInvaders at speed of 100 nanoseconds
 
 function shoot(e) {
   let laserId
   let currentLaserIndex = currentShooterIndex
   function moveLaser() {
-    if(currentLaserIndex >= 0 && currentLaserIndex <= 19 ) {
-      squares[currentLaserIndex].classList.remove('laser')
+    if(currentLaserIndex >= 0 && currentLaserIndex <= 19 ) {//if laser is in grid's top row
+      squares[currentLaserIndex].classList.remove('laser')//remove laser 
     }else{
-      squares[currentLaserIndex].classList.remove('laser')
+      squares[currentLaserIndex].classList.remove('laser')//move laser upwards in grid
       currentLaserIndex -= width
       squares[currentLaserIndex].classList.add('laser')
     }
-
-    if (squares[currentLaserIndex].classList.contains('invader')) {
+    if (squares[currentLaserIndex].classList.contains('invader')) {//check laser collision event with invader
       squares[currentLaserIndex].classList.remove('laser')
       squares[currentLaserIndex].classList.remove('invader')
       squares[currentLaserIndex].classList.add('boom')
-
-      setTimeout(()=> squares[currentLaserIndex].classList.remove('boom'), 200)
+      setTimeout(()=> squares[currentLaserIndex].classList.remove('boom'), 300)//laser hits an alien
       clearInterval(laserId)
-
-      const alienRemoved = alienInvaders.indexOf(currentLaserIndex)
-      aliensRemoved.push(alienRemoved)
-      results++
-      resultsDisplay.innerHTML = results;
+      const alienRemoved = alienInvaders.indexOf(currentLaserIndex)//position of shot alien
+      aliensRemoved.push(alienRemoved)//append shot alien position to 'aliensRemoved' array
+      results++//increase score
+      resultsDisplay.innerHTML = `The score is ${results}`;
      // aliensRemoved.style.display='block';
-
     }
-
   }
   switch(e.key) {
     case ' ':
@@ -215,7 +201,6 @@ function shoot(e) {
 }
 
 document.addEventListener('keydown', shoot) //invoking the 'shoot' function
-
 
 //stop, resume, restart buttons
 function toggleMenu(){
@@ -254,7 +239,6 @@ function toggleMenu(){
 toggleMenu() //invoking the 'toggleMenu' function
 
 //This is the TIMER
-
 //var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
 // Update the count down every 1 second
 var x = setInterval(function() {
@@ -263,19 +247,15 @@ var x = setInterval(function() {
   //var now = new Date().getTime();
   // Find the distance between now and the count down date
   //var distance = countDownDate - now;
-
 //4 minutes per game in nanoseconds
   var distance = 240000;
-
   // Time calculations for days, hours, minutes and seconds
   //var days = Math.floor(distance / (1000 * 60 * 60 * 24));
   // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   var minutes = Math.floor(distance/ (1000 * 60));
   var seconds = Math.floor(distance/ 1000);
-
   // Display the result in the element with id="demo"
   document.getElementById("countdown").innerHTML = "Time left: " + minutes + " m " + seconds + " sec ";
-
   // If the count down is finished, write some text
   if (distance < 0) {
     clearInterval(x);
