@@ -8,6 +8,11 @@
 		background-color: darkslateblue;
 }
 
+.results{
+	color:white;
+	font-size: xx-large;
+}
+
 .grid {
 	display: flex;
 	width: 400px;
