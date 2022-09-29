@@ -6,14 +6,7 @@
     justify-content: center;
 }
 
-/* .container{
-    display: flex;
-    gap: 5px;
-    margin: 0;
-    padding: 10px;
-    justify-content: center;
-    color: aliceblue;
-} */
+
 .parent{
     position: relative;
     border-style: double;
@@ -48,15 +41,8 @@
 
 .player{
     position: absolute;
-    /* border-bottom: 50px solid rgb(0, 26, 255);
-	border-left: 25px solid transparent;
-	border-right: 25px solid transparent; */
-	/* height: 0; */
-    /* position: relative; */
 	width: 125px;
     bottom: 0;
-    /* bottom: -300px; */
-    /* margin-left: 30%; */
 
 }
 #dragon{

@@ -1,67 +1,47 @@
 
 
-// let aliens = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+
 
 const body = document.body
-
-// let box = document.getElementById("box")
-// let box2= document.getElementById("box220")
-// let startGame = document.getElementById("start")
-// let stopGame = document.getElementById("stop")
 
 let parentDiv = document.getElementById("parent") //gets parent div that holds aliens
 let parentBoundary = getComputedStyle(parentDiv) //allows parsing style values from parent
 
-let ParentBoundary2 = document.getElementById("parent").getBoundingClientRect()
+let ParentBoundary2 = document.getElementById("parent").getBoundingClientRect() //gets boundingclient from parent
 let player = document.getElementById("player")
-let playerBoundary = document.getElementById("player").getBoundingClientRect()
+let playerBoundary = document.getElementById("player").getBoundingClientRect()  //gets bounding client from player
 
-let PlayerStyleFetch = getComputedStyle(player)
-let playerLeftMargin = PlayerStyleFetch.marginLeft .replace("px", '')
-// console.log(playerLeftMargin)
+let PlayerStyleFetch = getComputedStyle(player) //gets styles from player
+let playerLeftMargin = PlayerStyleFetch.marginLeft .replace("px", '') //gets margin from player and replaces into a value with only numbers
 
 let marginLeft = parentBoundary.marginLeft //stores various margins
 let marginRight = parentBoundary.width
-// let marginTop =parentBoundary.marginTop
 let marginBot =parentBoundary.height
 
-// console.log(marginLeft, marginRight, marginBot)
+alienStart = 50 //how far from left side of screen
+alienTop = 0 //how far from the top
+alienStartPosition = ParentBoundary2.width /2 -(750/2) //centers aliens on screen
+alienSpeed =5 //horizontal movement speed
+alienDescendSpeed =15 //vertical movement speed
 
-//inits starting alien positions and then updates in loop
+horizontalMovementLimit = ParentBoundary2.width /2 -100 //how far are assets allowed to move horizontally
 
-let alienStarts 
-alienStart = 0
-alienTop = 0
-alienStartPosition = 25
-alienSpeed =5
-alienDescendSpeed =15
+playerStart = ParentBoundary2.width/2 - playerBoundary.width //gets centered location
+playerMovement =8 //how fast player moves horizontally
+player.style.left = (ParentBoundary2.width/2 - playerBoundary.width +"px") //sets centered location
+
+playerIdleImgPos = 191 //x size value for a single sprite image
+playerIdleImgPosy = 161 // y value for a single sprite image
+playerIdleImgPosyLeft = 483 //last y value for single sprite image
 
 
-
-// playerStart = Number(playerLeftMargin)
-playerStart = 0
-playerIdleImgPos = 191
-playerIdleImgPosy = 161
-playerIdleImgPosyLeft = 483
-// playerStart=ParentBoundary2.x
-playerMovement =8
-let counter =0
-
-// horizontalMovementLimit =(marginRight.replace(/\D/g,''))/2 -150 //trims off "px" leaving only numerical values
-horizontalMovementLimit = ParentBoundary2.width /2 -100
-
-let verticalMovementLimit = marginBot.replace(/\D/g,'')-200
-
+let counter =0 //uses to count elapsed time in game loop
 
 let alienDivs = document.getElementsByClassName("aliens") //gets all aliens
-for(let i=0; i <alienDivs.length; i ++){
-    // console.log(alienDivs[i].getBoundingClientRect().x)
-    // alienStarts =(alienDivs[i].getBoundingClientRect().x)
-}
-// console.log(alienStarts)
-let key 
 
-let start = false
+let key //will store keypresses
+
+let start = false 
 let running = false
 
 
@@ -88,72 +68,50 @@ document.addEventListener('keyup', function(e){ // if no keys pressed re-assigns
     key = ""
 })
 
-
 console.log("player",playerBoundary)
 console.log("boundary",ParentBoundary2)
-// console.log(alienDivs[0].getBoundingClientRect())
-// console.log(alienDivs[1].getBoundingClientRect())
-// console.log(alienDivs[2].getBoundingClientRect())
-// console.log(alienDivs[3].getBoundingClientRect())
-// console.log(alienDivs[4].getBoundingClientRect())
 
+
+for(let i =0; i < alienDivs.length; i ++){ //runs a loop for every alien and assigns starting x value
+alienDivs[i].style.left =alienStartPosition  + "px" //horizontal position
+
+}
 
 //gameloop
 function gameloop(){
-    counter += 0.25
-    console.log(counter)
-    
-    // console.log(progress)
-    // console.log(playerStart)
-    Aliens()
+
+    counter += 0.25 //on every game loop call incraee by 0.25
+
     Player()
     drawAlien() //draws updated postion values
     updateAlien() //first updates postion values
     if (running) requestAnimationFrame(gameloop) //calls requestanimationframe and parses itself allowing the function to be re-run again
     
 }
-function Aliens(){
-    // let alienBoundaries = document.getElementById("alien13").getBoundingClientRect()
-    // console.log("alien",alienBoundaries)
-    // let aliens
-    // console.log("alien 0",alienDivs[0].getBoundingClientRect())
-    for (let i =0; i <alienDivs.length; i ++){
-        // console.log(horizontalMovementLimit, `${i}`,alienDivs[i].getBoundingClientRect(), ParentBoundary2.width)
-        // aliens.push(alienDivs[i].getBoundingClientRect())
-        console.log(alienDivs[i].getBoundingClientRect())
-    }
-    // console.log(aliens)
-    
-}
 
-
-
-function Player(){
+//player controls
+function Player(){ 
    
-    let canAnimate = false
-    movingRight = false
+    let canAnimate = false // sets to false otherwise will keep animating
+    movingRight = false //used to stop multiple animations at once like moving left/right and idling at same time
     movingLeft = false
     
-    if(counter >=2) {
+    if(counter >=1.75) { // every 1.75 counters will reset counter and allow next image to be animated
         counter =0
         canAnimate = true
     }
-   
-       
-            // p
-    // console.log(ParentBoundary2.width, ParentBoundary2.x, playerStart)
-    // console.log(ParentBoundary2.x, playerStart)
-        
-        if(key == `ArrowRight` ){
+           //if right key pressed, move player and animate
+        if(key == `ArrowRight` ){ 
             movingRight = true
-            if(playerStart < ParentBoundary2.width -(playerBoundary.width +12)){
+
+            if(playerStart < ParentBoundary2.width -191){ //checks that it is not moving outside boundary and assigns new value
                 playerStart +=playerMovement
                 player.style.left = playerStart  +"px"
 
                 if (canAnimate){
-                    document.getElementById("dragon").style.backgroundPosition = `-${playerIdleImgPos}px -${playerIdleImgPosy}px`
+                    document.getElementById("dragon").style.backgroundPosition = `-${playerIdleImgPos}px -${playerIdleImgPosy}px` //gets dragon image and assigns x & y positions on sprite sheet 
                
-                   if(playerIdleImgPos <573){
+                   if(playerIdleImgPos <573){ //checks if past max width of sprite sheet and either shows next image or resets
                        playerIdleImgPos = playerIdleImgPos +191
                    } else{
                        playerIdleImgPos =191
@@ -163,7 +121,7 @@ function Player(){
             }
         } 
 
-        if(key == `ArrowLeft`){
+        if(key == `ArrowLeft`){ //same as right arrow. but checks for left boundary
             movingLeft = true
             if(playerStart > 0){
                 playerStart -=playerMovement
@@ -182,6 +140,7 @@ function Player(){
                 }
             }
         }
+        //after all movement done it will check if player is idling (not moving) and will animate
          if(counter == 1 && movingRight ==false && movingLeft == false){
         document.getElementById("dragon").style.backgroundPosition = `-${playerIdleImgPos}px 0px`
     
@@ -197,35 +156,30 @@ function Player(){
 //updates position values
 function updateAlien(){
 
-    for(let i =0; i <alienDivs.length; i ++){
-
-    }
+    
     alienStartPosition += alienSpeed //updates starting position with the speed of movement
 
-    // console.log("top",alienTop, "limit", verticalMovementLimit)
-
     //checks if at either edge of allowed horizontal movement, if true it will update vertical postion and flip horizontal counter from + to- & from - to+
-      if (alienStartPosition >= horizontalMovementLimit || alienStartPosition <= alienStart +25) alienSpeed = -alienSpeed, alienTop +=alienDescendSpeed;
+      if (alienStartPosition >= horizontalMovementLimit || alienStartPosition <= alienStart ) alienSpeed = -alienSpeed, alienTop +=alienDescendSpeed;
       
 }
 
 //draws visible change in position
 function drawAlien(){
+    console.log(alienStartPosition)
 
     for(let i =0; i < alienDivs.length; i ++){ //runs a loop for every alien and changes top & left margin based on values from update()
         alienDivs[i].style.left =alienStartPosition + "px" //horizontal position
         // if(alienTop < ParentBoundary2.height/2){ 
+
+        console.log(alienDivs[i].style.top, ParentBoundary2.height)
+        if( alienDivs[i].style.top.replace("px", '') < ParentBoundary2.height/2 +75){
             alienDivs[i].style.top = alienTop +"px" //vertical position
 
-        // }
-        // console.log(alienTop, ParentBoundary2.height)
+        }
     }
 }
 
-
-
-
-// requestAnimationFrame(gameloop)
 
 
 
