@@ -57,22 +57,23 @@
 .canSee{
 	display:none
 }
-s
+
+s /* 's' makes the button 3D */
 #btnRestart{
 	background-color: #1bafdb;
 	border: solid #1bafdb 2px;
 	color: white;
-	width: 200px;
-	height: 30px;
+	width: 120px;
+	height: 100px;
 	font-weight: bolder;
 }
-
+s /* 's' makes the button 3D */
 #btnContinue{
 	background-color: #1bafdb;
 	border:#1bafdb;
 	color: white;
-	width: 200px;
-	height: 30px;
+	width: 120px;
+	height: 100px;
 	font-weight: bolder;
 }
 
