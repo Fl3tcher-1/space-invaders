@@ -46,12 +46,6 @@ function draw() {
 }*/
 
 
-// function loop() {
-//   moveInvaders()
-//   window.requestAnimationFrame(loop)
-// }
-// window.requestAnimationFrame(loop)
-
 
 
 //To ensure users of different browsers can get the same experience
@@ -59,7 +53,7 @@ var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAni
 const grid = document.querySelector('.grid');
 const resultsDisplay = document.querySelector('.results');
 let currentShooterIndex = 390;
-let width = 20;//gives the number of 'div' inside each row of the 'grid'
+let width = 20;//gives the number of 'div' inside each row and column of the 'grid'
 let direction = 1;
 let invadersId;
 let goingRight = true;
@@ -67,6 +61,9 @@ let aliensRemoved = [];//stick dead invaders in here
 let results = 0;//the score
 let isPlaying = false;
 let tries = 3;//number of player's lives
+
+
+
 for (let i = 0; i < 400; i++) {
   const square = document.createElement('div')
   grid.appendChild(square)
@@ -174,8 +171,13 @@ function moveInvaders() {
     }
   }
   if (aliensRemoved.length === alienInvaders.length) {//if all aliens have been shot
-    resultsDisplay.innerHTML = 'YOU WIN'//player wins
+    resultsDisplay.innerHTML = 'YOU WON'//player wins
     document.getElementById('btnStop').style.display='none'//hide the Stop button
+    window.addEventListener("keydown", function (e){
+      if( e.key =="t"){
+        window.location.reload();
+      }
+    })
     clearInterval(invadersId)
     isPlaying = false
     tries -= 1
@@ -192,7 +194,7 @@ function shoot(e) {
     if(currentLaserIndex >= 0 && currentLaserIndex <= 19 ) {//if laser is in grid's top row
       squares[currentLaserIndex].classList.remove('laser')//remove laser 
     }else{
-      squares[currentLaserIndex].classList.remove('laser')//move laser upwards in grid
+      squares[currentLaserIndex].classList.remove('laser')//if inside grid, move laser upwards
       currentLaserIndex -= width
       squares[currentLaserIndex].classList.add('laser')
     }
@@ -280,9 +282,50 @@ var x = setInterval(function() {
   // If the count down is finished, write some text
   if (distance < 0) {
     clearInterval(x);
-    document.getElementById("demo").innerHTML = "GAME OVER";
+    document.getElementById("demo").innerHTML = 'GAME OVER';
     isPlaying = false
   }
 }, 1000);
 
 clearInterval(x)
+
+/*//My game loop function is used to achieve 60 frames per second
+
+  function gameLoop(time) {
+    if(resultsDisplay.innerHTML = 'YOU WON' || resultsDisplay.innerHTML = 'GAME OVER' ){
+      return
+    }else if(!isPlaying){
+      return
+    }else{
+    draw()
+    moveInvaders()
+}
+window.addEventListener("keydown", (event) => {
+    switch(event.key) {
+      case "t": case "s": case "n": case "b":
+        toggleMenu();
+        break;
+      case ' ':
+        shoot(event);
+        break;
+      case 'ArrowLeft': case 'ArrowRight':
+        moveShooter(event)
+}, true) 
+
+   window.requestAnimationFrame(gameLoop)
+ }
+ window.requestAnimationFrame(gameLoop)
+*/
+
+/*Kingsley's gameLoop:
+if(lost){
+  return
+}else if(gamePaused){
+  return
+}
+moveBall()
+window.reequestAnimationFrame(loopAnimation)
+}
+window.requestAnimationFrame(loopAnimation);//start things off
+
+*/
