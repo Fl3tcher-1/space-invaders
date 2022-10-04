@@ -49,23 +49,28 @@ function draw() {
 
 
 //To ensure users of different browsers can get the same experience
-var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+//window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(f){return setTimeout(f, 1000/60)}; // simulate calling code 60 
+//window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || function(requestID){clearTimeout(requestID)} //fall back
 const grid = document.querySelector('.grid');
 const resultsDisplay = document.querySelector('.results');
 let currentShooterIndex = 390;
 let width = 20;//gives the number of 'div' inside each row and column of the 'grid'
 let direction = 1;
-let invadersId;
+//let invadersId;
 let goingRight = true;
 let aliensRemoved = [];//stick dead invaders in here
 let results = 0;//the score
 let isPlaying = false;
 let tries = 3;//number of player's lives
+let square;
+let currentLaserIndex = currentShooterIndex
+let fps = 0;
+let menu = document.getElementById('myTable')
 
-
+//++++++++++++ START OF GAME +++++++++++++++
 
 for (let i = 0; i < 400; i++) {
-  const square = document.createElement('div')
+  square = document.createElement('div')
   grid.appendChild(square)
 }
 const squares = Array.from(document.querySelectorAll('.grid div'))//
@@ -74,7 +79,9 @@ const alienInvaders = [//starting position of invaders
   20,21,22,23,24,25,26,27,28,29,
   40,41,42,43,44,45,46,47,48,49,
 ]
-function draw() {//draw all invaders at beginning of game
+
+squares[currentShooterIndex].classList.add('shooter') //draw shooter AT START OF GAME
+function draw() {//draw all invaders AT START OF GAME
     for (let i = 0; i < alienInvaders.length; i++) {
       if(!aliensRemoved.includes(i)) {
         squares[alienInvaders[i]].classList.add('invader')
@@ -82,28 +89,67 @@ function draw() {//draw all invaders at beginning of game
       }
     }
 }
-draw()//invoke draw
+draw()//draw invaders AT START OF GAME
 
-function remove() {//invader is removed when shot or it has reached grid's left or right edge
+
+//++++++++++++ GAME IS ON +++++++++++++++
+
+//incluide inside 'paintGameState' function
+function paintInv() { //paint invaders movements
   for (let i = 0; i < alienInvaders.length; i++) {
-    squares[alienInvaders[i]].classList.remove('invader')
+    if(!aliensRemoved.includes(i)) {
+      squares[alienInvaders[i]].classList.add('invader');
+    }
   }
 }
 
-squares[currentShooterIndex].classList.add('shooter') //draw shooter at start of game
+//include inside 'paintGameState' function
+function paintShooter() {//paints shooter movements
+  squares[currentShooterIndex].classList.add('shooter');
+  }
+
+  //include inside 'paintGameState' function
+function paintLaser() {//paints laser movements
+  squares[currentLaserIndex].classList.add('laser')
+
+}
+
+
+
+  //Include inside requestAnimationFrame
+function paintGameState(){
+
+paintInv()//draw invaders while game is on
+
+paintShooter()//draw shooter while game is on
+
+//paintLaser()//draw laser while game is on
+}
+
+
+
+
+
+function removeInv() {//invader is removed when shot or it has reached grid's left or right edge
+  for (let i = 0; i < alienInvaders.length; i++) {
+    squares[alienInvaders[i]].classList.remove('invader')
+    //squares[alienInvaders[i]].style.opacity = 0
+  }
+}
 
 function moveShooter(e) {
   if(isPlaying){
   squares[currentShooterIndex].classList.remove('shooter')//erase shooter
   switch(e.key) {
     case 'ArrowLeft':
-      if (currentShooterIndex % width !== 0) currentShooterIndex -=1//check left border e.g. (0, or 20, or 40, or 60) / 20 = (0,2,4,6) and no decimals
+      if (currentShooterIndex % width !== 0) currentShooterIndex -=1//first, check left border e.g. (0, or 20, or 40, or 60) / 20 = (0,2,4,6) i.e. no decimals, then move left
       break
     case 'ArrowRight' :
-      if (currentShooterIndex % width < width -1) currentShooterIndex +=1 //check right border e.g. (19, or 39, or 59, or 79) / 20 = (0.95,1.95,2.95,3.95) and (0*20 = 0 => 19 reminder)
+      if (currentShooterIndex % width < width -1) currentShooterIndex +=1 //first, check right border e.g. (19, or 39, or 59, or 79) / 20 = (0.95,1.95,2.95,3.95) and (0*20 = 0 => 19 reminder), then move right
       break
   }
-  squares[currentShooterIndex].classList.add('shooter')//paint shooter
+  //squares[currentShooterIndex].classList.add('shooter')//paint shooter// moved to drawShooter()
+
 }
 }
 
@@ -116,13 +162,13 @@ function moveInvaders() {
   window.last_render = Date.now()
   const leftEdge = alienInvaders[0] % width === 0//define left edge as modulus = 0
   const rightEdge = alienInvaders[alienInvaders.length - 1] % width === width -1//define right edge as modulus = 19
-  remove()//remove invaders from grid
+  removeInv()//remove invaders from grid
   if (rightEdge && goingRight) {//if invaders have reached grid's right edge
     for (let i = 0; i < alienInvaders.length; i++) {
       //console.log('before alien[i]:',alienInvaders[i] )
       alienInvaders[i] += width +1//+= ensures that all aliens are processed; move invaders down and left
       //console.log('after alien[i]:',alienInvaders[i] )
-      direction = -1
+      direction = -1 
       goingRight = false
     }
   }
@@ -138,54 +184,58 @@ function moveInvaders() {
   for (let i = 0; i < alienInvaders.length; i++) {//else if invaders are inside the grid
     alienInvaders[i] += direction//assign new position to all invaders
   }
-  draw()//paint invaders at their new position
+   paintInv()//paint invaders at their new position
 
   if (squares[currentShooterIndex].classList.contains('invader', 'shooter')) {//check if shooter was captured
     squares[currentShooterIndex].classList.add('deadShooter')
     squares[currentShooterIndex].classList.remove('invader')
     resultsDisplay.innerHTML = 'GAME OVER'//player has lost
-    document.getElementById('btnStop').style.display='none'//hide the Stop button
+    menu.style.opacity = "1";
+    //document.getElementById('btnStop').style.display='none'//hide the Stop button
     window.addEventListener("keydown", function (e){
       if( e.key =="t"){
         window.location.reload();
       }
     })
 
-    clearInterval(invadersId)
-    // isPlaying = false
+   //clearInterval(invadersId)
+    isPlaying = false
     tries -= 1
   }
+
   for (let i = 0; i < alienInvaders.length; i++) {
-    if(alienInvaders[i] > (squares.length)) {//if aliens have reached grid's bottom
+    if(alienInvaders[i] >= (squares[390]) && alienInvaders[i]<= squares[399]) {//if aliens have reached grid's bottom
       resultsDisplay.innerHTML = 'GAME OVER'//player has lost
-      document.getElementById('btnStop').style.display='none'//hide the Stop button
+      menu.style.opacity = "1";
+      //document.getElementById('btnStop').style.display='none'//hide the Stop button
       window.addEventListener("keydown", function (e){
         if( e.key =="t"){
           window.location.reload();
         }
       })
       // window.location.reload();
-      clearInterval(invadersId)
-      // isPlaying = false
+      //clearInterval(invadersId)
+      isPlaying = false
       tries -= 1
     }
   }
   if (aliensRemoved.length === alienInvaders.length) {//if all aliens have been shot
     resultsDisplay.innerHTML = 'YOU WON'//player wins
-    document.getElementById('btnStop').style.display='none'//hide the Stop button
+    menu.style.opacity = "1";
+    //document.getElementById('btnStop').style.display='none'//hide the Stop button
     window.addEventListener("keydown", function (e){
       if( e.key =="t"){
         window.location.reload();
       }
     })
-    clearInterval(invadersId)
+    //clearInterval(invadersId)
     isPlaying = false
     tries -= 1
   }
 }
 }
-
-invadersId = setInterval(moveInvaders, 100)//invoke moveInvaders at speed of 100 nanoseconds
+//I am removing setInterval function because I am using requestAnimationFrame function
+//invadersId = setInterval(moveInvaders, 100)//invoke moveInvaders at speed of 100 nanoseconds
 
 function shoot(e) {
   let laserId
@@ -216,8 +266,22 @@ function shoot(e) {
       laserId = setInterval(moveLaser, 100)
   }
 }
-
 document.addEventListener('keydown', shoot) //invoking the 'shoot' function
+  
+
+
+
+/*Moved to paintGameState
+function shoot(e) {
+  let laserId
+  switch(e.key) {
+    case ' ':
+      laserId = setInterval(moveLaser, 16)//calling 'shoot' function in rAF
+      moveLaser();
+  }
+}
+
+document.addEventListener('keydown', shoot) //invoking the 'shoot' function*/
 
 //stop, resume, restart buttons
 function toggleMenu(){
@@ -227,6 +291,7 @@ function toggleMenu(){
       const keyName = event.key;
       switch (keyName){
         case "s": //stop and show restart and continue buttons
+          
           var show1 = document.getElementById("btnContinue")
           var show2 = document.getElementById("btnRestart")
           var stop = document.getElementById('btnStop')
@@ -254,6 +319,11 @@ function toggleMenu(){
           isPlaying = true //continue game by setting isPlaying to 'true'
           
         case "t":
+          if(menu.style.opacity = "0"){
+            menu.style.opacity = "1";
+          }else{
+            menu.style.opacity = "0"
+          };
           isPlaying = true;
        }
   })
@@ -285,39 +355,100 @@ var x = setInterval(function() {
     document.getElementById("demo").innerHTML = 'GAME OVER';
     isPlaying = false
   }
-}, 1000);
+}, 1000)
 
 clearInterval(x)
 
-/*//My game loop function is used to achieve 60 frames per second
+//My game loop function v.0.1, used to achieve 60 frames per second
 
-  function gameLoop(time) {
-    if(resultsDisplay.innerHTML = 'YOU WON' || resultsDisplay.innerHTML = 'GAME OVER' ){
+  function gameLoop() {
+  /*  if(timestamp >= 1000/60){
       return
-    }else if(!isPlaying){
-      return
-    }else{
-    draw()
-    moveInvaders()
+    }else{*/
+    //console.log(timestamp)
+      if(fps === 3){
+        moveInvaders();
+        //moveLaser()
+        paintGameState();
+        //moveShooter(e);
+        //moveLaser(e);
+        /*window.addEventListener("keydown", (event) => { //Not needed for rAF
+         switch(event.key) {
+         case "t": case "s": case "n": case "b":
+            toggleMenu();
+            break;
+          case ' ':
+            shoot(event);
+            break;
+          case 'ArrowLeft': case 'ArrowRight':
+            moveShooter(event);
+      }
+    }, true)*/
+
+
+        fps = 0;
+      }
+  fps++
+     
+    //const timeElapsed = performance.now();//gives time interval since last frame
+  
+      window.requestAnimationFrame(gameLoop);//gameLoop is automatically passed a timestamp indicating the precise time requestAnimationFrame() was called.
+    }
+ 
+ window.requestAnimationFrame(gameLoop)//starts things off
+ //let startLoop = window.requestAnimationFrame(gameLoop)//starts things off
+
+
+//cancelAnimationFrame(startLoop)
+
+
+//My game loop function v.0.2 that includes time stamp
+/*function gameLoop() {
+//let d = new Date()
+//let previous = d.getSeconds() * 1000;
+let lag = 0.0;
+while (isPlaying)
+{
+  //d = new Date()
+  //let current = d.getSeconds() * 1000;
+  //let elapsed = current - previous;
+  let elapsed = performance.now();
+ // previous = current;
+  lag += elapsed;
+
+  //processInput();
+
+  while (lag >= 16)
+  {
+ //update();
+ moveInvaders();
+     window.addEventListener("keydown", (event) => { 
+         switch(event.key) {
+    /* case "t": case "s": case "n": case "b":
+            toggleMenu();
+            break;
+          case ' ':
+            shoot(event);
+            break;
+          case 'ArrowLeft': case 'ArrowRight':
+            moveShooter(event);
+      }
+    }, true)
+
+
+ lag -= 16;
+  }
+ 
+  //render();
+  window.requestAnimationFrame(gameLoop);
 }
-window.addEventListener("keydown", (event) => {
-    switch(event.key) {
-      case "t": case "s": case "n": case "b":
-        toggleMenu();
-        break;
-      case ' ':
-        shoot(event);
-        break;
-      case 'ArrowLeft': case 'ArrowRight':
-        moveShooter(event)
-}, true) 
-
-   window.requestAnimationFrame(gameLoop)
- }
- window.requestAnimationFrame(gameLoop)
+}
+let startLoop = window.requestAnimationFrame(gameLoop)//starts things off
 */
 
+
 /*Kingsley's gameLoop:
+function loopAnimation(){
 if(lost){
   return
 }else if(gamePaused){
@@ -329,3 +460,4 @@ window.reequestAnimationFrame(loopAnimation)
 window.requestAnimationFrame(loopAnimation);//start things off
 
 */
+
