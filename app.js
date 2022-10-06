@@ -62,14 +62,15 @@ let aliensRemoved = [];//stick dead invaders in here
 let results = 0;//the score
 let isPlaying = false;
 let tries;//set # lives to 1
-let lives;//to retain value after page refresh
+let lives;//to retain value in browser memory for 3 consecutive games
 let square;
 let currentLaserIndex = currentShooterIndex
 let fps = 0;
 let menu = document.querySelector(".menu")
 let heart = document.getElementById("heart1")
+let trophy = document.getElementById("trophy")
 
-//let heart1 = document.getElementById("#heart1")
+let lostHeart;
 //let heart2 = document.getElementById("#heart2")
 //let heart3 = document.getElementById("#heart3")
 
@@ -82,22 +83,36 @@ for (let i = 0; i < 400; i++) {
   grid.appendChild(square)
 }
 const squares = Array.from(document.querySelectorAll('.grid div'))//
-const alienInvaders = [//starting position of invaders
+var alienInvaders = [//starting position of invaders
   0,1,2,3,4,5,6,7,8,9,
   20,21,22,23,24,25,26,27,28,29,
   40,41,42,43,44,45,46,47,48,49,
 ]
 
 squares[currentShooterIndex].classList.add('shooter') //draw shooter AT START OF GAME
+
 function draw() {//draw all invaders AT START OF GAME
     for (let i = 0; i < alienInvaders.length; i++) {
       if(!aliensRemoved.includes(i)) {
         squares[alienInvaders[i]].classList.add('invader')
-       
       }
     }
 }
 draw()//draw invaders AT START OF GAME
+
+//re-position invaders during game, after life has been won or lost
+function drawAgain(){
+  //console.log("drawAgain IS being called")
+ removeInv()
+ alienInvaders = [//re-starting position of invaders
+  0,1,2,3,4,5,6,7,8,9,
+  20,21,22,23,24,25,26,27,28,29,
+  40,41,42,43,44,45,46,47,48,49,
+]
+
+draw()
+
+}
 
 
 //++++++++++++ GAME IS ON +++++++++++++++
@@ -106,7 +121,7 @@ draw()//draw invaders AT START OF GAME
 function paintInv() { //paint invaders movements
   for (let i = 0; i < alienInvaders.length; i++) {
     if(!aliensRemoved.includes(i)) {
-      console.log(square)
+      // console.log(square)
       squares[alienInvaders[i]].classList.add('invader');
       //squares[alienInvaders[i]].style.opacity = "1";
     }
@@ -163,17 +178,88 @@ function moveShooter(e) {
 }
 }
 
+function lostLife(){
+  console.log("lostLife called")
+  if(tries < 3 ){//player has at least one life left
+    //console.log(tries)
+    isPlaying = false;
+    //cancelAnimationFrame(gameLoopID);
+    //console.log(tries)
+    lostHeart = document.getElementById(`heart${tries}`)
+    //console.log(lostHeart)
+    resultsDisplay.innerHTML = `YOU LOST - Lives remaining: ${3-tries}`//player has lost
+    //document.getElementById("heart1").style.opacity="0"
+    lostHeart.style.opacity="0"
+    setTimeout(drawAgain, 4000);//re-set invaders' position after 4 seconds
+    setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
+    setTimeout(() => isPlaying = true, 4000);
+    setTimeout(() => resultsDisplay.innerHTML = `Space Invaders - Lives remaining: ${3-tries}`,4000)
+    tries++
+    localStorage.setItem("lives", tries);
+    //console.log(tries)
+    //console.log(localStorage.getItem("lives"))
+  }else{//Player has no more lives left
+    isPlaying = false;
+    //cancelAnimationFrame(gameLoopID);
+    resultsDisplay.innerHTML = `GAME OVER - Lives used: ${tries}. PLAY AGAIN?`//player has lost
+    document.getElementById("heart3").style.opacity="0"
+    //document.getElementById(`heart${tries}`).style.opacity="0"
+    lives = localStorage.setItem("lives", tries);
+    setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
+    //menu.style.opacity = "1";
+     //document.getElementById('btnStop').style.display='none'//hide the Stop button
+     window.addEventListener("keydown", function (e){//press "t" to play again
+       if( e.key =="t"){
+         window.location.reload();
+         //tries = localStorage.getItem("lives")//maybe not needed here
+         tries = 4
+       }
+     })
+  }
+
+ //clearInterval(invadersId)
+  //isPlaying = false
+  //tries += 1
+}
+
+function wonLife(){//player has earned one life, continues playing
+
+  isPlaying = false;
+  //cancelAnimationFrame(gameLoopID);
+  resultsDisplay.innerHTML = `YOU WON ONE LIFE! '\n' You now have ${tries + 1} lives`;//player has won
+  trophy.style.opacity="1"
+  //document.getElementById(`heart${tries}`).style.opacity="0";
+  tries += 1
+  localStorage.setItem("lives", tries)
+  setTimeout(trophy.style.opacity="0",4000);//hide trophy after 4 seconds
+
+  setTimeout(drawAgain, 4000);//re-set invaders' position after 4 seconds
+  
+  setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
+  
+  isPlaying = true;
+ //document.getElementById('btnStop').style.display='none'//hide the Stop button
+ /* window.addEventListener("keydown", function (e){
+    if( e.key =="t"){
+    
+    window.location.reload();
+    tries = localStorage.getItem("lives")//maybe not needed here
+  }
+})*/
+}
+
+
 document.addEventListener('keydown', moveShooter)//invoke moveShooter
 
 var time_passed_since_last_render = Date.now() - window.last_render;
 
 function moveInvaders() {
   //console.log(tries)
-  if(lives == null || lives == undefined || lives == 0){
+/*  if(lives == null || lives == undefined || lives == 0){
     tries = 1;
   } else{
     tries = localStorage.getItem("lives");//retrieve player's lives from browser memory
-  }
+  }*/
   //console.log(tries)
   if(isPlaying){
   window.last_render = Date.now()
@@ -185,7 +271,7 @@ function moveInvaders() {
       //console.log('before alien[i]:',alienInvaders[i] )
       alienInvaders[i] += width +1//+= ensures that all aliens are processed; move invaders down and left
       //console.log('after alien[i]:',alienInvaders[i] )
-      direction = -1 
+      direction = -1 //leftwards
       goingRight = false
     }
   }
@@ -194,7 +280,7 @@ function moveInvaders() {
       //console.log('before alien[i]:',alienInvaders[i] )
       alienInvaders[i] += width -1//+= ensures that all aliens are processed; move invaders down and right
       //console.log('after alien[i]:',alienInvaders[i] )
-      direction = 1
+      direction = 1 //rightwards
       goingRight = true
     }
   }
@@ -208,92 +294,32 @@ function moveInvaders() {
   if (squares[currentShooterIndex].classList.contains('invader', 'shooter')) {//check if shooter was captured
     squares[currentShooterIndex].classList.add('deadShooter')
     squares[currentShooterIndex].classList.remove('invader')
+    console.log("scenario 1");
+
     //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
     
-    if(tries < 3 ){//player has more lives
-      //console.log(tries)
-      resultsDisplay.innerHTML = `YOU LOST - PLAY AGAIN? Lives used: ${tries}`//player has lost
-      document.getElementById("heart1").style.opacity="0"
-      //document.getElementById(`heart${tries}`).style.opacity="0"
-      tries++
-      localStorage.setItem("lives", tries)
-      //console.log(tries)
-      //console.log(localStorage.getItem("lives"))
-    }else{//Player has no more lives
-      resultsDisplay.innerHTML = `GAME OVER - NO MORE LIVES! Lives used: ${tries}`//player has lost
-      document.getElementById("heart3").style.opacity="0"
-      //document.getElementById(`heart${tries}`).style.opacity="0"
-      tries = 0
-      lives = localStorage.setItem("lives", tries);
-    }
-    setTimeout(()=> menu.style.opacity = "1", 3000)//wait 3 seconds to show the menu
-   //menu.style.opacity = "1";
-    //document.getElementById('btnStop').style.display='none'//hide the Stop button
-    window.addEventListener("keydown", function (e){
-      if( e.key =="t"){
-        window.location.reload();
-        tries = localStorage.getItem("lives")//maybe not needed here
-      }
-    })
-
-   //clearInterval(invadersId)
-    isPlaying = false
-    //tries += 1
+     lostLife()
+    return
   }
  //End of game 2: Invaders have touched grid's bottom
   for (let i = 0; i < alienInvaders.length; i++) {
     if(alienInvaders[alienInvaders.length-1] >= 390 && alienInvaders[alienInvaders.length-10]<= 399) {//if lowest row of aliens has reached grid's bottom
+      console.log("scenario 2");
       //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
       //menu.style.opacity = "1";
-      if(tries < 3 ){
-        resultsDisplay.innerHTML = `YOU LOST - PLAY AGAIN? Lives used: ${tries}`//player has lost
-        document.getElementById("heart1").style.opacity="0"
-        tries++
-        localStorage.setItem("lives", tries)
-      }else{
-        resultsDisplay.innerHTML = `GAME OVER - NO MORE LIVES! Lives used: ${tries}`//player has lost
-        document.getElementById("heart3").style.opacity="0"
-        tries = 0
-        localStorage.setItem("lives", tries)
-      }
-      setTimeout(()=> menu.style.opacity = "1", 3000)//wait 3 seconds to show the menu
-      //document.getElementById('btnStop').style.display='none'//hide the Stop button
-      window.addEventListener("keydown", function (e){
-        if( e.key =="t"){
-          window.location.reload();
-          tries = localStorage.getItem("lives")//maybe not needed here
-        }
-      })
-      // window.location.reload();
-      //clearInterval(invadersId)
-      isPlaying = false
+
+      lostLife();
     }
   }
   // //End of game 3: if all aliens have been shot
   if (aliensRemoved.length === alienInvaders.length) {//if all aliens have been shot
+    console.log("scenario 3");
     //resultsDisplay.innerHTML = 'YOU WON'//player wins
     //menu.style.opacity = "1";
-    if(tries < 3 ){//player can play again
-      resultsDisplay.innerHTML = `YOU WON - lives used: ${tries}`;//player has won
-      document.getElementById(`"heart${tries}"`).style.opacity="0";
-      tries += 1
-      localStorage.setItem("lives", tries)
-    }else{
-      resultsDisplay.innerHTML = `YOU WON - NO MORE LIVES  lives used: ${tries}`;//player won
-      document.getElementById(`"heart${tries}"`).style.opacity="0";
-      tries = 0
-      localStorage.setItem("lives", tries)
-    }
-    setTimeout(()=> menu.style.opacity = "1", 3000)//wait 3 seconds to show the menu
-    //document.getElementById('btnStop').style.display='none'//hide the Stop button
-    window.addEventListener("keydown", function (e){
-      if( e.key =="t"){
-        window.location.reload();
-        tries = localStorage.getItem("lives")//maybe not needed here
-      }
-    })
     //clearInterval(invadersId)
-    isPlaying = false
+    //isPlaying = false
+
+     wonLife();
   }
 }
 }
@@ -463,10 +489,10 @@ clearInterval(x)
      
     //const timeElapsed = performance.now();//gives time interval since last frame
   
-      window.requestAnimationFrame(gameLoop);//gameLoop is automatically passed a timestamp indicating the precise time requestAnimationFrame() was called.
+      gameLoopID = window.requestAnimationFrame(gameLoop);//gameLoop is automatically passed a timestamp indicating the precise time requestAnimationFrame() was called.
     }
  
- window.requestAnimationFrame(gameLoop)//starts things off
+ let gameLoopID = window.requestAnimationFrame(gameLoop)//starts things off
  //let startLoop = window.requestAnimationFrame(gameLoop)//starts things off
 
 
