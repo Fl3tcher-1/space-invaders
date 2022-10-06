@@ -181,7 +181,7 @@ function moveShooter(e) {
 function lostLife(){
   console.log("lostLife called")
   if(tries < 3 ){//player has at least one life left
-    //console.log(tries)
+    console.log(tries)
     isPlaying = false;
     //cancelAnimationFrame(gameLoopID);
     //console.log(tries)
@@ -192,27 +192,31 @@ function lostLife(){
     lostHeart.style.opacity="0"
     setTimeout(drawAgain, 4000);//re-set invaders' position after 4 seconds
     setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
-    setTimeout(() => isPlaying = true, 4000);
+    setTimeout(() => isPlaying = true, 4000);//start playing after 4 seconds
     setTimeout(() => resultsDisplay.innerHTML = `Space Invaders - Lives remaining: ${3-tries}`,4000)
     tries++
     localStorage.setItem("lives", tries);
-    //console.log(tries)
+    console.log(tries)
     //console.log(localStorage.getItem("lives"))
   }else{//Player has no more lives left
+    console.log(tries)
     isPlaying = false;
     //cancelAnimationFrame(gameLoopID);
     resultsDisplay.innerHTML = `GAME OVER - Lives used: ${tries}. PLAY AGAIN?`//player has lost
     document.getElementById("heart3").style.opacity="0"
     //document.getElementById(`heart${tries}`).style.opacity="0"
-    lives = localStorage.setItem("lives", tries);
+    //lives = localStorage.setItem("lives", tries);
     setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
+    tries = 0
+    localStorage.setItem("lives", tries);
+    console.log(tries)
     //menu.style.opacity = "1";
      //document.getElementById('btnStop').style.display='none'//hide the Stop button
      window.addEventListener("keydown", function (e){//press "t" to play again
        if( e.key =="t"){
          window.location.reload();
          //tries = localStorage.getItem("lives")//maybe not needed here
-         tries = 4
+
        }
      })
   }
@@ -226,11 +230,11 @@ function wonLife(){//player has earned one life, continues playing
 
   isPlaying = false;
   //cancelAnimationFrame(gameLoopID);
-  resultsDisplay.innerHTML = `YOU WON ONE LIFE! '\n' You now have ${tries + 1} lives`;//player has won
+  resultsDisplay.innerHTML = `YOU WON ONE LIFE! '\n' You now have ${3 - tries + 1} lives left`;//player has won
   trophy.style.opacity="1"
   //document.getElementById(`heart${tries}`).style.opacity="0";
-  tries += 1
-  localStorage.setItem("lives", tries)
+  //tries += 1
+  //localStorage.setItem("lives", tries)
   setTimeout(trophy.style.opacity="0",4000);//hide trophy after 4 seconds
 
   setTimeout(drawAgain, 4000);//re-set invaders' position after 4 seconds
@@ -254,13 +258,14 @@ document.addEventListener('keydown', moveShooter)//invoke moveShooter
 var time_passed_since_last_render = Date.now() - window.last_render;
 
 function moveInvaders() {
-  //console.log(tries)
-/*  if(lives == null || lives == undefined || lives == 0){
+  tries = localStorage.getItem("lives")
+  console.log(tries)
+ if(tries == null || tries == undefined || tries == NaN || tries == 0){
     tries = 1;
   } else{
-    tries = localStorage.getItem("lives");//retrieve player's lives from browser memory
-  }*/
-  //console.log(tries)
+    tries = tries;//retrieve player's lives from browser memory
+  }
+  console.log(tries)
   if(isPlaying){
   window.last_render = Date.now()
   const leftEdge = alienInvaders[0] % width === 0//define left edge as modulus = 0
@@ -309,10 +314,12 @@ function moveInvaders() {
       //menu.style.opacity = "1";
 
       lostLife();
+      return
     }
   }
   // //End of game 3: if all aliens have been shot
   if (aliensRemoved.length === alienInvaders.length) {//if all aliens have been shot
+    console.log(tries)
     console.log("scenario 3");
     //resultsDisplay.innerHTML = 'YOU WON'//player wins
     //menu.style.opacity = "1";
@@ -320,6 +327,7 @@ function moveInvaders() {
     //isPlaying = false
 
      wonLife();
+     return
   }
 }
 }
@@ -421,7 +429,7 @@ function toggleMenu(){
           };
           isPlaying = true;
           //tries++
-          tries = localStorage.getItem("lives");
+          //tries = localStorage.getItem("lives");
        }
   })
 }
