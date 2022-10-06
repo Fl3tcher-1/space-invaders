@@ -13,14 +13,18 @@
 	font-size: xx-large;
 }
 
+#trophy{
+	opacity: 0;
+}
+
 .container{
 	position: relative;
 	display: grid;
 }
-.grid .menu{
+/*.grid .menu{
 	position:absolute;
 	opacity: 1;
-}
+}*/
 
 .grid{
 	display: flex;
@@ -36,7 +40,7 @@
 	width: 250px;
 	height: 100px;
 	color: white;
-	opacity: 1;
+	opacity: 0.5;
 }
 .centered{
 	background-color: darkslateblue;
@@ -54,6 +58,10 @@
 	font-weight: bolder;
 	display:block
 	
+}
+#heart1{
+	opacity: "1";
+	animation-fill-mode: forwards;
 }
 #btnStop {
 	background-color: white;
