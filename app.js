@@ -179,9 +179,9 @@ function moveShooter(e) {
 }
 
 function lostLife(){
-  console.log("lostLife called")
+  //console.log("lostLife called")
   if(tries < 3 ){//player has at least one life left
-    console.log(tries)
+    //console.log(tries)
     isPlaying = false;
     //cancelAnimationFrame(gameLoopID);
     //console.log(tries)
@@ -195,11 +195,11 @@ function lostLife(){
     setTimeout(() => isPlaying = true, 4000);//start playing after 4 seconds
     setTimeout(() => resultsDisplay.innerHTML = `Space Invaders - Lives remaining: ${3-tries}`,4000)
     tries++
-    localStorage.setItem("lives", tries);
-    console.log(tries)
+    localStorage.setItem("lives", tries);//save 'tries' value in browser's memory
+    //console.log(tries)
     //console.log(localStorage.getItem("lives"))
   }else{//Player has no more lives left
-    console.log(tries)
+    //console.log(tries)
     isPlaying = false;
     //cancelAnimationFrame(gameLoopID);
     resultsDisplay.innerHTML = `GAME OVER - Lives used: ${tries}. PLAY AGAIN?`//player has lost
@@ -208,8 +208,8 @@ function lostLife(){
     //lives = localStorage.setItem("lives", tries);
     setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
     tries = 0
-    localStorage.setItem("lives", tries);
-    console.log(tries)
+    localStorage.setItem("lives", tries);//save 'tries' value in browser's memory
+    //console.log(tries)
     //menu.style.opacity = "1";
      //document.getElementById('btnStop').style.display='none'//hide the Stop button
      window.addEventListener("keydown", function (e){//press "t" to play again
@@ -233,7 +233,7 @@ function wonLife(){//player has earned one life, continues playing
   resultsDisplay.innerHTML = `YOU WON ONE LIFE! '\n' You now have ${3 - tries + 1} lives left`;//player has won
   trophy.style.opacity="1"
   //document.getElementById(`heart${tries}`).style.opacity="0";
-  //tries += 1
+  tries = 
   //localStorage.setItem("lives", tries)
   setTimeout(trophy.style.opacity="0",4000);//hide trophy after 4 seconds
 
