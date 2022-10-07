@@ -96,10 +96,10 @@ function draw() {//draw all invaders AT START OF GAME
       }
     }
 }
-draw()//draw invaders AT START OF GAME
+draw()//draws invaders AT START OF GAME
 
-//re-position invaders during game, after life has been won or lost
-function drawAgain(){
+//re-position invaders during game, after life has been lost
+function drawAfterLost(){
   //console.log("drawAgain IS being called")
  removeInv()
  alienInvaders = [//re-starting position of invaders
@@ -125,16 +125,6 @@ draw()
 
 //++++++++++++ GAME IS ON +++++++++++++++
 
-//incluide inside 'paintGameState' function
-function paintInv() { //paint invaders movements
-  for (let i = 0; i < alienInvaders.length; i++) {
-    if(!aliensRemoved.includes(i)) {
-      // console.log(square)
-      squares[alienInvaders[i]].classList.add('invader');
-      //squares[alienInvaders[i]].style.opacity = "1";
-    }
-  }
-}
 
 //include inside 'paintGameState' function
 function paintShooter() {//paints shooter movements
@@ -149,15 +139,15 @@ function paintLaser() {//paints laser movements
 
 
 
-  //Include inside requestAnimationFrame
+  /*Not include inside requestAnimationFrame
 function paintGameState(){
 
 //paintInv()//draw invaders while game is on
 
-paintShooter()//draw shooter while game is on
+//paintShooter()//draw shooter while game is on
 
 //paintLaser()//draw laser while game is on
-}
+}*/
 
 
 
@@ -181,7 +171,7 @@ function moveShooter(e) {
       if (currentShooterIndex % width < width -1) currentShooterIndex +=1 //first, check right border e.g. (19, or 39, or 59, or 79) / 20 = (0.95,1.95,2.95,3.95) and (0*20 = 0 => 19 reminder), then move right
       break
   }
-  //squares[currentShooterIndex].classList.add('shooter')// moved to paintShooter() inside paintGameState()
+  squares[currentShooterIndex].classList.add('shooter')// added to paintShooter() inside paintGameState()
 
 }
 }
@@ -196,10 +186,13 @@ function lostLife(){
     //console.log(tries)
     lostHeart = document.getElementById(`heart${tries}`)
     //console.log(lostHeart)
-    resultsDisplay.innerHTML = `YOU LOST - Lives remaining: ${3-tries}`//player has lost
+    resultsDisplay.innerHTML = `
+    YOU LOST
+     Lives remaining: ${3-tries}
+     `;//player has lost
     //document.getElementById("heart1").style.opacity="0"
     lostHeart.style.opacity="0"
-    setTimeout(drawAgain, 4000);//re-set invaders' position after 4 seconds
+    setTimeout(drawAfterLost, 4000);//re-set invaders' position after 4 seconds
     setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
     tries++
     //localStorage.setItem("lives", tries);//to save 'tries' value in browser's memory variable 'lives', but doesn't work, gives 'undefined'
@@ -314,7 +307,7 @@ function moveInvaders() {
   for (let i = 0; i < alienInvaders.length; i++) {//else if invaders are inside the grid
     alienInvaders[i] += direction//assign new position to all invaders
   }
-   paintInv()//paint invaders at their new position. Previously moved to: paintGameState()
+   draw()//paint invaders at their new position. Previously moved to: paintGameState()
 
   //End of game 1: shooter is captured
   //console.log(tries)
@@ -358,9 +351,11 @@ function moveInvaders() {
 //invadersId = setInterval(moveInvaders, 100)//invoke moveInvaders at speed of 100 nanoseconds
 
 function shoot(e) {
+  console.log("shoot called")
   let laserId
   let currentLaserIndex = currentShooterIndex
   function moveLaser() {
+    console.log("moveLaser called")
     if(currentLaserIndex >= 0 && currentLaserIndex <= 19 ) {//if laser is in grid's top row
       squares[currentLaserIndex].classList.remove('laser')//remove laser 
     }else{
@@ -372,22 +367,19 @@ function shoot(e) {
       squares[currentLaserIndex].classList.remove('laser')
       squares[currentLaserIndex].classList.remove('invader')
       squares[currentLaserIndex].classList.add('boom')
-      setTimeout(()=> squares[currentLaserIndex].classList.remove('boom'), 400)//laser hits an alien
+      setTimeout(()=> squares[currentLaserIndex].classList.remove('boom'), 200)//laser hits an alien
       clearInterval(laserId)
       const alienRemoved = alienInvaders.indexOf(currentLaserIndex)//position of shot alien
       aliensRemoved.push(alienRemoved)//append shot alien position to 'aliensRemoved' array
       results++//increase score
-      scoreDisplay.innerHTML = `The score is ${results}`;
+      scoreDisplay.innerHTML = `Score: ${results}`;
       //aliensRemoved.style.display='block';
 
     }
   }
-
-   
-
   switch(e.key) {
     case ' ':
-      laserId = setInterval(moveLaser, 80)
+      laserId = setInterval(moveLaser, 100)
   /*  case 't':
       window.location.reload(); */
   }
@@ -498,7 +490,7 @@ clearInterval(x)
       if(fps === 3){
         moveInvaders();
         //moveLaser()
-        paintGameState();
+        //paintGameState();
         //moveShooter(e);
         //moveLaser(e);
         /*window.addEventListener("keydown", (event) => { //Not needed for rAF
