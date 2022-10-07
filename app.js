@@ -67,16 +67,15 @@ let square;
 let currentLaserIndex = currentShooterIndex
 let fps = 0;
 let menu = document.querySelector(".menu")
-let heart = document.getElementById("heart1")
 let trophy = document.getElementById("trophy")
-
+let addLife
 let lostHeart;
 //let heart2 = document.getElementById("#heart2")
 //let heart3 = document.getElementById("#heart3")
 
 //++++++++++++ START OF GAME +++++++++++++++
 
-console.log(heart)
+
 
 for (let i = 0; i < 400; i++) {
   square = document.createElement('div')
@@ -112,6 +111,16 @@ function drawAgain(){
 
 draw()
 
+}
+
+function drawAfterWin(){//draw invaders after player has won one life
+  aliensRemoved = []//clear all aliens from the 'aliensRemoved' array
+ alienInvaders = [//re-starting position of invaders
+  0,1,2,3,4,5,6,7,8,9,
+  20,21,22,23,24,25,26,27,28,29,
+  40,41,42,43,44,45,46,47,48,49,
+]
+draw()
 }
 
 
@@ -179,7 +188,7 @@ function moveShooter(e) {
 }
 
 function lostLife(){
-  //console.log("lostLife called")
+  console.log("lostLife called")
   if(tries < 3 ){//player has at least one life left
     //console.log(tries)
     isPlaying = false;
@@ -192,31 +201,38 @@ function lostLife(){
     lostHeart.style.opacity="0"
     setTimeout(drawAgain, 4000);//re-set invaders' position after 4 seconds
     setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
-    setTimeout(() => isPlaying = true, 4000);//start playing after 4 seconds
-    setTimeout(() => resultsDisplay.innerHTML = `Space Invaders - Lives remaining: ${3-tries}`,4000)
     tries++
-    localStorage.setItem("lives", tries);//save 'tries' value in browser's memory
+    //localStorage.setItem("lives", tries);//to save 'tries' value in browser's memory variable 'lives', but doesn't work, gives 'undefined'
+    console.log("tries after lost:", tries)
+    setTimeout(() => isPlaying = true, 4000);//start playing after 4 seconds
+    setTimeout(() => resultsDisplay.innerHTML = "Space Invaders",4000)// - Lives remaining: ${3-tries}`,4000)
     //console.log(tries)
     //console.log(localStorage.getItem("lives"))
   }else{//Player has no more lives left
     //console.log(tries)
     isPlaying = false;
     //cancelAnimationFrame(gameLoopID);
-    resultsDisplay.innerHTML = `GAME OVER - Lives used: ${tries}. PLAY AGAIN?`//player has lost
-    document.getElementById("heart3").style.opacity="0"
+    resultsDisplay.innerHTML = `
+    GAME OVER - Lives used: ${tries}
+     Press 'r' to play again
+     `;//player has lost
+    document.getElementById(`heart${tries}`).style.opacity="0"
     //document.getElementById(`heart${tries}`).style.opacity="0"
     //lives = localStorage.setItem("lives", tries);
     setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
-    tries = 0
-    localStorage.setItem("lives", tries);//save 'tries' value in browser's memory
+    //tries = 1
+    //localStorage.setItem("lives", tries);//to save 'tries' value in browser's memory, but doesn't work, gives 'undefined'
+    //console.log("lives in memory after lost 3 lives:",lives)
     //console.log(tries)
     //menu.style.opacity = "1";
      //document.getElementById('btnStop').style.display='none'//hide the Stop button
      window.addEventListener("keydown", function (e){//press "t" to play again
-       if( e.key =="t"){
-         window.location.reload();
+       if( e.key =="r"){
+         //window.location.reload();
+         location.reload(true)
+         tries = 1
+         //console.log("tries after lost 3 lives and hard reload:",tries)
          //tries = localStorage.getItem("lives")//maybe not needed here
-
        }
      })
   }
@@ -227,17 +243,20 @@ function lostLife(){
 }
 
 function wonLife(){//player has earned one life, continues playing
-
+  console.log("wonLife called")
+  addLife++
   isPlaying = false;
   //cancelAnimationFrame(gameLoopID);
-  resultsDisplay.innerHTML = `YOU WON ONE LIFE! '\n' You now have ${3 - tries + 1} lives left`;//player has won
+  resultsDisplay.innerHTML = `
+  YOU WON ONE LIFE!
+  You now have ${3 + addLife - tries} lives left
+  `;//player has won
   trophy.style.opacity="1"
   //document.getElementById(`heart${tries}`).style.opacity="0";
-  tries = 
   //localStorage.setItem("lives", tries)
   setTimeout(trophy.style.opacity="0",4000);//hide trophy after 4 seconds
 
-  setTimeout(drawAgain, 4000);//re-set invaders' position after 4 seconds
+  setTimeout(drawAfterWin, 4000);//re-draw invaders' at starting position after 4 seconds
   
   setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
   
@@ -258,15 +277,20 @@ document.addEventListener('keydown', moveShooter)//invoke moveShooter
 var time_passed_since_last_render = Date.now() - window.last_render;
 
 function moveInvaders() {
-  tries = localStorage.getItem("lives")
-  console.log(tries)
+ // tries = localStorage.getItem("lives")
+  //console.log(tries)
  if(tries == null || tries == undefined || tries == NaN || tries == 0){
     tries = 1;
-  } else{
-    tries = tries;//retrieve player's lives from browser memory
-  }
+  } else if(tries == 1 && !isPlaying){
+    menu.style.opacity="1";
+    resultsDisplay.innerHTML = `
+    SPACE INVADERS
+    Press 'p' to play
+    `;
+  };
   console.log(tries)
   if(isPlaying){
+  resultsDisplay.innerHTML = "SPACE INVADERS"
   window.last_render = Date.now()
   const leftEdge = alienInvaders[0] % width === 0//define left edge as modulus = 0
   const rightEdge = alienInvaders[alienInvaders.length - 1] % width === width -1//define right edge as modulus = 19
@@ -299,7 +323,8 @@ function moveInvaders() {
   if (squares[currentShooterIndex].classList.contains('invader', 'shooter')) {//check if shooter was captured
     squares[currentShooterIndex].classList.add('deadShooter')
     squares[currentShooterIndex].classList.remove('invader')
-    console.log("scenario 1");
+    console.log("Shooter dead, tries:", tries);
+   
 
     //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
     
@@ -309,7 +334,7 @@ function moveInvaders() {
  //End of game 2: Invaders have touched grid's bottom
   for (let i = 0; i < alienInvaders.length; i++) {
     if(alienInvaders[alienInvaders.length-1] >= 390 && alienInvaders[alienInvaders.length-10]<= 399) {//if lowest row of aliens has reached grid's bottom
-      console.log("scenario 2");
+      console.log("Aliens touch ground, tries:", tries);
       //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
       //menu.style.opacity = "1";
 
@@ -320,13 +345,13 @@ function moveInvaders() {
   // //End of game 3: if all aliens have been shot
   if (aliensRemoved.length === alienInvaders.length) {//if all aliens have been shot
     console.log(tries)
-    console.log("scenario 3");
+    console.log("All aliens shot, tries:", tries);
     //resultsDisplay.innerHTML = 'YOU WON'//player wins
     //menu.style.opacity = "1";
     //clearInterval(invadersId)
     //isPlaying = false
 
-     wonLife();
+    wonLife();
      return
   }
 }
@@ -395,33 +420,34 @@ function toggleMenu(){
       switch (keyName){
         case "s": //stop and show restart and continue buttons
           
-          var show1 = document.getElementById("btnContinue")
-          var show2 = document.getElementById("btnRestart")
-          var stop = document.getElementById('btnStop')
-          stop.classList.remove("btnStop")//hide the Stop button
-          stop.classList.add("btnStopHide")//hide the Stop button
-          show1.classList.toggle("canSee");
-          show2.classList.toggle("canSee");
+          //var show1 = document.getElementById("btnContinue")
+          //var show2 = document.getElementById("btnRestart")
+          //var stop = document.getElementById('btnStop')
+          //stop.classList.remove("btnStop")//hide the Stop button
+          //stop.classList.add("btnStopHide")//hide the Stop button
+          //show1.classList.toggle("canSee");
+          //show2.classList.toggle("canSee");
           if(isPlaying){ //stop game by setting isPlaying to 'false'
             isPlaying = false
-          }else{
+          }/*else{
             isPlaying = true
-          }
+          }*/
           break 
-        case "n": //hide restart and continue buttons and BEGIN AGAIN
-          document.getElementById('btnStop').classList.remove("btnStopHide")
-          window.location.reload();
+        case "r": //hide restart and continue buttons and BEGIN AGAIN
+          //document.getElementById('btnStop').classList.remove("btnStopHide")
+          //window.location.reload();
+          location.reload(true)
           
         case "c": //hide restart and continue buttons and CONTINUE
-          var show1 = document.getElementById("btnContinue")
-          var show2 = document.getElementById("btnRestart")
-          show1.classList.toggle("canSee");
-          show2.classList.toggle("canSee");
-          document.getElementById('btnStop').classList.remove("btnStopHide")
-          document.getElementById('btnStop').classList.add("btnStop")//show the Stop button
+          //var show1 = document.getElementById("btnContinue")
+          //var show2 = document.getElementById("btnRestart")
+          //show1.classList.toggle("canSee");
+          //show2.classList.toggle("canSee");
+          //document.getElementById('btnStop').classList.remove("btnStopHide")
+          //document.getElementById('btnStop').classList.add("btnStop")//show the Stop button
           isPlaying = true //continue game by setting isPlaying to 'true'
           
-        case "t":
+        case "p":
           if(menu.style.opacity = "0.5"){
             menu.style.opacity = "1";
           }else{
@@ -471,7 +497,7 @@ clearInterval(x)
       return
     }else{*/
     //console.log(timestamp)
-      if(fps === 2){
+      if(fps === 3){
         moveInvaders();
         //moveLaser()
         paintGameState();
