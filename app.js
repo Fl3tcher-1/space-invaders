@@ -107,7 +107,11 @@ function drawAfterLost(){
   20,21,22,23,24,25,26,27,28,29,
   40,41,42,43,44,45,46,47,48,49,
 ]
-
+for(i=0;i<=19;i++){
+  if(squares[i].classList.includes("laser")){
+    squares[i].classList.remove('laser');
+  }
+}
 draw()
 
 }
@@ -119,6 +123,11 @@ function drawAfterWin(){//draw invaders after player has won one life
   20,21,22,23,24,25,26,27,28,29,
   40,41,42,43,44,45,46,47,48,49,
 ]
+for(i=0;i<=19;i++){
+  if(squares[i].classList.includes("laser")){
+    squares[i].classList.remove('laser');
+  }
+}
 draw()
 }
 
@@ -279,7 +288,7 @@ function moveInvaders() {
     Press 'p' to play
     `;
   };
-  console.log(tries)
+  //console.log(tries)
   if(isPlaying){
   resultsDisplay.innerHTML = "SPACE INVADERS"
   window.last_render = Date.now()
