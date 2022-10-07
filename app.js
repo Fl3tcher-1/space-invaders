@@ -53,6 +53,7 @@ function draw() {
 //window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || function(requestID){clearTimeout(requestID)} //fall back
 const grid = document.querySelector('.grid');
 const resultsDisplay = document.querySelector('.results');
+const scoreDisplay = document.querySelector('.score');
 let currentShooterIndex = 390;
 let width = 20;//gives the number of 'div' inside each row and column of the 'grid'
 let direction = 1;
@@ -67,10 +68,8 @@ let square;
 let currentLaserIndex = currentShooterIndex
 let fps = 0;
 let menu = document.querySelector(".menu")
-let trophy = document.getElementById("trophy")
-let addLife
+let trophy = false
 let lostHeart;
-//let heart2 = document.getElementById("#heart2")
 //let heart3 = document.getElementById("#heart3")
 
 //++++++++++++ START OF GAME +++++++++++++++
@@ -188,6 +187,7 @@ function moveShooter(e) {
 }
 
 function lostLife(){
+  trophy = false;
   console.log("lostLife called")
   if(tries < 3 ){//player has at least one life left
     //console.log(tries)
@@ -243,24 +243,21 @@ function lostLife(){
 }
 
 function wonLife(){//player has earned one life, continues playing
+  //trophy = true;
   console.log("wonLife called")
-  addLife++
   isPlaying = false;
-  //cancelAnimationFrame(gameLoopID);
+  //show 'triumph message' for 4 seconds
   resultsDisplay.innerHTML = `
-  YOU WON ONE LIFE!
-  You now have ${3 + addLife - tries} lives left
-  `;//player has won
-  trophy.style.opacity="1"
+  🏆 YOU WON ONE LIFE!
+  You still have ${3 - tries +1} lives left
+  `;
+  //trophy = false
   //document.getElementById(`heart${tries}`).style.opacity="0";
   //localStorage.setItem("lives", tries)
-  setTimeout(trophy.style.opacity="0",4000);//hide trophy after 4 seconds
-
+  //setTimeout(trophy.style.opacity="0",4000);//hide trophy after 4 seconds
   setTimeout(drawAfterWin, 4000);//re-draw invaders' at starting position after 4 seconds
-  
-  setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
-  
-  isPlaying = true;
+  setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
+  setTimeout(() => isPlaying = true,4000);//wait 4 seconds before start playing again
  //document.getElementById('btnStop').style.display='none'//hide the Stop button
  /* window.addEventListener("keydown", function (e){
     if( e.key =="t"){
@@ -277,11 +274,12 @@ document.addEventListener('keydown', moveShooter)//invoke moveShooter
 var time_passed_since_last_render = Date.now() - window.last_render;
 
 function moveInvaders() {
+  scoreDisplay.innerHTML = `Score: ${results}`;
  // tries = localStorage.getItem("lives")
   //console.log(tries)
  if(tries == null || tries == undefined || tries == NaN || tries == 0){
     tries = 1;
-  } else if(tries == 1 && !isPlaying){
+  } else if(tries == 1 && !isPlaying && !trophy){
     menu.style.opacity="1";
     resultsDisplay.innerHTML = `
     SPACE INVADERS
@@ -324,7 +322,7 @@ function moveInvaders() {
     squares[currentShooterIndex].classList.add('deadShooter')
     squares[currentShooterIndex].classList.remove('invader')
     console.log("Shooter dead, tries:", tries);
-   
+    trophy = false
 
     //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
     
@@ -337,7 +335,7 @@ function moveInvaders() {
       console.log("Aliens touch ground, tries:", tries);
       //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
       //menu.style.opacity = "1";
-
+      trophy = false
       lostLife();
       return
     }
@@ -350,7 +348,7 @@ function moveInvaders() {
     //menu.style.opacity = "1";
     //clearInterval(invadersId)
     //isPlaying = false
-
+    trophy = true
     wonLife();
      return
   }
@@ -379,7 +377,7 @@ function shoot(e) {
       const alienRemoved = alienInvaders.indexOf(currentLaserIndex)//position of shot alien
       aliensRemoved.push(alienRemoved)//append shot alien position to 'aliensRemoved' array
       results++//increase score
-      resultsDisplay.innerHTML = `The score is ${results}`;
+      scoreDisplay.innerHTML = `The score is ${results}`;
       //aliensRemoved.style.display='block';
 
     }
