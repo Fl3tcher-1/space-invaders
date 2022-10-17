@@ -216,7 +216,7 @@ function lostLife(){
     //cancelAnimationFrame(gameLoopID);
     resultsDisplay.innerHTML = `
     GAME OVER - Lives used: ${tries}
-     Press 'r' to play again
+     Press 'r' to play again?
      `;//player has lost
     document.getElementById(`heart${tries}`).style.opacity="0"
     //document.getElementById(`heart${tries}`).style.opacity="0"

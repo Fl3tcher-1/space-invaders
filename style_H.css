@@ -26,18 +26,17 @@ line-height: 26.4px;
 }
 
 .results{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	color: #69dadb;
-	margin-top: 30px;
-	margin-bottom: 20px;
+	width: 300px;
+	height: 60px;
+	/*color: #69dadb;*/
+	color: #CAEDDE;
+	margin: 30px auto 0px auto;
 	font-family: "Lemon"; 
-	font-size: 24px; 
+	font-size: 28px; 
 	font-style: normal; 
 	font-variant: normal; 
 	font-weight: 400; 
-	line-height: 26.4px; 
+	line-height: 1.45; 
 }
 
 .score{
@@ -97,7 +96,8 @@ line-height: 26.4px;
 	justify-content: center;
 	align-items: center;
 }
-#btnStart{
+
+/*#btnStart{
 	background-color: white;
 	border: solid gold;
 	color: gold;
@@ -106,20 +106,20 @@ line-height: 26.4px;
 	font-weight: bolder;
 	display:block
 	
-}
+}*/
 
 #heart1{
 	opacity: "1";
 	animation-fill-mode: forwards;
 	margin-top: 30px;
-	margin-left: 100px;
+	margin-left: 200px;
 }
 
 #heart3{
 	margin-bottom: 30px;
 }
 
-#btnStop {
+/*#btnStop {
 	background-color: white;
 	border: solid #1bafdb 2px;
 	color: #1bafdb;
@@ -137,12 +137,12 @@ line-height: 26.4px;
 	height: 40px;
 	font-weight: bolder;
 	display:block
-}
+}*/
 .canSee{
 	display:none
 }
 
-s /* 's' makes the button 3D */
+/*s /* 's' makes the button 3D 
 #btnRestart{
 	background-color: #1bafdb;
 	border: solid #1bafdb 2px;
@@ -151,7 +151,7 @@ s /* 's' makes the button 3D */
 	height: 100px;
 	font-weight: bolder;
 }
-s /* 's' makes the button 3D */
+s /* 's' makes the button 3D 
 #btnContinue{
 	background-color: #1bafdb;
 	border:#1bafdb;
@@ -159,7 +159,7 @@ s /* 's' makes the button 3D */
 	width: 120px;
 	height: 100px;
 	font-weight: bolder;
-}
+}*/
 
 .grid div {
 	width: 20px;
