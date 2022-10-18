@@ -25,6 +25,11 @@ line-height: 26.4px;
 	padding: 10px;
 }
 
+.explosion{
+	opacity: 0;
+	width: 40px;
+}
+
 .results{
 	width: 300px;
 	height: 60px;
@@ -64,7 +69,7 @@ line-height: 26.4px;
 }*/
 
 .grid{
-	margin: auto 100px auto 420px;
+	margin: 50px auto 200px 700px;
 	background-color: #03045E;
 	display: flex;
 	width: 400px;
@@ -89,9 +94,7 @@ line-height: 26.4px;
 	line-height: 20px; 
 }
 .centered{
-	margin-left:auto;
-	margin-right:0;
-	margin-top: 100px;
+	margin: 50px auto 200px 700px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -118,6 +121,7 @@ line-height: 26.4px;
 #heart3{
 	margin-bottom: 30px;
 }
+
 
 /*#btnStop {
 	background-color: white;
@@ -169,12 +173,15 @@ s /* 's' makes the button 3D
 	border-radius: 20px;
 }
 .shooter {
-	background-color: green;
+	
+	background-color: green; 
 }
 .deadShooter{
 	background-color:grey;
+	border-radius: 20px;
 }
 .laser {
+	size: 50%;
 	background-color: paleturquoise;
 }
 .boom {
