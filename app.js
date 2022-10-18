@@ -186,6 +186,22 @@ function moveShooter(e) {
 
 }
 }
+//sets off explosion once after loss of one life
+function puff(){
+  explosion = document.getElementById(`explosion${tries}`);
+  explosion.style.opacity="1";
+  setTimeout(() => {
+    explosion.style.opacity = "0"
+  },500);
+}
+
+function resurrectShooter(){
+  if(squares[currentShooterIndex].classList.contains('deadShooter')){
+    setTimeout(() => {
+      squares[currentShooterIndex].classList.remove('deadShooter')
+  },4000)
+}
+}
 
 function lostLife(){
   trophy = false;
@@ -196,15 +212,17 @@ function lostLife(){
     //cancelAnimationFrame(gameLoopID);
     //console.log(tries)
     lostHeart = document.getElementById(`heart${tries}`)
-    explosion = document.getElementById(`explosion${tries}`)
+   // explosion = document.getElementById(`explosion${tries}`)
     //console.log(lostHeart)
     resultsDisplay.innerHTML = `
     YOU LOST
      Lives remaining: ${3-tries}
      `;//player has lost
     //document.getElementById("heart1").style.opacity="0"
+    puff()
     lostHeart.style.opacity="0"
-    explosion.style.opacity="1";
+    resurrectShooter()
+    //explosion.style.opacity="1";
     setTimeout(drawAfterLost, 4000);//re-set invaders' position after 4 seconds
     setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
     tries++
@@ -212,9 +230,9 @@ function lostLife(){
     console.log("tries after lost:", tries)
     setTimeout(() => isPlaying = true, 4000);//start playing after 4 seconds
     setTimeout(() => resultsDisplay.innerHTML = "Space Invaders",4000)// - Lives remaining: ${3-tries}`,4000)
-    setTimeout(() => {
-      explosion.style.opacity = "0"
-    },1000);
+    //setTimeout(() => {
+    //  explosion.style.opacity = "0"
+   // },500);
     // clearTimeout(myExplosion); No need to clearTimeout, or explosion keeps going.
     //console.log(tries)
     //console.log(localStorage.getItem("lives"))
@@ -226,12 +244,13 @@ function lostLife(){
     GAME OVER - Lives used: ${tries}
      Press 'r' to play again?
      `;//player has lost
+     puff();
     document.getElementById(`heart${tries}`).style.opacity="0"
-    explosion = document.getElementById(`explosion${tries}`);
-    explosion.style.opacity="1";
-    setTimeout(() => {
-      explosion.style.opacity = "0"
-    },1000);
+    // explosion = document.getElementById(`explosion${tries}`);
+    // explosion.style.opacity="1";
+    // setTimeout(() => {
+    //   explosion.style.opacity = "0"
+    // },500);
     //setTimeout(function(){explosion.style.opacity="0"},1000);
     //document.getElementById(`heart${tries}`).style.opacity="0"
     //lives = localStorage.setItem("lives", tries);
