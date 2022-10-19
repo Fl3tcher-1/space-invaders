@@ -54,18 +54,22 @@ function draw() {
 const grid = document.querySelector('.grid');
 const resultsDisplay = document.querySelector('.results');
 const scoreDisplay = document.querySelector('.score');
+const timeDisplay = document.querySelector('#time');
+let startTime = 0;//time stamp at game start
+let timeElapsed = 0;
 let currentShooterIndex = 390;
 let width = 20;//gives the number of 'div' inside each row and column of the 'grid'
 let direction = 1;
 //let invadersId;
 let goingRight = true;
-let aliensRemoved = [];//stick dead invaders in here
+let aliensRemoved = [];//stick dead invaders in h ere
 let results = 0;//the score
 let isPlaying = false;
 let tries;//set # lives to 1
 let lives;//to retain value in browser memory for 3 consecutive games
 let square;
 let currentLaserIndex = currentShooterIndex
+//let laserId
 let fps = 0;
 let menu = document.querySelector(".menu")
 let trophy = false
@@ -195,6 +199,7 @@ function puff(){
   },500);
 }
 
+//repaints 'shooter' before new play
 function resurrectShooter(){
   if(squares[currentShooterIndex].classList.contains('deadShooter')){
     setTimeout(() => {
@@ -281,6 +286,7 @@ function wonLife(){//player has earned one life, continues playing
   //trophy = true;
   console.log("wonLife called")
   isPlaying = false;
+  //clearInterval(laserId)
   //show 'triumph message' for 4 seconds
   resultsDisplay.innerHTML = `
   🏆 YOU WON ONE LIFE!
@@ -429,8 +435,6 @@ function shoot(e) {
 document.addEventListener('keydown', shoot) //invoking the 'shoot' function
   
 
-
-
 /*Moved to paintGameState
 function shoot(e) {
   let laserId
@@ -451,7 +455,6 @@ function toggleMenu(){
       const keyName = event.key;
       switch (keyName){
         case "s": //stop and show restart and continue buttons
-          
           //var show1 = document.getElementById("btnContinue")
           //var show2 = document.getElementById("btnRestart")
           //var stop = document.getElementById('btnStop')
@@ -468,6 +471,7 @@ function toggleMenu(){
         case "r": //hide restart and continue buttons and BEGIN AGAIN
           //document.getElementById('btnStop').classList.remove("btnStopHide")
           //window.location.reload();
+          //console.time(startTime);
           location.reload(true)
           
         case "c": //hide restart and continue buttons and CONTINUE
@@ -497,7 +501,7 @@ toggleMenu() //invoking the 'toggleMenu' function
 //This is the TIMER
 //var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
 // Update the count down every 1 second
-var x = setInterval(function() {
+/*var x = setInterval(function() {
   
   // Get today's date and time
   //var now = new Date().getTime();
@@ -520,7 +524,47 @@ var x = setInterval(function() {
   }
 }, 1000)
 
-clearInterval(x)
+clearInterval(x)*/
+
+
+/*function start() {
+  startTime = new Date();
+};
+
+function end() {
+  endTime = new Date();
+  var timeDiff = endTime - startTime; //in ms
+  // strip the ms
+  timeDiff /= 1000;*/
+
+  /*function theTimer(e){
+    if(e.key = 'r'){
+      console.time(startTime/1000)
+    }
+    while(isPlaying = true){
+      console.timeLog(startTime/1000);
+    }
+  }
+
+  document.addEventListener('keydown',theTimer)*/
+
+
+//Show time while playing
+/*function theTimer(e){
+  startTime = new Date().getTime();
+  console.log({startTime})
+  if(e = 'r'){
+    timeElapsed = new Date().getTime - startTime
+    console.log({timeElapsed})
+    var minutes = Math.floor(timeElapsed/ (1000 * 60));
+    var seconds = Math.floor(timeElapsed/ 1000);
+    timeDisplay.innerHTML = "Time: "+ minutes + " m " + seconds + " sec ";
+}
+}
+
+document.addEventListener('keydown', theTimer)*/
+
+
 
 //My game loop function v.0.1, used to achieve 60 frames per second
 
@@ -529,7 +573,7 @@ clearInterval(x)
       return
     }else{*/
     //console.log(timestamp)
-      if(fps === 3){
+      if(fps === 4){
         moveInvaders();
         //moveLaser()
         //paintGameState();

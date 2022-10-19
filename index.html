@@ -14,47 +14,45 @@
   <!--fonts from: https://www.cssfontstack.com/Abel-->
 </head>
 <body>
-  <div class="results"><h1 font-size: 25px; font: x-large;">Space Invaders</h1></div>
-    <br>
-    <br>
+  <div class="results"><h1 font-size: 25px; font: x-large;>Space Invaders</h1></div>
 <center>
-<table>
-  <tr>
-    <td></td>
-    <td style="position: auto; width: 500px;"><left><h2 class="score" style="color: white;">Score:</h2></left> </td>
-    <!--<td><right><button id="btnStop" style="float: right; width: 200px;"> Type 's' to STOP</button></right></td>-->
-     <td><right><img class="angel" id="heart1" src="Angel_Heart.png" alt="angel_heart"></right></td>
-     <td><left><img class="explosion" id="explosion1" src="explosion.gif" alt="explosion"></left></td>
-     <td><right><img class="angel" id="heart2" src="Angel_Heart.png" alt="angel_heart"></right></td>
-     <td><left><img class="explosion" id="explosion2" src="explosion.gif" alt="explosion"></left></td>
-     <td><right><img class="angel" id="heart3" src="Angel_Heart.png" alt="angel_heart"></right></td>
-     <td><left><img class="explosion" id="explosion3" src="explosion.gif" alt="explosion"></left></td>
-  </tr>
-</table>
-
-   
-  <center>
-    <div class="container">
-      <div class="grid">
-      </div>
-    </div>
-  </center>
-
-  </div>
+  <div>
+    <span class="info">
+      <h2 class="score" style="color: white;">Score:</h2>
+    </span>
+    <span class="info">
+      <h2 id="time" style="color: white;">Time:</h2>
+    </span>
+    <span class="info">
+          <!--<td><right><button id="btnStop" style="float: right; width: 200px;"> Type 's' to STOP</button></right></td>-->
+          <div id="lives">
+          <img class="angel" id="heart1" src="Angel_Heart.png" alt="angel_heart">
+          <img class="explosion" id="explosion1" src="explosion.gif" alt="explosion">
+          <img class="angel" id="heart2" src="Angel_Heart.png" alt="angel_heart">
+          <img class="explosion" id="explosion2" src="explosion.gif" alt="explosion">
+          <img class="angel" id="heart3" src="Angel_Heart.png" alt="angel_heart">
+          <img class="explosion" id="explosion3" src="explosion.gif" alt="explosion">
+        </div>
+    </span>
+   </div>
+   <div class="container">
+      <div class="grid"></div>
+   </div>
     <!--<td><right><button class="restartContinue canSee" id="btnRestart" style="float: right; width: 120px; height: 100px;">Type 'n' for NEW GAME</button></right></td>
     <td><div style="width: 10px;"></div></td>
     <td><right><button class="restartContinue canSee" id="btnContinue" style="float: right; width: 120px;height: 100px">Type 'c' to CONTINUE</button></right></td>-->
     <!--<td><img src="pic_trulli.jpg" alt="hearth"></td>-->
  
 
-  <center><div class="menu" style="width: 400px; height: 50x;">
+  <right><div class="menu" >
         <h3>'p' to play</h3>
         <h3>'s' to stop</h3>
         <h3>'r' to re-start</h3> 
         <h3>'c' to continue</h3>
         <h3>'space bar' to shoot</h3>
-        <h3><strong>&#8678 &#8680</strong> moves shooter left / right</h3>
-</div></center>
+        <h3><strong>&#8678 &#8680</strong> move shooter left / right</h3>
+       </div>
+  </right>
 </center>
   <script src="app.js"></script>
 </body>
