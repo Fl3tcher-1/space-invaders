@@ -34,8 +34,15 @@ playerIdleImgPos = 191 //x size value for a single sprite image
 playerIdleImgPosy = 161 // y value for a single sprite image
 playerIdleImgPosyLeft = 483 //last y value for single sprite image
 
+let bulletStart = playerBoundary.height -15
+let bulletMovement = bulletStart
+
 
 let counter =0 //uses to count elapsed time in game loop
+let fire =0
+let  bulletsShot =0
+
+let canFire = true
 
 let alienDivs = document.getElementsByClassName("aliens") //gets all aliens
 
@@ -82,7 +89,9 @@ function gameloop(){
 
     counter += 0.25 //on every game loop call incraee by 0.25
 
+
     Player()
+    shoot()
     drawAlien() //draws updated postion values
     updateAlien() //first updates postion values
     if (running) requestAnimationFrame(gameloop) //calls requestanimationframe and parses itself allowing the function to be re-run again
@@ -153,6 +162,80 @@ function Player(){
     }
 }
 
+//shooting
+function shoot(){
+    fire +=0.1
+    // console.log(fire)
+    if(fire >=2) canFire = true
+
+    // console.log(fire, canFire)
+
+
+    // console.log(counter)  
+    if (key == ' '  && canFire){
+
+         bulletsShot +=1
+
+        canFire =false
+        fire =0
+        let bullet = document.createElement('div')
+        bullet.classList.add = "bullet"
+        bullet.id =`bullet ${bulletsShot}`
+        bullet.className ='bullet'
+        // console.log("fafaef")
+        
+        
+        bullet.style.marginLeft = (playerStart + (playerBoundary.width * 0.75)) +"px"
+        bullet.style.bottom = bulletStart +"px"
+
+
+        
+        let bullets = document.getElementsByClassName('bullet')
+        // console.log(bullets.length)
+
+        parentDiv.appendChild(bullet)
+        if(bullets.length <5){
+
+        }
+        
+        
+        
+    }    
+     let bullets = document.getElementsByClassName('bullet')
+     
+
+
+    if( bullets !=null && bullets.length >0) {
+        bulletMovement +=15
+
+        Array.from(bullets).forEach((bullet)=>{
+            // console.log(bullet)
+            
+            if(bulletMovement +"px" <= parentBoundary.height){
+                bullet.style.bottom = bulletMovement + "px"
+            } else{
+                bulletMovement =bulletStart
+                bullet.remove()
+                bulletsShot -=1
+            }
+        })
+     
+        
+        // for(let i =0; i <bullets.length; i ++){
+        //     if(bulletMovement +"px" <= parentBoundary.height){
+        //         bullets[i].style.bottom = bulletMovement + "px"
+        //     } else{
+        //         bulletMovement =bulletStart
+        //         bullets[i].remove()
+        //     }
+        // }
+
+    }
+    
+    
+    
+}
+
 //updates position values
 function updateAlien(){
 
@@ -166,13 +249,13 @@ function updateAlien(){
 
 //draws visible change in position
 function drawAlien(){
-    console.log(alienStartPosition)
+    // console.log(alienStartPosition)
 
     for(let i =0; i < alienDivs.length; i ++){ //runs a loop for every alien and changes top & left margin based on values from update()
         alienDivs[i].style.left =alienStartPosition + "px" //horizontal position
         // if(alienTop < ParentBoundary2.height/2){ 
 
-        console.log(alienDivs[i].style.top, ParentBoundary2.height)
+        // console.log(alienDivs[i].style.top, ParentBoundary2.height)
         if( alienDivs[i].style.top.replace("px", '') < ParentBoundary2.height/2 +75){
             alienDivs[i].style.top = alienTop +"px" //vertical position
 

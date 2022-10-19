@@ -47,6 +47,15 @@
     bottom: 0;
 
 }
+
+.bullet {
+    height: 15px;
+    width: 15px;
+    background-color: blue;
+    position: absolute;
+
+}
+
 #dragon{
     height: 150px;
     width: 191px;
