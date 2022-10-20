@@ -255,9 +255,11 @@ s /* 's' makes the button 3D
 .laser {
 	size: 50%;
 	background-color: paleturquoise;
+	clip-path: polygon(40% 0, 70% 50%, 50% 50%, 0 50%);
 }
 .boom {
 	background-color: red;
+	clip-path: polygon(40% 0, 70% 50%, 50% 70%, 0 50%);
 }
 
 
