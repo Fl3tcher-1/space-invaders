@@ -344,7 +344,6 @@ function wonLife(){//player has earned one life, continues playing
   setTimeout(() => isPlaying = true, 4000);//wait 4 seconds before start playing again
   setTimeout(() => timeStatus = true, 4000);//wait 4 seconds before start timer
     if(timeStatus == true){
-      console.log({timeStatus})
       timeInterval = setInterval(startTimer, 1000);
     };
  //document.getElementById('btnStop').style.display='none'//hide the Stop button

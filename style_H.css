@@ -57,6 +57,12 @@ span.info{
 	line-height: 20px;
 }
 
+span.game{
+	display: inline-block;
+	margin-right: 12vw;
+	margin-left: 30vw;
+}
+
 .score{
 	height: 50px;
 	width: 400px;
@@ -65,13 +71,13 @@ span.info{
 
 #time{
 	height: 50px;
-	width: 400px;
+	width: 600px;
 	font-weight: 200;
 }
 
 #lives{
 	height: 50;
-	width: 400px;
+	width: 500px;
 	align-items: right;
 }
 
@@ -118,7 +124,6 @@ span.info{
 .menu{
 	float:inline-start;
 	text-align: left;
-	float: right;
 	color: white;
 	opacity: 0.5;
 	font-family: "Abel";
@@ -128,6 +133,24 @@ span.info{
 	font-weight: 400;
 	line-height: 20px; 
 }
+
+.game-container {
+	display: flex;
+}
+
+/*.menu{
+	float:inline-start;
+	text-align: left;
+	float: right;
+	color: white;
+	opacity: 0.5;
+	font-family: "Abel";
+	font-size: 18px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 20px; 
+}*/
 .centered{
 
 	display: flex;
@@ -235,4 +258,12 @@ s /* 's' makes the button 3D
 }
 .boom {
 	background-color: red;
+}
+
+
+@media only screen and (max-width: 600px){
+	span.game{
+		margin-right: 200px;
+		margin-left: 10vw;
+	}
 }
