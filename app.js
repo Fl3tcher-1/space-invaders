@@ -342,10 +342,11 @@ function wonLife(){//player has earned one life, continues playing
   setTimeout(drawAfterWin, 4000);//re-draw invaders' at starting position after 4 seconds
   setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
   setTimeout(() => isPlaying = true, 4000);//wait 4 seconds before start playing again
-  setTimeout(() => timeStatus = true, 4000);//wait 4 seconds before start timer
-    if(timeStatus == true){
-      timeInterval = setInterval(startTimer, 1000);
-    };
+  //wait 4 seconds before start timer
+  setTimeout(function(){
+    timeStatus = true;
+    timeInterval = setInterval(startTimer, 1000);
+  }, 4000);
  //document.getElementById('btnStop').style.display='none'//hide the Stop button
  /* window.addEventListener("keydown", function (e){
     if( e.key =="t"){
@@ -656,7 +657,7 @@ document.addEventListener('keydown', theTimer)*/
       return
     }else{*/
     //console.log(timestamp)
-      if(fps === 2){
+      if(fps === 4){
         moveInvaders();
         //moveLaser()
         //paintGameState();
