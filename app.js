@@ -55,7 +55,7 @@ const grid = document.querySelector('.grid');
 const resultsDisplay = document.querySelector('.results');
 const scoreDisplay = document.querySelector('.score');
 //~~~~~~~~~~~~~Timer variables start~~~~~~~~~
-//Stop Watch: https://codepen.io/madrine256/details/KKoRvBb
+//Stop Watch from: https://codepen.io/madrine256/details/KKoRvBb
 const timerContainer = document.querySelector('#time');//get timer element
 let timeInterval = null,//time stamp at game start
     timeStatus = false,
@@ -101,7 +101,7 @@ function startTimer(){
     leadingSecs = seconds;
   };
     //add zero if minutes are less than 10
-        if(minutes < 10){
+  if(minutes < 10){
    leadingMins= '0' + minutes.toString();
   }else{
     leadingMins= minutes;
@@ -110,11 +110,13 @@ function startTimer(){
    timerContainer.innerHTML = `Time: ${leadingMins} : ${leadingSecs}`;
   }
 
-
+//make the grid of 400 divs that will contain invaders & shooter
 for (let i = 0; i < 400; i++) {
   square = document.createElement('div')
   grid.appendChild(square)
 }
+
+//make an array from grid divs
 const squares = Array.from(document.querySelectorAll('.grid div'))//
 var alienInvaders = [//starting position of invaders
   0,1,2,3,4,5,6,7,8,9,
@@ -265,6 +267,11 @@ function lostLife(){
     console.log("tries after lost:", tries)
     setTimeout(() => isPlaying = true, 4000);//start playing after 4 seconds
     setTimeout(() => resultsDisplay.innerHTML = "Space Invaders",4000)// - Lives remaining: ${3-tries}`,4000)
+    //wait 4 seconds before start timer
+    setTimeout(function(){
+      timeStatus = true;
+      timeInterval = setInterval(startTimer, 1000);
+    }, 4000);
     //setTimeout(() => {
     //  explosion.style.opacity = "0"
    // },500);
@@ -296,7 +303,13 @@ function lostLife(){
     //console.log(tries)
     //menu.style.opacity = "1";
      //document.getElementById('btnStop').style.display='none'//hide the Stop button
-     window.addEventListener("keydown", function (e){//press "t" to play again
+     //stop the timer
+     window.clearInterval(timeInterval);
+     minutes =0, seconds =0;
+     timeStatus = false;
+     timerContainer.innerHTML = `Time: 0${minutes} : 0${seconds}`;
+     //press "t" to play again
+     window.addEventListener("keydown", function (e){
        if( e.key =="r"){
          //window.location.reload();
          location.reload(true)
@@ -328,7 +341,12 @@ function wonLife(){//player has earned one life, continues playing
   //setTimeout(trophy.style.opacity="0",4000);//hide trophy after 4 seconds
   setTimeout(drawAfterWin, 4000);//re-draw invaders' at starting position after 4 seconds
   setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
-  setTimeout(() => isPlaying = true,4000);//wait 4 seconds before start playing again
+  setTimeout(() => isPlaying = true, 4000);//wait 4 seconds before start playing again
+  setTimeout(() => timeStatus = true, 4000);//wait 4 seconds before start timer
+    if(timeStatus == true){
+      console.log({timeStatus})
+      timeInterval = setInterval(startTimer, 1000);
+    };
  //document.getElementById('btnStop').style.display='none'//hide the Stop button
  /* window.addEventListener("keydown", function (e){
     if( e.key =="t"){
@@ -396,8 +414,12 @@ function moveInvaders() {
     trophy = false
 
     //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
-    
+    //stop the timer
+    timeStatus = false;
+    window.clearInterval(timeInterval);
+
      lostLife()
+
     return
   }
  //End of game 2: Invaders have touched grid's bottom
@@ -407,7 +429,12 @@ function moveInvaders() {
       //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
       //menu.style.opacity = "1";
       trophy = false
+      //stop the timer
+      timeStatus = false;
+      window.clearInterval(timeInterval);
+
       lostLife();
+
       return
     }
   }
@@ -420,6 +447,11 @@ function moveInvaders() {
     //clearInterval(invadersId)
     //isPlaying = false
     trophy = true
+
+    //stop the timer
+    timeStatus = false;
+    window.clearInterval(timeInterval);
+
     wonLife();
      return
   }
@@ -528,7 +560,7 @@ function toggleMenu(){
             timeStatus = true;
           };
           isPlaying = true //continue game by setting isPlaying to 'true'
-          
+        //to start playing again  
         case "p":
           if(menu.style.opacity = "0.5"){
             menu.style.opacity = "1";
@@ -625,7 +657,7 @@ document.addEventListener('keydown', theTimer)*/
       return
     }else{*/
     //console.log(timestamp)
-      if(fps === 4){
+      if(fps === 2){
         moveInvaders();
         //moveLaser()
         //paintGameState();
