@@ -1,15 +1,18 @@
 
-
-
-
 const body = document.body
 
+let characters =["dragon", "spaceship"]
+let character ="d"
+let charSelectScreen =document.getElementById("characterSelect")
+let dragonCharacter = document.getElementById("splitLeft")
 let parentDiv = document.getElementById("parent") //gets parent div that holds aliens
 let parentBoundary = getComputedStyle(parentDiv) //allows parsing style values from parent
 
 let ParentBoundary2 = document.getElementById("parent").getBoundingClientRect() //gets boundingclient from parent
 let player = document.getElementById("player")
 let playerBoundary = document.getElementById("player").getBoundingClientRect()  //gets bounding client from player
+
+let boundarygrid = document.getElementById("boundaryGrid")
 
 let PlayerStyleFetch = getComputedStyle(player) //gets styles from player
 let playerLeftMargin = PlayerStyleFetch.marginLeft .replace("px", '') //gets margin from player and replaces into a value with only numbers
@@ -18,29 +21,57 @@ let marginLeft = parentBoundary.marginLeft //stores various margins
 let marginRight = parentBoundary.width
 let marginBot =parentBoundary.height
 
+let spaceshipCharacter = document.getElementById("splitRight")
+
+let start = false //inits start
+
+dragonCharacter.addEventListener("click", () =>{
+    character =characters[0]
+    charSelectScreen.remove()
+    start =true
+    running=true
+    player.style.opacity =1
+    boundarygrid.style.opacity =1
+    requestAnimationFrame(gameloop)
+    
+})
+
+
+spaceshipCharacter.addEventListener ("click", () =>{
+    character=characters[1]
+    charSelectScreen.remove()
+    start = true
+    running =true
+    player.style.opacity =1
+    boundarygrid.style.opacity =1
+    requestAnimationFrame(gameloop)
+
+})
+
 alienStart = 50 //how far from left side of screen
 alienTop = 0 //how far from the top
 alienStartPosition = ParentBoundary2.width /2 -(750/2) //centers aliens on screen
 alienSpeed =5 //horizontal movement speed
-alienDescendSpeed =15 //vertical movement speed
 
-horizontalMovementLimit = ParentBoundary2.width /2 -100 //how far are assets allowed to move horizontally
+
+alienDescendSpeed = 15 //vertical movement speed
+
+horizontalMovementLimit = ParentBoundary2.width /2 +100 //how far are assets allowed to move horizontally
 
 playerStart = ParentBoundary2.width/2 - playerBoundary.width //gets centered location
-playerMovement =8 //how fast player moves horizontally
+playerMovement =9 //how fast player moves horizontally
 player.style.left = (ParentBoundary2.width/2 - playerBoundary.width +"px") //sets centered location
 
 playerIdleImgPos = 191 //x size value for a single sprite image
 playerIdleImgPosy = 161 // y value for a single sprite image
 playerIdleImgPosyLeft = 483 //last y value for single sprite image
 
-let bulletStart = playerBoundary.height -15
+let bulletStart = playerBoundary.height -25
 let bulletMovement = bulletStart
+let bulletVelocity = 22
 
 
 let counter =0 //uses to count elapsed time in game loop
-let fire =0
-let  bulletsShot =0
 
 let canFire = true
 
@@ -48,18 +79,21 @@ let alienDivs = document.getElementsByClassName("aliens") //gets all aliens
 
 let key //will store keypresses
 
-let start = false 
 let running = false
 
-
+if(start && !running) { //if game is set to start and is not running starts game loop--- to prevent speeding up of game
+    running =true // sets running to true to stop increasing game speed on keydowns
+    requestAnimationFrame(gameloop)
+}
 document.addEventListener('keydown', function(e){ //lstens for key presses and assigns them to a variable
     key=e.key
     if (key == "p" || key == "Enter"){ //checks if keys pressed if so, sets start to true
-    start =true
-
-}
-if(running && key == "p" ){ //checks if game is running and correspinding key pressed- if true, stops the game
-    start = false
+        start =true
+        charSelectScreen.remove()
+        
+    }
+    if(running && key == "p" ){ //checks if game is running and correspinding key pressed- if true, stops the game
+        start = false
     running =false //sets to false to allow restart of game
     // console.log("jkbgjyuj")
     cancelAnimationFrame(gameloop) //stops game
@@ -80,20 +114,21 @@ console.log("boundary",ParentBoundary2)
 
 
 for(let i =0; i < alienDivs.length; i ++){ //runs a loop for every alien and assigns starting x value
-alienDivs[i].style.left =alienStartPosition  + "px" //horizontal position
-
+    alienDivs[i].style.left =alienStartPosition  + "px" //horizontal position
+    
 }
 
 //gameloop
 function gameloop(){
-
+    
     counter += 0.25 //on every game loop call incraee by 0.25
-
-
+    
+    console.log(character)
     Player()
     shoot()
     drawAlien() //draws updated postion values
     updateAlien() //first updates postion values
+    collisions()
     if (running) requestAnimationFrame(gameloop) //calls requestanimationframe and parses itself allowing the function to be re-run again
     
 }
@@ -164,9 +199,7 @@ function Player(){
 
 //shooting
 function shoot(){
-    fire +=0.1
     // console.log(fire)
-    if(fire >=2) canFire = true
 
     // console.log(fire, canFire)
 
@@ -174,65 +207,36 @@ function shoot(){
     // console.log(counter)  
     if (key == ' '  && canFire){
 
-         bulletsShot +=1
-
         canFire =false
-        fire =0
         let bullet = document.createElement('div')
         bullet.classList.add = "bullet"
-        bullet.id =`bullet ${bulletsShot}`
+        bullet.id =`bullet`
         bullet.className ='bullet'
-        // console.log("fafaef")
-        
-        
-        bullet.style.marginLeft = (playerStart + (playerBoundary.width * 0.75)) +"px"
+
+        bullet.style.marginLeft = (playerStart + (playerBoundary.width * 0.7)) +"px"
         bullet.style.bottom = bulletStart +"px"
 
-
-        
-        let bullets = document.getElementsByClassName('bullet')
-        // console.log(bullets.length)
-
-        parentDiv.appendChild(bullet)
-        if(bullets.length <5){
-
-        }
-        
-        
+        parentDiv.appendChild(bullet)  
         
     }    
      let bullets = document.getElementsByClassName('bullet')
      
 
-
     if( bullets !=null && bullets.length >0) {
-        bulletMovement +=15
+        bulletMovement +=bulletVelocity
 
         Array.from(bullets).forEach((bullet)=>{
-            // console.log(bullet)
             
             if(bulletMovement +"px" <= parentBoundary.height){
                 bullet.style.bottom = bulletMovement + "px"
             } else{
                 bulletMovement =bulletStart
                 bullet.remove()
-                bulletsShot -=1
+                canFire = true
             }
         })
-     
-        
-        // for(let i =0; i <bullets.length; i ++){
-        //     if(bulletMovement +"px" <= parentBoundary.height){
-        //         bullets[i].style.bottom = bulletMovement + "px"
-        //     } else{
-        //         bulletMovement =bulletStart
-        //         bullets[i].remove()
-        //     }
-        // }
 
     }
-    
-    
     
 }
 
@@ -261,6 +265,51 @@ function drawAlien(){
 
         }
     }
+}
+
+function collisions(){
+
+   
+    let aliens = document.getElementsByClassName("aliens")
+    let weaponFire = document.getElementById("bullet")
+
+
+    // console.log(aliens[2].getBoundingClientRect(),aliens[2].getBoundingClientRect().x +50)
+    if(weaponFire != null){
+        // let bulletWidth = weaponFire.getBoundingClientRect().width
+        let bulletBoundary = weaponFire.getBoundingClientRect()
+        for(let i=0; i <aliens.length; i ++){
+            let alienBoundary = aliens[i].getBoundingClientRect()
+            if(alienBoundary.x <(bulletBoundary.x + bulletBoundary.width) &&(alienBoundary.x + alienBoundary.width ) >bulletBoundary.x){ // checks for x collisons
+                if(alienBoundary.y <(bulletBoundary.y + bulletBoundary.height)&& (alienBoundary.y +alienBoundary.height)> bulletBoundary.y){ //checks for y collisions
+                // aliens[i].remove()
+                if(aliens[i].innerHTML !="destroyed"){
+                    weaponFire.remove()
+                    bulletMovement =bulletStart
+                    canFire = true
+                }
+                aliens[i].style.opacity = 0 
+                aliens[i].innerHTML = "destroyed"
+                console.log(aliens[i].innerHTML)
+                console.log("iugiuuhuaeg")
+
+                }
+            }
+
+
+        }
+
+        // console.log(bulletBoundary,alienBoundary)
+        
+        
+        // console.log(aliens[2].getBoundingClientRect(), weaponFire.getBoundingClientRect())
+        // if(aliens[2].getBoundingClientRect.x +50)
+    }
+
+   for(let i =0; i <aliens.length; i ++){
+    // console.log(aliens[i].getBoundingClientRect())
+    
+   }
 }
 
 

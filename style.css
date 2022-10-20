@@ -6,6 +6,46 @@
     justify-content: center;
 }
 
+.characterSelect{
+    position: absolute;
+    color: aliceblue;
+    width: 1300px;
+}
+
+.title{
+    display: flex;
+    justify-content: center;
+}
+
+
+.division{
+    display: flex;
+   text-align: center;
+    justify-content: center;
+    width: 50%;
+    height: 600px;
+    float: left;
+    
+    background-color: rgb(77, 70, 70);
+}
+
+.centered >img{
+    margin-top: 100px;
+    width: 500px;
+    border-radius: 50%;
+    border-style: dotted;
+    border-width: 5px;
+
+    border-bottom-color: blue;
+    border-left-color: red;
+    border-right-color: blue;
+    border-top-color: red;
+    
+}
+.centered >img:hover{
+    transform: scale(1.2);
+}
+
 
 .parent{
     position: relative;
@@ -23,18 +63,20 @@
 .parent > .BoundaryGrid{
     display: grid;
     /* position: absolute; */
-    grid-template-columns: 150px 150px 150px 150px 150px;
+    grid-template-columns: 100px 100px 100px 100px 100px;
     margin-top: 10px;
     padding: 0%;
     gap: 10px;
     height: 200px;
     width: 100px;
+    opacity: 0;
     
 }
 
 .aliens{
     width: 0;
 	height: 0;
+    opacity: 1;
 	border-left: 25px solid transparent;
 	border-right: 25px solid transparent;
 	border-top: 50px solid rgb(255, 0, 0);
@@ -45,11 +87,12 @@
     position: absolute;
 	width: 125px;
     bottom: 0;
+    opacity: 0;
 
 }
 
 .bullet {
-    height: 15px;
+    height: 30px;
     width: 15px;
     background-color: blue;
     position: absolute;
