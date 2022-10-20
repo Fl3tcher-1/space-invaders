@@ -60,13 +60,13 @@ span.info{
 .score{
 	height: 50px;
 	width: 400px;
-	font-weight: 400;
+	font-weight: 200;
 }
 
 #time{
 	height: 50px;
 	width: 400px;
-	font-weight: 400;
+	font-weight: 200;
 }
 
 #lives{

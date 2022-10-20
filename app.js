@@ -54,9 +54,16 @@ function draw() {
 const grid = document.querySelector('.grid');
 const resultsDisplay = document.querySelector('.results');
 const scoreDisplay = document.querySelector('.score');
-const timeDisplay = document.querySelector('#time');
-let startTime = 0;//time stamp at game start
-let timeElapsed = 0;
+//~~~~~~~~~~~~~Timer variables start~~~~~~~~~
+//Stop Watch: https://codepen.io/madrine256/details/KKoRvBb
+const timerContainer = document.querySelector('#time');//get timer element
+let timeInterval = null,//time stamp at game start
+    timeStatus = false,
+    minutes = 0,
+    seconds = 0,
+    leadingMins = 0,
+    leadingSecs = 0;
+//~~~~~~~~~~~~~~Timer variables end~~~~~~~~~~~~
 let currentShooterIndex = 390;
 let width = 20;//gives the number of 'div' inside each row and column of the 'grid'
 let direction = 1;
@@ -79,6 +86,29 @@ let explosion;
 
 //++++++++++++ START OF GAME +++++++++++++++
 
+//This is the timer function
+function startTimer(){
+  seconds++;
+  //if seconds dived by 60 = 1 set back the seconds to 0 and increment the minutes 
+  if(seconds/60 === 1 ){
+    seconds =0;
+    minutes++;
+  }
+  //add zero if seconds are less than 10
+  if(seconds < 10){
+    leadingSecs = '0' + seconds.toString();
+  }else{
+    leadingSecs = seconds;
+  };
+    //add zero if minutes are less than 10
+        if(minutes < 10){
+   leadingMins= '0' + minutes.toString();
+  }else{
+    leadingMins= minutes;
+  };
+   //Change timer text content to actaul stop watch
+   timerContainer.innerHTML = `Time: ${leadingMins} : ${leadingSecs}`;
+  }
 
 
 for (let i = 0; i < 400; i++) {
@@ -462,6 +492,11 @@ function toggleMenu(){
           //stop.classList.add("btnStopHide")//hide the Stop button
           //show1.classList.toggle("canSee");
           //show2.classList.toggle("canSee");
+          //stop the timer
+          menu.style.opacity = "0.5";
+          //stop the timer
+          timeStatus = false;
+          window.clearInterval(timeInterval);
           if(isPlaying){ //stop game by setting isPlaying to 'false'
             isPlaying = false
           }/*else{
@@ -473,6 +508,11 @@ function toggleMenu(){
           //window.location.reload();
           //console.time(startTime);
           location.reload(true)
+          //remove timer numbers
+          window.clearInterval(timeInterval);
+          minutes =0, seconds =0;
+          timeStatus = false;
+          timerContainer.innerHTML = `0${hours} : 0${minutes}`;
           
         case "c": //hide restart and continue buttons and CONTINUE
           //var show1 = document.getElementById("btnContinue")
@@ -481,6 +521,12 @@ function toggleMenu(){
           //show2.classList.toggle("canSee");
           //document.getElementById('btnStop').classList.remove("btnStopHide")
           //document.getElementById('btnStop').classList.add("btnStop")//show the Stop button
+          //start the timer by invoking the 'startTimer' function
+          if(timeStatus === false){
+            //timeInterval = setInterval(startTimer, 1000);
+            timeInterval = setInterval(startTimer, 1000);
+            timeStatus = true;
+          };
           isPlaying = true //continue game by setting isPlaying to 'true'
           
         case "p":
@@ -489,6 +535,12 @@ function toggleMenu(){
           }else{
             menu.style.opacity = "0.5"
           };
+          //start the timer by invoking the 'startTimer' function
+          if(timeStatus === false){
+            timeInterval = setInterval(startTimer, 1000);
+            timeStatus = true;
+          }
+          //restart the game
           isPlaying = true;
           //tries++
           //tries = localStorage.getItem("lives");
