@@ -12,6 +12,7 @@ let parentBoundary = getComputedStyle(parentDiv) //allows parsing style values f
 
 let ParentBoundary2 = document.getElementById("parent").getBoundingClientRect() //gets boundingclient from parent
 let player = document.getElementById("player")
+let player2 =document.getElementById("player2")
 let playerBoundary = document.getElementById("player").getBoundingClientRect()  //gets bounding client from player
 
 let boundarygrid = document.getElementById("boundaryGrid")
@@ -23,37 +24,13 @@ let marginLeft = parentBoundary.marginLeft //stores various margins
 let marginRight = parentBoundary.width
 let marginBot =parentBoundary.height
 
-
-
 let start = false //inits start
-
-dragonCharacter.addEventListener("click", () =>{
-    character =characters[0]
-    charSelectScreen.remove()
-    start =true
-    running=true
-    player.style.opacity =1
-    boundarygrid.style.opacity =1
-    requestAnimationFrame(gameloop)
-    
-})
-
-
-spaceshipCharacter.addEventListener ("click", () =>{
-    character=characters[1]
-    charSelectScreen.remove()
-    start = true
-    running =true
-    player.style.opacity =1
-    boundarygrid.style.opacity =1
-    requestAnimationFrame(gameloop)
-
-})
 
 alienStart = 50 //how far from left side of screen
 alienTop = 0 //how far from the top
 alienStartPosition = ParentBoundary2.width /2 -(750/2) //centers aliens on screen
 alienSpeed =5 //horizontal movement speed
+                let destroyed = []
 
 
 alienDescendSpeed = 15 //vertical movement speed
@@ -82,6 +59,33 @@ let alienDivs = document.getElementsByClassName("aliens") //gets all aliens
 let key //will store keypresses
 
 let running = false
+
+let row1 =[0,5,10]
+
+dragonCharacter.addEventListener("click", () =>{
+    character =characters[0]
+    charSelectScreen.remove()
+    start =true
+    running=true
+    player.style.opacity =1
+    boundarygrid.style.opacity =1
+    requestAnimationFrame(gameloop)
+    
+})
+
+
+spaceshipCharacter.addEventListener ("click", () =>{
+    character=characters[1]
+    player=player2
+    player.style.left = ParentBoundary2.width/2 - playerBoundary.width +"px"
+    charSelectScreen.remove()
+    start = true
+    running =true
+    player.style.opacity =1
+    boundarygrid.style.opacity =1
+    requestAnimationFrame(gameloop)
+
+})
 
 if(start && !running) { //if game is set to start and is not running starts game loop--- to prevent speeding up of game
     running =true // sets running to true to stop increasing game speed on keydowns
@@ -120,12 +124,18 @@ for(let i =0; i < alienDivs.length; i ++){ //runs a loop for every alien and ass
     
 }
 
+
+
+
+
+
+
 //gameloop
 function gameloop(){
     
     counter += 0.25 //on every game loop call incraee by 0.25
     
-    console.log(character)
+    // console.log(character)
     Player()
     shoot()
     drawAlien() //draws updated postion values
@@ -155,6 +165,7 @@ function Player(){
                 player.style.left = playerStart  +"px"
 
                 if (canAnimate){
+                  
                     document.getElementById("dragon").style.backgroundPosition = `-${playerIdleImgPos}px -${playerIdleImgPosy}px` //gets dragon image and assigns x & y positions on sprite sheet 
                
                    if(playerIdleImgPos <573){ //checks if past max width of sprite sheet and either shows next image or resets
@@ -162,7 +173,8 @@ function Player(){
                    } else{
                        playerIdleImgPos =191
                    }
-
+                    
+                
                 }
             }
         } 
@@ -201,12 +213,7 @@ function Player(){
 
 //shooting
 function shoot(){
-    // console.log(fire)
-
-    // console.log(fire, canFire)
-
-
-    // console.log(counter)  
+ 
     if (key == ' '  && canFire){
 
         canFire =false
@@ -271,7 +278,6 @@ function drawAlien(){
 
 function collisions(){
 
-   
     let aliens = document.getElementsByClassName("aliens")
     let weaponFire = document.getElementById("bullet")
 
@@ -282,20 +288,42 @@ function collisions(){
         let bulletBoundary = weaponFire.getBoundingClientRect()
         for(let i=0; i <aliens.length; i ++){
             let alienBoundary = aliens[i].getBoundingClientRect()
-            if(alienBoundary.x <(bulletBoundary.x + bulletBoundary.width) &&(alienBoundary.x + alienBoundary.width ) >bulletBoundary.x){ // checks for x collisons
+            if(alienBoundary.x +3 <(bulletBoundary.x + bulletBoundary.width) &&(alienBoundary.x + alienBoundary.width ) >bulletBoundary.x){ // checks for x collisons
                 if(alienBoundary.y <(bulletBoundary.y + bulletBoundary.height)&& (alienBoundary.y +alienBoundary.height)> bulletBoundary.y){ //checks for y collisions
                 // aliens[i].remove()
-                if(aliens[i].innerHTML !="destroyed"){
                     weaponFire.remove()
                     bulletMovement =bulletStart
                     canFire = true
-                }
-                aliens[i].style.opacity = 0 
-                aliens[i].innerHTML = "destroyed"
-                console.log(aliens[i].innerHTML)
-                console.log("iugiuuhuaeg")
+                
+                // aliens[i].style.opacity = 0 
+                // console.log(Array.from(aliens).splice(i,4, " "))
+                destroyed.push(aliens[i].id)
 
+                console.log(destroyed)
+                aliens[i].className ="destroyed"
+
+                if(destroyed.includes("alien0") && destroyed.includes("alien5") && destroyed.includes("alien10") && !destroyed.includes("l1")){
+                        alienStart -=100
+                        destroyed.push("l1")
                 }
+                
+                if(destroyed.includes("alien4") &&  destroyed.includes("alien9") && destroyed.includes("alien14") && !destroyed.includes("r1")){
+                    horizontalMovementLimit +=100
+                    destroyed.push("r1")
+                }
+
+                // console.log(destroyed.includes("alien" +row1[0]))
+
+                    
+                // aliens[i].innerHTML = "destroyed"
+                // console.log(aliens[i].innerHTML)
+                // console.log("iugiuuhuaeg")
+                
+
+                
+          
+            }
+                // console.log(aliens[i].id, getComputedStyle(aliens[i]).opacity)
             }
 
 
@@ -308,10 +336,7 @@ function collisions(){
         // if(aliens[2].getBoundingClientRect.x +50)
     }
 
-   for(let i =0; i <aliens.length; i ++){
-    // console.log(aliens[i].getBoundingClientRect())
-    
-   }
+
 }
 
 
