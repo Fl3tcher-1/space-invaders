@@ -45,7 +45,20 @@ function draw() {
   // Draw the state of the world
 }*/
 
+/*Play a sound:
+  var x = document.getElementById("myAudio");
+  x.play(), or: x.pause()
+  or:
+  var audio = new Audio("folder_name/audio_file.mp3");
+  audio.play(); audio.pause();
+  also:
+  The 'currentTime' property sets or returns the current position (in seconds) 
+  of the audio/video playback. When setting this property, the playback 
+  will jump to the specified position.
+  audio.currentTime = 0;
+  audio.play();
 
+*/
 
 
 //To ensure users of different browsers can get the same experience
@@ -82,6 +95,15 @@ let menu = document.querySelector(".menu")
 let trophy = false
 let lostHeart;
 let explosion;
+//~~~~~~~~~~~~~Sounds variables start~~~~~~~~~
+var piuPiu = new Audio("sounds/piu.ogg");
+var deadAngel = new Audio("sounds/deadAngel.ogg");
+var capturedShooter = new Audio("sounds/capturedShooter.ogg");//not used as I don't like it
+var gameOver = new Audio("sounds/gameOver.ogg");
+var haveWon = new Audio("sounds/haveWon.ogg");
+var distantUFO = new Audio("sounds/distantUFO.ogg");
+//~~~~~~~~~~~~~~Sounds variables end~~~~~~~~~~~~
+
 //let heart3 = document.getElementById("#heart3")
 
 //++++++++++++ START OF GAME +++++++++++++++
@@ -196,7 +218,17 @@ function paintGameState(){
 //paintLaser()//draw laser while game is on
 }*/
 
+//play 'distantUfoLights' when game is on
+/*function playDistantUFO(){
+  if(isPlaying = true){
+    distantUFO.currentTime = 0;
+    distantUFO.play();
+  }else{
+    distantUFO.pause()
+  }
+}
 
+playDistantUFO()*/
 
 
 
@@ -222,8 +254,10 @@ function moveShooter(e) {
 
 }
 }
-//sets off explosion once after loss of one life
+//sets off explosion once after loss of one life, and plays 'deadAngel'
 function puff(){
+  deadAngel.currentTime = 0;
+  deadAngel.play();
   explosion = document.getElementById(`explosion${tries}`);
   explosion.style.opacity="1";
   setTimeout(() => {
@@ -236,6 +270,9 @@ function resurrectShooter(){
   if(squares[currentShooterIndex].classList.contains('deadShooter')){
     setTimeout(() => {
       squares[currentShooterIndex].classList.remove('deadShooter')
+  },4000)
+  setTimeout(function(){
+    gameOver.pause()
   },4000)
 }
 }
@@ -265,7 +302,9 @@ function lostLife(){
     tries++
     //localStorage.setItem("lives", tries);//to save 'tries' value in browser's memory variable 'lives', but doesn't work, gives 'undefined'
     console.log("tries after lost:", tries)
-    setTimeout(() => isPlaying = true, 4000);//start playing after 4 seconds
+    //stop playing 'gameOver' after 4 secs
+    setTimeout(() => gameOver.pause(), 4000);
+    setTimeout(() => isPlaying = true, 4000);//game back on after 4 seconds
     setTimeout(() => resultsDisplay.innerHTML = "Space Invaders",4000)// - Lives remaining: ${3-tries}`,4000)
     //wait 4 seconds before start timer
     setTimeout(function(){
@@ -280,7 +319,6 @@ function lostLife(){
     //console.log(localStorage.getItem("lives"))
   }else{//Player has no more lives left
     //console.log(tries)
-    isPlaying = false;
     //cancelAnimationFrame(gameLoopID);
     resultsDisplay.innerHTML = `
     GAME OVER - Lives used: ${tries}
@@ -297,6 +335,10 @@ function lostLife(){
     //document.getElementById(`heart${tries}`).style.opacity="0"
     //lives = localStorage.setItem("lives", tries);
     setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
+    //stop playing 'gameOver' after 4 secs
+    setTimeout(function(){
+      gameOver.pause();
+    },4000);
     //tries = 1
     //localStorage.setItem("lives", tries);//to save 'tries' value in browser's memory, but doesn't work, gives 'undefined'
     //console.log("lives in memory after lost 3 lives:",lives)
@@ -307,8 +349,7 @@ function lostLife(){
      window.clearInterval(timeInterval);
      minutes =0, seconds =0;
      timeStatus = false;
-     timerContainer.innerHTML = `Time: 0${minutes} : 0${seconds}`;
-     //press "t" to play again
+     //timerContainer.innerHTML = `Time: 0${minutes} : 0${seconds}`;
      window.addEventListener("keydown", function (e){
        if( e.key =="r"){
          //window.location.reload();
@@ -342,6 +383,10 @@ function wonLife(){//player has earned one life, continues playing
   setTimeout(drawAfterWin, 4000);//re-draw invaders' at starting position after 4 seconds
   setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
   setTimeout(() => isPlaying = true, 4000);//wait 4 seconds before start playing again
+  //wait 4 seconds before you stop playing 'haveWon'
+  setTimeout(function(){
+    haveWon.pause();
+  },4000);
   //wait 4 seconds before start timer
   setTimeout(function(){
     timeStatus = true;
@@ -363,6 +408,7 @@ document.addEventListener('keydown', moveShooter)//invoke moveShooter
 var time_passed_since_last_render = Date.now() - window.last_render;
 
 function moveInvaders() {
+
   scoreDisplay.innerHTML = `Score: ${results}`;
  // tries = localStorage.getItem("lives")
   //console.log(tries)
@@ -412,7 +458,9 @@ function moveInvaders() {
     squares[currentShooterIndex].classList.remove('invader')
     console.log("Shooter dead, tries:", tries);
     trophy = false
-
+    //play the 'gameOver' tune
+    gameOver.currentTime = 0;
+    gameOver.play();
     //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
     //stop the timer
     timeStatus = false;
@@ -426,6 +474,9 @@ function moveInvaders() {
   for (let i = 0; i < alienInvaders.length; i++) {
     if(alienInvaders[alienInvaders.length-1] >= 390 && alienInvaders[alienInvaders.length-10]<= 399) {//if lowest row of aliens has reached grid's bottom
       console.log("Aliens touch ground, tries:", tries);
+      //play the 'gameOver' tune
+      gameOver.currentTime = 0;
+      gameOver.play();
       //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
       //menu.style.opacity = "1";
       trophy = false
@@ -447,7 +498,9 @@ function moveInvaders() {
     //clearInterval(invadersId)
     //isPlaying = false
     trophy = true
-
+    //play the triumph sound
+    haveWon.currentTime = 0;
+    haveWon.play();
     //stop the timer
     timeStatus = false;
     window.clearInterval(timeInterval);
@@ -474,6 +527,7 @@ function shoot(e) {
       squares[currentLaserIndex].classList.add('laser')
     }
     if (squares[currentLaserIndex].classList.contains('invader')) {//check laser collision event with invader
+      piuPiu.pause();
       squares[currentLaserIndex].classList.remove('laser')
       squares[currentLaserIndex].classList.remove('invader')
       squares[currentLaserIndex].classList.add('boom')
@@ -490,6 +544,8 @@ function shoot(e) {
   switch(e.key) {
     case ' ':
       laserId = setInterval(moveLaser, 100)
+      piuPiu.currentTime = 0;
+      piuPiu.play();
   /*  case 't':
       window.location.reload(); */
   }
@@ -582,72 +638,6 @@ function toggleMenu(){
 
 toggleMenu() //invoking the 'toggleMenu' function
 
-//This is the TIMER
-//var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
-// Update the count down every 1 second
-/*var x = setInterval(function() {
-  
-  // Get today's date and time
-  //var now = new Date().getTime();
-  // Find the distance between now and the count down date
-  //var distance = countDownDate - now;
-//4 minutes per game in nanoseconds
-  var distance = 240000;
-  // Time calculations for days, hours, minutes and seconds
-  //var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor(distance/ (1000 * 60));
-  var seconds = Math.floor(distance/ 1000);
-  // Display the result in the element with id="demo"
-  document.getElementById("countdown").innerHTML = "Time left: " + minutes + " m " + seconds + " sec ";
-  // If the count down is finished, write some text
-  if (distance < 0) {
-    clearInterval(x);
-    document.getElementById("demo").innerHTML = 'GAME OVER';
-    isPlaying = false
-  }
-}, 1000)
-
-clearInterval(x)*/
-
-
-/*function start() {
-  startTime = new Date();
-};
-
-function end() {
-  endTime = new Date();
-  var timeDiff = endTime - startTime; //in ms
-  // strip the ms
-  timeDiff /= 1000;*/
-
-  /*function theTimer(e){
-    if(e.key = 'r'){
-      console.time(startTime/1000)
-    }
-    while(isPlaying = true){
-      console.timeLog(startTime/1000);
-    }
-  }
-
-  document.addEventListener('keydown',theTimer)*/
-
-
-//Show time while playing
-/*function theTimer(e){
-  startTime = new Date().getTime();
-  console.log({startTime})
-  if(e = 'r'){
-    timeElapsed = new Date().getTime - startTime
-    console.log({timeElapsed})
-    var minutes = Math.floor(timeElapsed/ (1000 * 60));
-    var seconds = Math.floor(timeElapsed/ 1000);
-    timeDisplay.innerHTML = "Time: "+ minutes + " m " + seconds + " sec ";
-}
-}
-
-document.addEventListener('keydown', theTimer)*/
-
 
 
 //My game loop function v.0.1, used to achieve 60 frames per second
@@ -657,7 +647,7 @@ document.addEventListener('keydown', theTimer)*/
       return
     }else{*/
     //console.log(timestamp)
-      if(fps === 4){
+      if(fps === 2){
         moveInvaders();
         //moveLaser()
         //paintGameState();
