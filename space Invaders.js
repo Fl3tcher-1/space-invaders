@@ -2,9 +2,11 @@
 const body = document.body
 
 let characters =["dragon", "spaceship"]
-let character ="d"
+let character 
 let charSelectScreen =document.getElementById("characterSelect")
 let dragonCharacter = document.getElementById("splitLeft")
+let spaceshipCharacter = document.getElementById("splitRight")
+
 let parentDiv = document.getElementById("parent") //gets parent div that holds aliens
 let parentBoundary = getComputedStyle(parentDiv) //allows parsing style values from parent
 
@@ -21,7 +23,7 @@ let marginLeft = parentBoundary.marginLeft //stores various margins
 let marginRight = parentBoundary.width
 let marginBot =parentBoundary.height
 
-let spaceshipCharacter = document.getElementById("splitRight")
+
 
 let start = false //inits start
 
