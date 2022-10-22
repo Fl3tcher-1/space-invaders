@@ -224,8 +224,8 @@ function paintGameState(){
 }*/
 
 //play 'distantUfoLights' when game is on
-/*function playDistantUFO(){
-  if(isPlaying = true){
+function playDistantUFO(){
+  if(isPlaying){
     distantUFO.currentTime = 0;
     distantUFO.play();
   }else{
@@ -233,7 +233,7 @@ function paintGameState(){
   }
 }
 
-playDistantUFO()*/
+
 
 
 
@@ -318,6 +318,8 @@ function lostLife(){
       timeStatus = true;
       timeInterval = setInterval(startTimer, 1000);
     }, 4000);
+    //wait 4 seconds before start playing 'distantUfoLights'
+    setTimeout(playDistantUFO,4000);
     //setTimeout(() => {
     //  explosion.style.opacity = "0"
    // },500);
@@ -347,6 +349,8 @@ function lostLife(){
     setTimeout(function(){
       gameOver.pause();
     },4000);
+    //wait 4 seconds before start playing 'distantUfoLights'NOT NEEDED HERE!
+    //setTimeout(playDistantUFO,4000);
     //tries = 1
     //localStorage.setItem("lives", tries);//to save 'tries' value in browser's memory, but doesn't work, gives 'undefined'
     //console.log("lives in memory after lost 3 lives:",lives)
@@ -397,6 +401,8 @@ function wonLife(){//player has earned one life, continues playing
   setTimeout(function(){
     haveWon.pause();
   },4000);
+    //wait 4 seconds before start playing 'distantUfoLights'
+    setTimeout(playDistantUFO,4000);
   //wait 4 seconds before start timer
   setTimeout(function(){
     timeStatus = true;
@@ -468,6 +474,8 @@ function moveInvaders() {
   if (squares[currentShooterIndex].classList.contains('invader', 'shooter')) {//check if shooter was captured
     squares[currentShooterIndex].classList.add('deadShooter')
     squares[currentShooterIndex].classList.remove('invader')
+    //stop the 'distantUfoLights' tune
+    distantUFO.pause()
     //console.log("Shooter dead, tries:", tries);
     trophy = false
     //play the 'gameOver' tune
@@ -484,7 +492,9 @@ function moveInvaders() {
  //End of game 2: Invaders have touched grid's bottom
   for (let i = 0; i < alienInvaders.length; i++) {
     if(alienInvaders[alienInvaders.length-1] >= 390 && alienInvaders[alienInvaders.length-10]<= 399) {//if lowest row of aliens has reached grid's bottom
-      console.log("Aliens touch ground, tries:", tries);
+      //console.log("Aliens touch ground, tries:", tries);
+      //stop the 'distantUfoLights' tune
+      distantUFO.pause()
       //play the 'gameOver' tune
       gameOver.currentTime = 0;
       gameOver.play();
@@ -502,14 +512,16 @@ function moveInvaders() {
   }
   // //End of game 3: if all aliens have been shot
   if (aliensRemoved.length === alienInvaders.length) {//if all aliens have been shot
-    console.log(tries)
-    console.log("All aliens shot, tries:", tries);
+    //stop the 'distantUfoLights' tune
+    distantUFO.pause()
+    //console.log(tries)
+    //console.log("All aliens shot, tries:", tries);
     //messageDisplay.innerHTML = 'YOU WON'//player wins
     //menu.style.opacity = "1";
     //clearInterval(invadersId)
     //isPlaying = false
     trophy = true
-    //play the triumph sound
+    //play the 'haveWon' tune
     haveWon.currentTime = 0;
     haveWon.play();
     //stop the timer
@@ -529,7 +541,7 @@ function shoot(e) {
   let laserId
   let currentLaserIndex = currentShooterIndex
   function moveLaser() {
-    console.log("moveLaser called")
+    //console.log("moveLaser called")
     if(currentLaserIndex >= 0 && currentLaserIndex <= 19 ) {//if laser is in grid's top row
       squares[currentLaserIndex].classList.remove('laser')//remove laser 
     }else{
@@ -602,6 +614,8 @@ function toggleMenu(){
           }/*else{
             isPlaying = true
           }*/
+         //stop playing the 'distantUfoLights' tune
+         playDistantUFO()
           break 
         case "r": //hide restart and continue buttons and BEGIN AGAIN
           //document.getElementById('btnStop').classList.remove("btnStopHide")
@@ -627,7 +641,10 @@ function toggleMenu(){
             timeInterval = setInterval(startTimer, 1000);
             timeStatus = true;
           };
-          isPlaying = true //continue game by setting isPlaying to 'true'
+          //continue game by setting isPlaying to 'true'
+          isPlaying = true 
+          //play the 'distantUfoLights' tune
+          playDistantUFO()
         //to start playing again  
         case "p":
           if(menu.style.opacity = "0.5"){
@@ -642,6 +659,8 @@ function toggleMenu(){
           }
           //restart the game
           isPlaying = true;
+          //play the 'distantUfoLights' tune
+          playDistantUFO()
           //tries++
           //tries = localStorage.getItem("lives");
        }
