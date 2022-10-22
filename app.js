@@ -380,7 +380,7 @@ function wonLife(){//player has earned one life, continues playing
   isPlaying = false;
   //clearInterval(laserId)
   //show 'triumph message' for 4 seconds
-    messageDisplay.innerHTML = '<color=gold><p>🏆 YOU WON ONE LIFE!<br>'
+    messageDisplay.innerHTML = "<span style='color: gold;'><p>🏆 YOU WON ONE LIFE!</span><br>"
                              + `You have ${3 - tries +1} lives left</p>`;
   // messageDisplay.innerHTML = `
   // 🏆 YOU WON ONE LIFE!
