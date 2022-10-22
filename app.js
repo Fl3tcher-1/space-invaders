@@ -82,7 +82,7 @@ let width = 20;//gives the number of 'div' inside each row and column of the 'gr
 let direction = 1;
 //let invadersId;
 let goingRight = true;
-let aliensRemoved = [];//stick dead invaders in h ere
+let aliensRemoved = [];//stick dead invaders in here
 let results = 0;//the score
 let isPlaying = false;
 let tries;//set # lives to 1
@@ -101,7 +101,7 @@ var deadAngel = new Audio("sounds/deadAngel.ogg");
 var capturedShooter = new Audio("sounds/capturedShooter.ogg");//not used as I don't like it
 var gameOver = new Audio("sounds/gameOver.ogg");
 var haveWon = new Audio("sounds/haveWon.ogg");
-var distantUFO = new Audio("sounds/distantUFO.ogg");
+var distantUFO = new Audio("sounds/distantUfoLights.ogg");
 //~~~~~~~~~~~~~~Sounds variables end~~~~~~~~~~~~
 
 //let heart3 = document.getElementById("#heart3")
@@ -132,14 +132,15 @@ function startTimer(){
    timerContainer.innerHTML = `Time: ${leadingMins} : ${leadingSecs}`;
   }
 
-//make the grid of 400 divs that will contain invaders & shooter
+//make the grid of 400 divs that will contain invaders, shooter, and laser
 for (let i = 0; i < 400; i++) {
   square = document.createElement('div')
   grid.appendChild(square)
 }
 
-//make an array from grid divs
+//make an array from grid divs named 'squares'
 const squares = Array.from(document.querySelectorAll('.grid div'))//
+//make an array for alien invaders
 var alienInvaders = [//starting position of invaders
   0,1,2,3,4,5,6,7,8,9,
   20,21,22,23,24,25,26,27,28,29,
@@ -150,6 +151,9 @@ squares[currentShooterIndex].classList.add('shooter') //draw shooter AT START OF
 
 function draw() {//draw all invaders AT START OF GAME
     for (let i = 0; i < alienInvaders.length; i++) {
+      //console.log({squares})
+      //console.log("aliens: ", alienInvaders[i])
+      //console.log("squares: ", squares[alienInvaders[i]])
       if(!aliensRemoved.includes(i)) {
         squares[alienInvaders[i]].classList.add('invader')
       }
@@ -184,8 +188,9 @@ function drawAfterWin(){//draw invaders after player has won one life
   40,41,42,43,44,45,46,47,48,49,
 ]
 for(i=0;i<=19;i++){
-  if(squares[i].classList.contains("laser")){
+  if(squares[i].classList.contains("laser")||squares[i].classList.contains("boom")){
     squares[i].classList.remove('laser');
+    squares[i].classList.remove('boom');
   }
 }
 draw()
@@ -279,7 +284,7 @@ function resurrectShooter(){
 
 function lostLife(){
   trophy = false;
-  console.log("lostLife called")
+  //console.log("lostLife called")
   if(tries < 3 ){//player has at least one life left
     //console.log(tries)
     isPlaying = false;
@@ -318,7 +323,8 @@ function lostLife(){
     //console.log(tries)
     //console.log(localStorage.getItem("lives"))
   }else{//Player has no more lives left
-    //console.log(tries)
+    //stop aliens
+    isPlaying = false;
     //cancelAnimationFrame(gameLoopID);
     resultsDisplay.innerHTML = `
     GAME OVER - Lives used: ${tries}
@@ -326,6 +332,7 @@ function lostLife(){
      `;//player has lost
      puff();
     document.getElementById(`heart${tries}`).style.opacity="0"
+    console.log({tries})
     // explosion = document.getElementById(`explosion${tries}`);
     // explosion.style.opacity="1";
     // setTimeout(() => {
@@ -335,7 +342,7 @@ function lostLife(){
     //document.getElementById(`heart${tries}`).style.opacity="0"
     //lives = localStorage.setItem("lives", tries);
     setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
-    //stop playing 'gameOver' after 4 secs
+    //wait 4 secs before stopping playing'gameOver'
     setTimeout(function(){
       gameOver.pause();
     },4000);
@@ -405,7 +412,7 @@ function wonLife(){//player has earned one life, continues playing
 
 document.addEventListener('keydown', moveShooter)//invoke moveShooter
 
-var time_passed_since_last_render = Date.now() - window.last_render;
+//var time_passed_since_last_render = Date.now() - window.last_render; this is not used anywhere
 
 function moveInvaders() {
 
@@ -461,7 +468,6 @@ function moveInvaders() {
     //play the 'gameOver' tune
     gameOver.currentTime = 0;
     gameOver.play();
-    //resultsDisplay.innerHTML = 'GAME OVER'//player has lost
     //stop the timer
     timeStatus = false;
     window.clearInterval(timeInterval);
@@ -544,6 +550,7 @@ function shoot(e) {
   switch(e.key) {
     case ' ':
       laserId = setInterval(moveLaser, 100)
+      //play shoot sound
       piuPiu.currentTime = 0;
       piuPiu.play();
   /*  case 't':
