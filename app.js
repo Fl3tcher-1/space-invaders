@@ -1,50 +1,4 @@
 
-/*This is the pattern of a 'game loop':
-
-let previous = getCurrentTime();
-let lag = 0.0;
-while (true)
-{
-  let current = getCurrentTime();
-  let elapsed = current - previous;
-  previous = current;
-  lag += elapsed;
-
-  processInput();
-
-  while (lag >= 16)
-  {
- update();
- lag -= 16;
-  }
- 
-  render();
-
-}
-*/
-
-/*move element until screen width -100px:
-xpos = 0;
-function move(){
-  xpos = xpos + 5;
-  box.style.transform = `translateX(${xpos}px)`;
-  let ww = document.body.clientWidth - 100;
-  if(xpos < ww){
-    requestAnimationFrame(move);
-  }
-}
-
-window.requestAnimationFrame(move);
-*/
-
-
-/*function update() {
-  // Update the state of the world for the elapsed time since last render
-}
-function draw() {
-  // Draw the state of the world
-}*/
-
 /*Play a sound:
   var x = document.getElementById("myAudio");
   x.play(), or: x.pause()
@@ -57,10 +11,7 @@ function draw() {
   will jump to the specified position.
   audio.currentTime = 0;
   audio.play();
-
 */
-
-
 //To ensure users of different browsers can get the same experience
 //window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(f){return setTimeout(f, 1000/60)}; // simulate calling code 60 
 //window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || function(requestID){clearTimeout(requestID)} //fall back
@@ -104,10 +55,7 @@ var haveWon = new Audio("sounds/haveWon.ogg");
 var distantUFO = new Audio("sounds/distantUfoLights.ogg");
 //~~~~~~~~~~~~~~Sounds variables end~~~~~~~~~~~~
 
-//let heart3 = document.getElementById("#heart3")
-
 //++++++++++++ START OF GAME +++++++++++++++
-
 //This is the timer function
 function startTimer(){
   seconds++;
@@ -131,13 +79,11 @@ function startTimer(){
    //Change timer text content to actaul stop watch
    timerContainer.innerHTML = `Time: ${leadingMins} : ${leadingSecs}`;
   }
-
 //make the grid of 400 divs that will contain invaders, shooter, and laser
 for (let i = 0; i < 400; i++) {
   square = document.createElement('div')
   grid.appendChild(square)
 }
-
 //make an array from grid divs named 'squares'
 const squares = Array.from(document.querySelectorAll('.grid div'))//
 //make an array for alien invaders
@@ -146,21 +92,15 @@ var alienInvaders = [//starting position of invaders
   20,21,22,23,24,25,26,27,28,29,
   40,41,42,43,44,45,46,47,48,49,
 ]
-
 squares[currentShooterIndex].classList.add('shooter') //draw shooter AT START OF GAME
-
 function draw() {//draw all invaders AT START OF GAME
     for (let i = 0; i < alienInvaders.length; i++) {
-      //console.log({squares})
-      //console.log("aliens: ", alienInvaders[i])
-      //console.log("squares: ", squares[alienInvaders[i]])
       if(!aliensRemoved.includes(i)) {
         squares[alienInvaders[i]].classList.add('invader')
       }
     }
 }
 draw()//draws invaders AT START OF GAME
-
 //re-position invaders during game, after life has been lost
 function drawAfterLost(){
   //console.log("drawAgain IS being called")
@@ -177,9 +117,7 @@ for(i=0;i<=19;i++){
   }
 }
 draw()
-
 }
-
 function drawAfterWin(){//draw invaders after player has won one life
   aliensRemoved = []//clear all aliens from the 'aliensRemoved' array
  alienInvaders = [
@@ -195,34 +133,21 @@ for(i=0;i<=19;i++){
 }
 draw()
 }
-
-
 //++++++++++++ GAME IS ON +++++++++++++++
-
-
 //include inside 'paintGameState' function
 function paintShooter() {//paints shooter movements
   squares[currentShooterIndex].classList.add('shooter');
   }
-
   //include inside 'paintGameState' function
 function paintLaser() {//paints laser movements
   squares[currentLaserIndex].classList.add('laser')
-
 }
-
-
-
   /*Not include inside requestAnimationFrame
 function paintGameState(){
-
 //paintInv()//draw invaders while game is on
-
 //paintShooter()//draw shooter while game is on
-
 //paintLaser()//draw laser while game is on
 }*/
-
 //play 'distantUfoLights' when game is on
 function playDistantUFO(){
   if(isPlaying){
@@ -232,18 +157,11 @@ function playDistantUFO(){
     distantUFO.pause()
   }
 }
-
-
-
-
-
 function removeInv() {//invader is removed when shot or it has reached grid's left or right edge
   for (let i = 0; i < alienInvaders.length; i++) {
     squares[alienInvaders[i]].classList.remove('invader')
-    //squares[alienInvaders[i]].style.opacity = "0";
   }
 }
-
 function moveShooter(e) {
   if(isPlaying){
   squares[currentShooterIndex].classList.remove('shooter')//erase shooter
@@ -256,7 +174,6 @@ function moveShooter(e) {
       break
   }
   squares[currentShooterIndex].classList.add('shooter')// added to paintShooter() inside paintGameState()
-
 }
 }
 //sets off explosion once after loss of one life, and plays 'deadAngel'
@@ -269,7 +186,6 @@ function puff(){
     explosion.style.opacity = "0"
   },500);
 }
-
 //repaints 'shooter' before new play
 function resurrectShooter(){
   if(squares[currentShooterIndex].classList.contains('deadShooter')){
@@ -281,18 +197,11 @@ function resurrectShooter(){
   },4000)
 }
 }
-
 function lostLife(){
   trophy = false;
-  //console.log("lostLife called")
   if(tries < 3 ){//player has at least one life left
-    //console.log(tries)
     isPlaying = false;
-    //cancelAnimationFrame(gameLoopID);
-    //console.log(tries)
     lostHeart = document.getElementById(`heart${tries}`)
-   // explosion = document.getElementById(`explosion${tries}`)
-    //console.log(lostHeart)
       messageDisplay.innerHTML = '<p>YOU LOST<br>'
                                + `Lives remaining: ${3-tries} </p>`;
     // messageDisplay.innerHTML = `
@@ -308,7 +217,6 @@ function lostLife(){
     setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
     tries++
     //localStorage.setItem("lives", tries);//to save 'tries' value in browser's memory variable 'lives', but doesn't work, gives 'undefined'
-    //console.log("tries after lost:", tries)
     //stop playing 'gameOver' after 4 secs
     setTimeout(() => gameOver.pause(), 4000);
     setTimeout(() => isPlaying = true, 4000);//game back on after 4 seconds
@@ -320,12 +228,6 @@ function lostLife(){
     }, 4000);
     //wait 4 seconds before start playing 'distantUfoLights'
     setTimeout(playDistantUFO,4000);
-    //setTimeout(() => {
-    //  explosion.style.opacity = "0"
-   // },500);
-    // clearTimeout(myExplosion); No need to clearTimeout, or explosion keeps going.
-    //console.log(tries)
-    //console.log(localStorage.getItem("lives"))
   }else{//Player has no more lives left
     //stop aliens
     isPlaying = false;
@@ -335,54 +237,25 @@ function lostLife(){
      ;//player has lost
      puff();
     document.getElementById(`heart${tries}`).style.opacity="0"
-    //console.log({tries})
-    // explosion = document.getElementById(`explosion${tries}`);
-    // explosion.style.opacity="1";
-    // setTimeout(() => {
-    //   explosion.style.opacity = "0"
-    // },500);
-    //setTimeout(function(){explosion.style.opacity="0"},1000);
-    //document.getElementById(`heart${tries}`).style.opacity="0"
-    //lives = localStorage.setItem("lives", tries);
     setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
     //wait 4 secs before stopping playing'gameOver'
     setTimeout(function(){
       gameOver.pause();
     },4000);
-    //wait 4 seconds before start playing 'distantUfoLights'NOT NEEDED HERE!
-    //setTimeout(playDistantUFO,4000);
-    //tries = 1
-    //localStorage.setItem("lives", tries);//to save 'tries' value in browser's memory, but doesn't work, gives 'undefined'
-    //console.log("lives in memory after lost 3 lives:",lives)
-    //console.log(tries)
-    //menu.style.opacity = "1";
-     //document.getElementById('btnStop').style.display='none'//hide the Stop button
-     //stop the timer
      window.clearInterval(timeInterval);
      minutes =0, seconds =0;
      timeStatus = false;
-     //timerContainer.innerHTML = `Time: 0${minutes} : 0${seconds}`;
      window.addEventListener("keydown", function (e){
        if( e.key =="r"){
-         //window.location.reload();
          location.reload(true)
          tries = 1
-         //console.log("tries after lost 3 lives and hard reload:",tries)
-         //tries = localStorage.getItem("lives")//maybe not needed here
        }
      })
   }
-
- //clearInterval(invadersId)
-  //isPlaying = false
-  //tries += 1
 }
-
 function wonLife(){//player has earned one life, continues playing
-  //trophy = true;
   console.log("wonLife called")
   isPlaying = false;
-  //clearInterval(laserId)
   //show 'triumph message' for 4 seconds
     messageDisplay.innerHTML = "<span style='color: gold;'><p>🏆 YOU WON ONE LIFE!</span><br>"
                              + `You have ${3 - tries +1} lives left</p>`;
@@ -390,10 +263,6 @@ function wonLife(){//player has earned one life, continues playing
   // 🏆 YOU WON ONE LIFE!
   // You have ${3 - tries +1} lives left
   // `;
-  //trophy = false
-  //document.getElementById(`heart${tries}`).style.opacity="0";
-  //localStorage.setItem("lives", tries)
-  //setTimeout(trophy.style.opacity="0",4000);//hide trophy after 4 seconds
   setTimeout(drawAfterWin, 4000);//re-draw invaders' at starting position after 4 seconds
   setTimeout(()=> menu.style.opacity = "1", 4000);//wait 4 seconds to show the menu
   setTimeout(() => isPlaying = true, 4000);//wait 4 seconds before start playing again
@@ -408,38 +277,21 @@ function wonLife(){//player has earned one life, continues playing
     timeStatus = true;
     timeInterval = setInterval(startTimer, 1000);
   }, 4000);
- //document.getElementById('btnStop').style.display='none'//hide the Stop button
- /* window.addEventListener("keydown", function (e){
-    if( e.key =="t"){
-    
-    window.location.reload();
-    tries = localStorage.getItem("lives")//maybe not needed here
-  }
-})*/
 }
-
-
 document.addEventListener('keydown', moveShooter)//invoke moveShooter
-
-//var time_passed_since_last_render = Date.now() - window.last_render; this is not used anywhere
-
 function moveInvaders() {
-
   scoreDisplay.innerHTML = `Score: ${results}`;
- // tries = localStorage.getItem("lives")
-  //console.log(tries)
  if(tries == null || tries == undefined || tries == NaN || tries == 0){
     tries = 1;
   } else if(tries == 1 && !isPlaying && !trophy){
     menu.style.opacity="1";
     messageDisplay.innerHTML = '<p>SPACE INVADERS<br>'
                              + 'Press \'p\' to play</p>';
-    // messageDisplay.innerHTML = `
+    // messageDisplay.innerHTML = `//this doesn't work...
     // SPACE INVADERS
     // Press 'p' to play
     // `;
   };
-  //console.log(tries)
   if(isPlaying){
   messageDisplay.innerHTML = "SPACE INVADERS"
   window.last_render = Date.now()
@@ -448,18 +300,14 @@ function moveInvaders() {
   removeInv()//remove invaders from grid
   if (rightEdge && goingRight) {//if invaders have reached grid's right edge
     for (let i = 0; i < alienInvaders.length; i++) {
-      //console.log('before alien[i]:',alienInvaders[i] )
       alienInvaders[i] += width +1//+= ensures that all aliens are processed; move invaders down and left
-      //console.log('after alien[i]:',alienInvaders[i] )
       direction = -1 //leftwards
       goingRight = false
     }
   }
   if(leftEdge && !goingRight) {//if invaders have reached grid's left edge
     for (let i = 0; i < alienInvaders.length; i++) {
-      //console.log('before alien[i]:',alienInvaders[i] )
       alienInvaders[i] += width -1//+= ensures that all aliens are processed; move invaders down and right
-      //console.log('after alien[i]:',alienInvaders[i] )
       direction = 1 //rightwards
       goingRight = true
     }
@@ -468,15 +316,12 @@ function moveInvaders() {
     alienInvaders[i] += direction//assign new position to all invaders
   }
    draw()//paint invaders at their new position. Previously moved to: paintGameState()
-
   //End of game 1: shooter is captured
-  //console.log(tries)
   if (squares[currentShooterIndex].classList.contains('invader', 'shooter')) {//check if shooter was captured
     squares[currentShooterIndex].classList.add('deadShooter')
     squares[currentShooterIndex].classList.remove('invader')
     //stop the 'distantUfoLights' tune
     distantUFO.pause()
-    //console.log("Shooter dead, tries:", tries);
     trophy = false
     //play the 'gameOver' tune
     gameOver.currentTime = 0;
@@ -484,29 +329,22 @@ function moveInvaders() {
     //stop the timer
     timeStatus = false;
     window.clearInterval(timeInterval);
-
      lostLife()
-
     return
   }
  //End of game 2: Invaders have touched grid's bottom
   for (let i = 0; i < alienInvaders.length; i++) {
     if(alienInvaders[alienInvaders.length-1] >= 390 && alienInvaders[alienInvaders.length-10]<= 399) {//if lowest row of aliens has reached grid's bottom
-      //console.log("Aliens touch ground, tries:", tries);
       //stop the 'distantUfoLights' tune
       distantUFO.pause()
       //play the 'gameOver' tune
       gameOver.currentTime = 0;
       gameOver.play();
-      //messageDisplay.innerHTML = 'GAME OVER'//player has lost
-      //menu.style.opacity = "1";
       trophy = false
       //stop the timer
       timeStatus = false;
       window.clearInterval(timeInterval);
-
       lostLife();
-
       return
     }
   }
@@ -514,12 +352,6 @@ function moveInvaders() {
   if (aliensRemoved.length === alienInvaders.length) {//if all aliens have been shot
     //stop the 'distantUfoLights' tune
     distantUFO.pause()
-    //console.log(tries)
-    //console.log("All aliens shot, tries:", tries);
-    //messageDisplay.innerHTML = 'YOU WON'//player wins
-    //menu.style.opacity = "1";
-    //clearInterval(invadersId)
-    //isPlaying = false
     trophy = true
     //play the 'haveWon' tune
     haveWon.currentTime = 0;
@@ -527,7 +359,6 @@ function moveInvaders() {
     //stop the timer
     timeStatus = false;
     window.clearInterval(timeInterval);
-
     wonLife();
      return
   }
@@ -535,13 +366,11 @@ function moveInvaders() {
 }
 //I am removing setInterval function because I am using requestAnimationFrame function
 //invadersId = setInterval(moveInvaders, 100)//invoke moveInvaders at speed of 100 nanoseconds
-
 function shoot(e) {
   console.log("shoot called")
   let laserId
   let currentLaserIndex = currentShooterIndex
   function moveLaser() {
-    //console.log("moveLaser called")
     if(currentLaserIndex >= 0 && currentLaserIndex <= 19 ) {//if laser is in grid's top row
       squares[currentLaserIndex].classList.remove('laser')//remove laser 
     }else{
@@ -550,7 +379,6 @@ function shoot(e) {
       squares[currentLaserIndex].classList.add('laser')
     }
     if (squares[currentLaserIndex].classList.contains('invader')) {//check laser collision event with invader
-      //piuPiu.pause(); removed as it caused DOM exception and interrupted play
       squares[currentLaserIndex].classList.remove('laser')
       squares[currentLaserIndex].classList.remove('invader')
       squares[currentLaserIndex].classList.add('boom')
@@ -560,8 +388,6 @@ function shoot(e) {
       aliensRemoved.push(alienRemoved)//append shot alien position to 'aliensRemoved' array
       results++//increase score
       scoreDisplay.innerHTML = `Score: ${results}`;
-      //aliensRemoved.style.display='block';
-
     }
   }
   switch(e.key) {
@@ -570,57 +396,31 @@ function shoot(e) {
       //play shoot sound
       piuPiu.currentTime = 0;
       piuPiu.play();
-  /*  case 't':
-      window.location.reload(); */
   }
 }
 document.addEventListener('keydown', shoot) //invoking the 'shoot' function
   
 
-/*Moved to paintGameState
-function shoot(e) {
-  let laserId
-  switch(e.key) {
-    case ' ':
-      laserId = setInterval(moveLaser, 16)//calling 'shoot' function in rAF
-      moveLaser();
-  }
-}
-
-document.addEventListener('keydown', shoot) //invoking the 'shoot' function*/
-
-//stop, resume, restart buttons
+//stop, resume, restart menu
 function toggleMenu(){
   window.addEventListener(
     "keydown",
     (event) => {
       const keyName = event.key;
       switch (keyName){
-        case "s": //stop and show restart and continue buttons
-          //var show1 = document.getElementById("btnContinue")
-          //var show2 = document.getElementById("btnRestart")
-          //var stop = document.getElementById('btnStop')
-          //stop.classList.remove("btnStop")//hide the Stop button
-          //stop.classList.add("btnStopHide")//hide the Stop button
-          //show1.classList.toggle("canSee");
-          //show2.classList.toggle("canSee");
-          //stop the timer
+        case "s": //stop
           menu.style.opacity = "0.5";
           //stop the timer
           timeStatus = false;
           window.clearInterval(timeInterval);
           if(isPlaying){ //stop game by setting isPlaying to 'false'
             isPlaying = false
-          }/*else{
-            isPlaying = true
-          }*/
+          }
          //stop playing the 'distantUfoLights' tune
          playDistantUFO()
           break 
-        case "r": //hide restart and continue buttons and BEGIN AGAIN
-          //document.getElementById('btnStop').classList.remove("btnStopHide")
-          //window.location.reload();
-          //console.time(startTime);
+
+        case "r": //restart
           location.reload(true)
           console.log({tries})
           //remove timer numbers
@@ -629,13 +429,7 @@ function toggleMenu(){
           timeStatus = false;
           timerContainer.innerHTML = `0${hours} : 0${minutes}`;
           
-        case "c": //hide restart and continue buttons and CONTINUE
-          //var show1 = document.getElementById("btnContinue")
-          //var show2 = document.getElementById("btnRestart")
-          //show1.classList.toggle("canSee");
-          //show2.classList.toggle("canSee");
-          //document.getElementById('btnStop').classList.remove("btnStopHide")
-          //document.getElementById('btnStop').classList.add("btnStop")//show the Stop button
+        case "c": //continue 
           //start the timer by invoking the 'startTimer' function
           if(timeStatus === false){
             timeInterval = setInterval(startTimer, 1000);
@@ -645,7 +439,7 @@ function toggleMenu(){
           isPlaying = true 
           //play the 'distantUfoLights' tune
           playDistantUFO()
-        //to start playing again  
+        //play 
         case "p":
           if(menu.style.opacity = "0.5"){
             menu.style.opacity = "1";
@@ -661,115 +455,20 @@ function toggleMenu(){
           isPlaying = true;
           //play the 'distantUfoLights' tune
           playDistantUFO()
-          //tries++
-          //tries = localStorage.getItem("lives");
        }
   })
 }
-
 toggleMenu() //invoking the 'toggleMenu' function
-
-
-
 //My game loop function v.0.1, used to achieve 60 frames per second
-
   function gameLoop() {
-  /*  if(timestamp >= 1000/60){
-      return
-    }else{*/
-    //console.log(timestamp)
       if(fps === 4){
         moveInvaders();
-        //moveLaser()
-        //paintGameState();
-        //moveShooter(e);
-        //moveLaser(e);
-        /*window.addEventListener("keydown", (event) => { //Not needed for rAF
-         switch(event.key) {
-         case "t": case "s": case "n": case "b":
-            toggleMenu();
-            break;
-          case ' ':
-            shoot(event);
-            break;
-          case 'ArrowLeft': case 'ArrowRight':
-            moveShooter(event);
-      }
-    }, true)*/
-
-
         fps = 0;
       }
   fps++
-     
-    //const timeElapsed = performance.now();//gives time interval since last frame
-  
       gameLoopID = window.requestAnimationFrame(gameLoop);//gameLoop is automatically passed a timestamp indicating the precise time requestAnimationFrame() was called.
     }
  
  let gameLoopID = window.requestAnimationFrame(gameLoop)//starts things off
- //let startLoop = window.requestAnimationFrame(gameLoop)//starts things off
 
-
-//cancelAnimationFrame(startLoop)
-
-
-//My game loop function v.0.2 that includes time stamp
-/*function gameLoop() {
-//let d = new Date()
-//let previous = d.getSeconds() * 1000;
-let lag = 0.0;
-while (isPlaying)
-{
-  //d = new Date()
-  //let current = d.getSeconds() * 1000;
-  //let elapsed = current - previous;
-  let elapsed = performance.now();
- // previous = current;
-  lag += elapsed;
-
-  //processInput();
-
-  while (lag >= 16)
-  {
- //update();
- moveInvaders();
-     window.addEventListener("keydown", (event) => { 
-         switch(event.key) {
-    /* case "t": case "s": case "n": case "b":
-            toggleMenu();
-            break;
-          case ' ':
-            shoot(event);
-            break;
-          case 'ArrowLeft': case 'ArrowRight':
-            moveShooter(event);
-      }
-    }, true)
-
-
- lag -= 16;
-  }
- 
-  //render();
-  window.requestAnimationFrame(gameLoop);
-}
-}
-let startLoop = window.requestAnimationFrame(gameLoop)//starts things off
-*/
-
-
-/*Kingsley's gameLoop:
-function loopAnimation(){
-if(lost){
-  return
-}else if(gamePaused){
-  return
-}
-moveBall()
-window.reequestAnimationFrame(loopAnimation)
-}
-window.requestAnimationFrame(loopAnimation);//start things off
-
-*/
 
