@@ -102,14 +102,12 @@ squares[currentShooterIndex].classList.add('shooter')
 function draw() {
     for (let i = 0; i < alienInvaders.length; i++) {
       if(!aliensRemoved.includes(i)) {
-        if(squares[alienInvaders[i]].classList.contains('laser')){
+        if(squares[alienInvaders[i]].classList.contains('invader', 'laser')){
           console.log("laser")
           squares[alienInvaders[i]].classList.remove('laser')
-          squares[alienInvaders[i]].classList.add('invader')
-        }else if(squares[alienInvaders[i]].classList.contains('boom')){
+        }else if(squares[alienInvaders[i]].classList.contains('invader', 'boom')){
           console.log("boom")
           squares[alienInvaders[i]].classList.remove('boom')
-          squares[alienInvaders[i]].classList.add('invader')
         }else{
           console.log("invader")
           squares[alienInvaders[i]].classList.add('invader')
