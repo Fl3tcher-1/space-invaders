@@ -6,6 +6,13 @@
     justify-content: center;
 }
 
+.time{
+    justify-content: center;
+    text-align: center;
+    font-size: 60px;
+    color: aqua;
+}
+
 .characterSelect{
     position: absolute;
     color: aliceblue;

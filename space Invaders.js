@@ -62,6 +62,11 @@ let running = false
 
 let row1 =[0,5,10]
 
+let time = new Date().getTime()
+    let seconds =0
+    let minutes =0
+
+
 dragonCharacter.addEventListener("click", () =>{
     character =characters[0]
     charSelectScreen.remove()
@@ -136,6 +141,7 @@ function gameloop(){
     counter += 0.25 //on every game loop call incraee by 0.25
     
     // console.log(character)
+    timer()
     Player()
     shoot()
     drawAlien() //draws updated postion values
@@ -143,6 +149,47 @@ function gameloop(){
     collisions()
     if (running) requestAnimationFrame(gameloop) //calls requestanimationframe and parses itself allowing the function to be re-run again
     
+}
+
+function timer(){
+    let currentTime =new Date().getTime()
+    let timer = document.getElementById("time")
+    // console.log(timeDifference/60)
+
+    if (currentTime - time >= 1000){
+        time =currentTime
+        seconds ++
+    } 
+    if(seconds == 60){
+        minutes ++
+        seconds =0
+    }
+    if (seconds <10){
+        timer.innerText =  `00:0${seconds}` 
+    } 
+     else if(seconds >10 && minutes ==0){
+        timer.innerText =  `00:${seconds}`
+    }
+
+    if(minutes >10){
+         if (seconds <10){
+        timer.innerText =  `${minutes}:0${seconds}` 
+    } 
+     else if(seconds >10){
+        timer.innerText =  `${minutes}:${seconds}`
+    }
+
+    } else if (minutes >0){
+        if (seconds <10){
+        timer.innerText =  `0${minutes}:0${seconds}` 
+    } 
+     else if(seconds >10){
+        timer.innerText =  `0${minutes}:${seconds}`
+    }
+}
+    
+    console.log(seconds)
+
 }
 
 //player controls
