@@ -39,6 +39,14 @@ let timeInterval = null,//time stamp at game start
     leadingMins = 0,
     leadingSecs = 0;
 //~~~~~~~~~~~~~~Timer variables end~~~~~~~~~~~~
+//array of alien invaders
+var alienInvaders = [//starting position of invaders
+  20,21,22,23,24,25,26,27,28,29,
+  40,41,42,43,44,45,46,47,48,49,
+  60,61,62,63,64,65,66,67,68,69,
+]
+let leftEdge = 0 //define grid's left edge as modulus = 0
+let rightEdge = 19 //define grid's right edge as modulus = 19
 let currentShooterIndex = 390;
 let width = 20;//gives the number of 'div' inside each row and column of the 'grid'
 let direction = 1;
@@ -109,12 +117,7 @@ for (let i = 0; i < 400; i++) {
 }
 //make an array from grid divs named 'squares'
 const squares = Array.from(document.querySelectorAll('.grid div'))//
-//make an array for alien invaders
-var alienInvaders = [//starting position of invaders
-  20,21,22,23,24,25,26,27,28,29,
-  40,41,42,43,44,45,46,47,48,49,
-  60,61,62,63,64,65,66,67,68,69,
-]
+
 //draw shooter AT START OF GAME
 squares[currentShooterIndex].classList.add('shooter')
 //draw all invaders AT START OF GAME
@@ -137,12 +140,6 @@ function drawAfterLost(){
   40,41,42,43,44,45,46,47,48,49,
   60,61,62,63,64,65,66,67,68,69,
 ]
-//console.log(squares[0].classList)
-/*for(i=0;i<=19;i++){
-  if(squares[i].classList.contains("laser")){
-    squares[i].classList.remove('laser');
-  }
-}*/
 draw()
 }
 function drawAfterWin(){//draw invaders after player has won one life
@@ -187,7 +184,10 @@ function playDistantUFO(){
 }
 function removeInv() {//invader is removed when shot or it has reached grid's left or right edge
   for (let i = 0; i < alienInvaders.length; i++) {
-    squares[alienInvaders[i]].classList.remove('invader')
+    if(!aliensRemoved.includes(i)){
+      squares[alienInvaders[i]].classList.remove('invader')
+    }
+
   }
 }
 function moveShooter(e) {
@@ -232,15 +232,9 @@ function lostLife(){
     lostHeart = document.getElementById(`heart${tries}`)
       messageDisplay.innerHTML = '<p>YOU LOST<br>'
                                + `Lives remaining: ${3-tries} </p>`;
-    // messageDisplay.innerHTML = `
-    // YOU LOST........
-    // Lives remaining: ${3-tries}
-    //  `;//player has lost
-    //document.getElementById("heart1").style.opacity="0"
     puff()
     lostHeart.style.opacity="0"
     resurrectShooter()
-    //explosion.style.opacity="1";
     setTimeout(drawAfterLost, 5000);//re-set invaders' position after 4 seconds
     setTimeout(()=> menu.style.opacity = "1", 5000);//wait 4 seconds to show the menu
     tries++
@@ -248,7 +242,6 @@ function lostLife(){
     //stop playing 'gameOver' after 4 secs
     setTimeout(() => gameOver.pause(), 5000);
     setTimeout(() => isPlaying = true, 5000);//game back on after 4 seconds
-    setTimeout(() => messageDisplay.innerHTML = "Space Invaders",5000)// - Lives remaining: ${3-tries}`,5000)
     //wait 4 seconds before start timer
     setTimeout(function(){
       timeStatus = true;
@@ -284,7 +277,7 @@ function lostLife(){
 function wonLife(){//player has earned one life, continues playing
   isPlaying = false;
   changeSpeed()
-  //show 'triumph message' for 4 seconds
+  //show 'triumph message' for 5 seconds
     messageDisplay.innerHTML = "<span style='color: gold;'><p>🏆 YOU WON ONE LIFE!</span><br>"
                              + `You have ${3 - tries +1} lives left</p>`;
   // messageDisplay.innerHTML = `
@@ -322,11 +315,11 @@ function moveInvaders() {
     // `;
   };
   if(isPlaying){
-  messageDisplay.innerHTML = "SPACE INVADERS"
+  messageDisplay.innerHTML = '<p>SPACE INVADERS</p>'
   //window.last_render = Date.now()
-  const leftEdge = alienInvaders[0] % width === 0//define left edge as modulus = 0
-  const rightEdge = alienInvaders[alienInvaders.length - 1] % width === width -1//define right edge as modulus = 19
   removeInv()//remove invaders from grid
+    leftEdge = alienInvaders[0] % width === 0//define left edge as modulus = 0
+    rightEdge = alienInvaders[alienInvaders.length - 1] % width === width -1//define right edge as modulus = 19
   if (rightEdge && goingRight) {//if invaders have reached grid's right edge
     for (let i = 0; i < alienInvaders.length; i++) {
       alienInvaders[i] += width +1//+= ensures that all aliens are processed; move invaders down and left
@@ -363,7 +356,7 @@ function moveInvaders() {
   }
  //End of game 2: Invaders have touched grid's bottom
   for (let i = 0; i < alienInvaders.length; i++) {
-    if(alienInvaders[alienInvaders.length-1] >= 390 && alienInvaders[alienInvaders.length-10]<= 399) {//if lowest row of aliens has reached grid's bottom
+    if(!aliensRemoved.includes(i) && alienInvaders[i] >= 390 && alienInvaders[i]<= 399) {//aliens have reached grid's bottom
       //stop the 'distantUfoLights' tune
       distantUFO.pause()
       //play the 'gameOver' tune
@@ -456,6 +449,7 @@ function toggleMenu(){
           minutes =0, seconds =0;
           timeStatus = false;
           timerContainer.innerHTML = `0${hours} : 0${minutes}`;
+          tries = 1;
           
         case "c": //continue 
           //start the timer by invoking the 'startTimer' function
