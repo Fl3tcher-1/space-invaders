@@ -266,12 +266,12 @@ function lostLife(){
      window.clearInterval(timeInterval);
      minutes =0, seconds =0;
      timeStatus = false;
-     window.addEventListener("keydown", function (e){
+     /*window.addEventListener("keydown", function (e){
        if( e.key =="r"){
          location.reload(true)
          tries = 1
        }
-     })
+     })*/
   }
 }
 function wonLife(){//player has earned one life, continues playing
@@ -284,7 +284,7 @@ function wonLife(){//player has earned one life, continues playing
   // 🏆 YOU WON ONE LIFE!
   // You have ${3 - tries +1} lives left
   // `;
-  setTimeout(drawAfterWin, 5000);//re-draw invaders' at starting position after 4 seconds
+  setTimeout(drawAfterWin, 4000);//re-draw invaders' at starting position after 4 seconds
   setTimeout(()=> menu.style.opacity = "1", 5000);//wait 4 seconds to show the menu
   setTimeout(() => isPlaying = true, 5000);//wait 4 seconds before start playing again
   //wait 4 seconds before you stop playing 'haveWon'
@@ -309,13 +309,9 @@ function moveInvaders() {
     menu.style.opacity="1";
     messageDisplay.innerHTML = '<p>SPACE INVADERS<br>'
                              + 'Press \'p\' to play</p>';
-    // messageDisplay.innerHTML = `//this doesn't work...
-    // SPACE INVADERS
-    // Press 'p' to play
-    // `;
   };
   if(isPlaying){
-  messageDisplay.innerHTML = '<p>SPACE INVADERS</p>'
+  //messageDisplay.innerHTML = '<p>SPACE INVADERS</p>'
   //window.last_render = Date.now()
   removeInv()//remove invaders from grid
     leftEdge = alienInvaders[0] % width === 0//define left edge as modulus = 0
@@ -443,13 +439,21 @@ function toggleMenu(){
          playDistantUFO()
           break 
         case "r": //restart
-          location.reload(true)
+          //location.reload(true)
+          removeInv()
+          squares[currentShooterIndex].classList.remove('shooter')
+          drawAfterWin()
+          squares[390].classList.add('shooter')
+          document.getElementById('heart1').style.opacity="1"
+          document.getElementById('heart2').style.opacity="1"
+          document.getElementById('heart3').style.opacity="1"
+          tries = 0
           //remove timer numbers
           window.clearInterval(timeInterval);
-          minutes =0, seconds =0;
+          //minutes =0, seconds =0;
           timeStatus = false;
           timerContainer.innerHTML = `0${hours} : 0${minutes}`;
-          tries = 1;
+
           
         case "c": //continue 
           //start the timer by invoking the 'startTimer' function
