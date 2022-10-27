@@ -10,6 +10,18 @@
   will jump to the specified position.
   audio.currentTime = 0;
   audio.play();
+
+// this way its possible to lose the layout
+box.style.transform = `translateX(${x * 100}px)`
+It is possible to remove painting by adding a layer:
+
+ this will take care of the painting by creating a layer and transform it
+#box {
+  width: 100px;
+  height: 100px;
+  ....
+  will-change: transform;
+}
 */
 //To ensure users of different browsers can get the same experience
 //window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(f){return setTimeout(f, 1000/60)}; // simulate calling code 60 
@@ -45,6 +57,7 @@ let menu = document.querySelector(".menu")
 let trophy = false
 let lostHeart;
 let explosion;
+let speed = 4;
 //~~~~~~~~~~~~~Sounds variables start~~~~~~~~~
 var piuPiu = new Audio("sounds/piu.ogg");
 var deadAngel = new Audio("sounds/deadAngel.ogg");
@@ -53,7 +66,19 @@ var gameOver = new Audio("sounds/gameOver.ogg");
 var haveWon = new Audio("sounds/haveWon.ogg");
 var distantUFO = new Audio("sounds/distantUfoLights.ogg");
 //~~~~~~~~~~~~~~Sounds variables end~~~~~~~~~~~~
+
 //++++++++++++ START OF GAME +++++++++++++++
+
+//change speed of game function
+function changeSpeed(){
+  if(speed >=2){
+    --speed;
+}else{
+  speed;
+}
+}
+
+
 //This is the timer function
 function startTimer(){
   seconds++;
@@ -266,6 +291,7 @@ function lostLife(){
 }
 function wonLife(){//player has earned one life, continues playing
   isPlaying = false;
+  changeSpeed()
   //show 'triumph message' for 4 seconds
     messageDisplay.innerHTML = "<span style='color: gold;'><p>🏆 YOU WON ONE LIFE!</span><br>"
                              + `You have ${3 - tries +1} lives left</p>`;
@@ -470,7 +496,7 @@ function toggleMenu(){
 toggleMenu() //invoking the 'toggleMenu' function
 //My game loop function v.0.1, used to achieve 60 frames per second
   function gameLoop() {
-      if(fps === 4){
+      if(fps === speed){
         moveInvaders();
         fps = 0;
       }
