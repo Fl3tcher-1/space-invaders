@@ -57,7 +57,7 @@ let menu = document.querySelector(".menu")
 let trophy = false
 let lostHeart;
 let explosion;
-let speed = 4;
+let speed = 5;
 //~~~~~~~~~~~~~Sounds variables start~~~~~~~~~
 var piuPiu = new Audio("sounds/piu.ogg");
 var deadAngel = new Audio("sounds/deadAngel.ogg");
@@ -69,7 +69,7 @@ var distantUFO = new Audio("sounds/distantUfoLights.ogg");
 
 //++++++++++++ START OF GAME +++++++++++++++
 
-//change speed of game function
+//change speed of game
 function changeSpeed(){
   if(speed >=2){
     --speed;
@@ -121,19 +121,11 @@ squares[currentShooterIndex].classList.add('shooter')
 function draw() {
     for (let i = 0; i < alienInvaders.length; i++) {
       if(!aliensRemoved.includes(i)) {
-        if(squares[alienInvaders[i]].classList.contains('invader', 'laser')){
-          console.log("laser")
-          squares[alienInvaders[i]].classList.remove('laser')
-        }else if(squares[alienInvaders[i]].classList.contains('invader', 'boom')){
-          console.log("boom")
-          squares[alienInvaders[i]].classList.remove('boom')
-        }else{
-          console.log("invader")
           squares[alienInvaders[i]].classList.add('invader')
         }
       }
     }
-}
+
 //draws invaders AT START OF GAME
 draw()
 //re-position invaders during game, after life has been lost
@@ -267,7 +259,7 @@ function lostLife(){
   }else{//Player has no more lives left
     //stop aliens
     isPlaying = false;
-    //cancelAnimationFrame(gameLoopID);
+    cancelAnimationFrame(gameLoopID);
     messageDisplay.innerHTML = '<p> GAME OVER<br>'
                               + 'Press \'r\' to play again? </p>'
      ;//player has lost
@@ -315,6 +307,7 @@ function wonLife(){//player has earned one life, continues playing
   }, 5000);
 }
 document.addEventListener('keydown', moveShooter)//invoke moveShooter
+
 function moveInvaders() {
   scoreDisplay.innerHTML = `Score: ${results}`;
  if(tries == null || tries == undefined || tries == NaN || tries == 0){
@@ -330,7 +323,7 @@ function moveInvaders() {
   };
   if(isPlaying){
   messageDisplay.innerHTML = "SPACE INVADERS"
-  window.last_render = Date.now()
+  //window.last_render = Date.now()
   const leftEdge = alienInvaders[0] % width === 0//define left edge as modulus = 0
   const rightEdge = alienInvaders[alienInvaders.length - 1] % width === width -1//define right edge as modulus = 19
   removeInv()//remove invaders from grid
@@ -494,6 +487,7 @@ function toggleMenu(){
   })
 }
 toggleMenu() //invoking the 'toggleMenu' function
+
 //My game loop function v.0.1, used to achieve 60 frames per second
   function gameLoop() {
       if(fps === speed){
