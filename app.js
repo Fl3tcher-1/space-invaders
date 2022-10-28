@@ -121,6 +121,7 @@ const squares = Array.from(document.querySelectorAll('.grid div'))//
 //draw shooter AT START OF GAME
 squares[currentShooterIndex].classList.add('shooter')
 //draw all invaders AT START OF GAME
+
 function draw() {
     for (let i = 0; i < alienInvaders.length; i++) {
       if(!aliensRemoved.includes(i)) {
@@ -258,21 +259,14 @@ function lostLife(){
      ;//player has lost
      puff();
     document.getElementById(`heart${tries}`).style.opacity="0"
-    setTimeout(()=> menu.style.opacity = "1", 5000)//wait 4 seconds to show the menu
+    setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
     //wait 4 secs before stopping playing'gameOver'
     setTimeout(function(){
       gameOver.pause();
-    },5000);
+    },4000);
      window.clearInterval(timeInterval);
      minutes =0, seconds =0;
      timeStatus = false;
-     /*window.addEventListener("keydown", function (e){
-       if( e.key =="r"){
-         location.reload(true)
-         tries = 1
-       }
-     })*/
-  }
 }
 function wonLife(){//player has earned one life, continues playing
   isPlaying = false;
@@ -305,7 +299,10 @@ function moveInvaders() {
   scoreDisplay.innerHTML = `Score: ${results}`;
  if(tries == null || tries == undefined || tries == NaN || tries == 0){
     tries = 1;
-  } else if(tries == 1 && !isPlaying && !trophy){
+    menu.style.opacity="1";
+    messageDisplay.innerHTML = '<p>SPACE INVADERS<br>'
+                             + 'Press \'p\' to play</p>';
+  } else if(tries ==  1 && !isPlaying && !trophy){
     menu.style.opacity="1";
     messageDisplay.innerHTML = '<p>SPACE INVADERS<br>'
                              + 'Press \'p\' to play</p>';
@@ -352,7 +349,7 @@ function moveInvaders() {
   }
  //End of game 2: Invaders have touched grid's bottom
   for (let i = 0; i < alienInvaders.length; i++) {
-    if(!aliensRemoved.includes(i) && alienInvaders[i] >= 390 && alienInvaders[i]<= 399) {//aliens have reached grid's bottom
+    if(!aliensRemoved.includes(i) && alienInvaders[i] >= 380 && alienInvaders[i]<= 399) {//aliens have reached grid's bottom
       //stop the 'distantUfoLights' tune
       distantUFO.pause()
       //play the 'gameOver' tune
@@ -440,21 +437,21 @@ function toggleMenu(){
           break 
         case "r": //restart
           //location.reload(true)
-          removeInv()
+          tries = undefined
           squares[currentShooterIndex].classList.remove('shooter')
+          removeInv() 
           drawAfterWin()
           squares[390].classList.add('shooter')
+          //bring back 3 angels
           document.getElementById('heart1').style.opacity="1"
           document.getElementById('heart2').style.opacity="1"
           document.getElementById('heart3').style.opacity="1"
-          tries = 0
-          //remove timer numbers
+          //stop timer and remove time numbers
           window.clearInterval(timeInterval);
-          //minutes =0, seconds =0;
+          minutes =0, seconds =0;
           timeStatus = false;
-          timerContainer.innerHTML = `0${hours} : 0${minutes}`;
-
-          
+          timerContainer.innerHTML = `Time: 0${minutes} : 0${seconds}`;
+          break
         case "c": //continue 
           //start the timer by invoking the 'startTimer' function
           if(timeStatus === false){
