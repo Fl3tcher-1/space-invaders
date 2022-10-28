@@ -221,13 +221,9 @@ function puff(){
 //repaints 'shooter' before new play
 function resurrectShooter(){
   if(squares[currentShooterIndex].classList.contains('deadShooter')){
-
       squares[currentShooterIndex].classList.remove('deadShooter')
-
 } else if(squares[currentShooterIndex].classList.contains('shooter')){
-
     squares[currentShooterIndex].classList.remove('shooter')
-
 }
 currentShooterIndex = 390
 squares[currentShooterIndex].classList.add('shooter')
@@ -444,6 +440,7 @@ function toggleMenu(){
           break 
         case "r": //restart
           //location.reload(true) //not used as it caused frame drop
+          if(!isPlaying){
           tries = 1
           speed = 4 
           removeInv() 
@@ -460,6 +457,7 @@ function toggleMenu(){
           //wipe out the score
           results = 0
           break
+          }
         case "c": //continue 
           //start the timer by invoking the 'startTimer' function
           if(timeStatus === false){
