@@ -65,7 +65,7 @@ let menu = document.querySelector(".menu")
 let trophy = false
 let lostHeart;
 let explosion;
-let speed = 5;
+let speed = 3;
 //~~~~~~~~~~~~~Sounds variables start~~~~~~~~~
 var piuPiu = new Audio("sounds/piu.ogg");
 var deadAngel = new Audio("sounds/deadAngel.ogg");
@@ -259,14 +259,15 @@ function lostLife(){
      ;//player has lost
      puff();
     document.getElementById(`heart${tries}`).style.opacity="0"
-    setTimeout(()=> menu.style.opacity = "1", 4000)//wait 4 seconds to show the menu
+    setTimeout(()=> menu.style.opacity = "1", 5000)//wait 4 seconds to show the menu
     //wait 4 secs before stopping playing'gameOver'
     setTimeout(function(){
       gameOver.pause();
-    },4000);
+    },5000);
      window.clearInterval(timeInterval);
      minutes =0, seconds =0;
      timeStatus = false;
+  }
 }
 function wonLife(){//player has earned one life, continues playing
   isPlaying = false;
@@ -299,16 +300,17 @@ function moveInvaders() {
   scoreDisplay.innerHTML = `Score: ${results}`;
  if(tries == null || tries == undefined || tries == NaN || tries == 0){
     tries = 1;
-    menu.style.opacity="1";
+   /* menu.style.opacity="1";
     messageDisplay.innerHTML = '<p>SPACE INVADERS<br>'
-                             + 'Press \'p\' to play</p>';
-  } else if(tries ==  1 && !isPlaying && !trophy){
+                             + 'Press \'p\' to play</p>';*/
+  } else if(tries == 1 && !isPlaying && !trophy){
     menu.style.opacity="1";
     messageDisplay.innerHTML = '<p>SPACE INVADERS<br>'
                              + 'Press \'p\' to play</p>';
   };
   if(isPlaying){
-  //messageDisplay.innerHTML = '<p>SPACE INVADERS</p>'
+    console.log({moveInvaders})
+  messageDisplay.innerHTML = '<p>SPACE INVADERS</p>'
   //window.last_render = Date.now()
   removeInv()//remove invaders from grid
     leftEdge = alienInvaders[0] % width === 0//define left edge as modulus = 0
@@ -437,20 +439,22 @@ function toggleMenu(){
           break 
         case "r": //restart
           //location.reload(true)
-          tries = undefined
+          //isPlaying = false
+          tries = 1
           squares[currentShooterIndex].classList.remove('shooter')
           removeInv() 
           drawAfterWin()
           squares[390].classList.add('shooter')
-          //bring back 3 angels
           document.getElementById('heart1').style.opacity="1"
           document.getElementById('heart2').style.opacity="1"
           document.getElementById('heart3').style.opacity="1"
-          //stop timer and remove time numbers
+          //remove timer numbers
           window.clearInterval(timeInterval);
           minutes =0, seconds =0;
           timeStatus = false;
           timerContainer.innerHTML = `Time: 0${minutes} : 0${seconds}`;
+          //wipe out the score
+          results = 0
           break
         case "c": //continue 
           //start the timer by invoking the 'startTimer' function
