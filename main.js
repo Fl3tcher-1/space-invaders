@@ -18,7 +18,7 @@ let dragon = document.getElementById('dragon')
 // character sprites
 playerIdleImgPos = 191 //x size value for a single sprite image
 playerIdleImgPosy = 161 // y value for a single sprite image
-playerIdleImgPosyLeft = 483 //last y value for single sprite image
+playerIdleImgPosYMax = 483 //last y value for single sprite image
 counter =0 //used to control animation speed
 
 //      SPACESHIP 
@@ -67,7 +67,7 @@ var distantUFO = new Audio("sounds/distantUfoLights.ogg");
 
 //      ENEMY 
 let aliens = Array.from(document.querySelectorAll(".aliens")); // creates an array from all aliens with class aliens
-let enemies = document.getElementsByClassName('aliens')
+// let enemies = document.getElementsByClassName('aliens')
 let destroyed = false; 
 const enemy = document.getElementById("enemy");
 
@@ -239,7 +239,7 @@ function animateEnemy() {
       enemy.style.transform = `translate(${position}px, ${curentY}px)`;
   } else{
       if (direction === true){
-      curentY += 60;
+      curentY += 50;
       // console.log("curentY", curentY);
       enemy.style.transform = `translate(${position}px, ${curentY}px)`;
       direction = false;
@@ -248,7 +248,7 @@ function animateEnemy() {
     position -= 10;
     enemy.style.transform = `translate(${position}px, ${curentY}px)`;
     if (position < 4) {
-      curentY += 60;
+      curentY += 50;
        
       enemy.style.transform = `translate(${position}px, ${curentY}px)`;
       direction = true;
@@ -256,9 +256,23 @@ function animateEnemy() {
   }
 
   
-//CHECKS IF ENEMY HAS REACHED THE BOTTOM/SPACESHIP TO REMOVE LIFE AND CHANGE CORRESPONDING ELEMENTS
+  //CHECKS IF ENEMY HAS REACHED THE BOTTOM/SPACESHIP TO REMOVE LIFE AND CHANGE CORRESPONDING ELEMENTS
     if (enemy.getBoundingClientRect().bottom >= spaceship.getBoundingClientRect().top){
+      // started = false;
+      // wait 3 seconds before starting new play
+      // setTimeout(started = true, 3000);
+
       let hearts = Array.from(document.getElementsByClassName('heart'))
+      started= false
+      setTimeout(() => {
+        started= true;
+        spaceship.style.left = playArea - middleOfSpaceShip + "px";
+      }, 1500)
+      
+      position =0 
+      curentY =0  
+      
+      
       // console.log(hearts.length);
       
        //if no hearts-- game is over
@@ -283,10 +297,10 @@ function animateEnemy() {
         bullet.remove()
         
       }
+  
+      
 
       //reset alien values
-      position =0 
-      curentY =0  
         
       //plays sound when life lost
       if(hearts.length > 0){
@@ -323,7 +337,7 @@ function movePlayer(){
       //if can animate, updates image from sprite sheet
       if(canAnimate){
  
-           dragon.style.backgroundPosition = `-${playerIdleImgPos}px -${playerIdleImgPosyLeft }px` //sets x&y position of sprite sheet to use
+           dragon.style.backgroundPosition = `-${playerIdleImgPos}px -${playerIdleImgPosYMax }px` //sets x&y position of sprite sheet to use
 
         // checks if at the end of sprite sheet and either reset or move position
        if(playerIdleImgPos <573){
@@ -388,7 +402,6 @@ function shoot() {
     let bullet = document.createElement("IMG");
     bullet.src = "./resources/img/bullet.png"; //img for the bullet
     bullet.setAttribute("id", "laser");
-    const body = document.querySelector("body");
 
     //UPDATE BULLET POSITIONS, add to document and play sound
     bullet.style.marginLeft=(spaceshipStart +(spaceship.getBoundingClientRect().width *0.75))+"px"
@@ -474,8 +487,10 @@ function collisionDetection(){
   }
 }
 
+
 //      GAME LOOP 
 function gameLoop() {
+
   counter +=0.25 // used for animations
   if (started === true) {
 
@@ -487,7 +502,7 @@ function gameLoop() {
       scoreboard.style.opacity =1
     }
     //if game has not ended run the game loop
-  if (gameOver === false) {
+  if (gameOver === false && started) {
     timer()
     animateEnemy();
     movePlayer();
