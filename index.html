@@ -1,16 +1,100 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-
-  <title>Space Invaders</title>
-  <link rel="stylesheet" href="style_H.css">
-
-</head>
-<body>
-  <h1 class="results">0</h1>
-  <div class="grid"></div>
-  <script src="app.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>SPACE INVADERS</title>
+  </head>
+  <body>
+    <h1>SPACE INVADERS</h1>
+    <div class="scoreboard" id="scoreboard">
+      <div class="time">
+        <p>Time:</p>
+        <pre id="timer">00:00</pre>
+      </div>
+      <div class="score">
+        <pre id="t1"></pre>
+        <p>Score:</p>
+        <pre id="score">0</pre>
+      </div>
+      <div class="lives">
+        <p>Lives:</p>
+        <pre id="t1"></pre>
+        <img id="heart1" class="heart" src=".//resources/img/heart.jpg" alt="heart" style="width: 40px; height: 40x;">
+        <img id="heart2 "class="heart" src=".//resources/img/heart.jpg" alt="heart" style="width: 40px; height: 40px;">
+        <img id="heart3" class="heart" src=".//resources/img/heart.jpg" alt="heart" style="width: 40px; height: 40px;">
+      </div>
+    </div>
+    
+    <div id="container">
+      <div id="characterSelect" class ="characterSelect">
+        <div class="title">
+            <h2>Choose Your Character</h2>
+        </div>
+        <div id="splitLeft" class="division">
+            <div class="centered">
+                <img src="./resources/img/pngfind.com-skyrim-dragon-png-1561397.png" alt="dragon">
+                <br>
+                <h2>Press 'A' for Dragon</h2>
+            </div>
+        </div>
+        <div id="splitRight" class ="division">
+            <div class="centered">
+                <img src="./resources/img/spaceship.jpg" alt="spaceship">
+                 <br>
+                <h2>Press 'D' for Spaceship</h2>
+            </div>
+        </div>
+    </div>
+      <div class="board" id="instruction">
+        <h2>HOW TO PLAY</h2>
+        <h3>START THE GAME: ENTER</h3>
+        <h3>MOVE LEFT: left arrow </h3>
+        <h3>MOVE RIGHT: right arrow </h3>
+        <h3>FIRE: space bar</h3>
+        <h3>PAUSE: P</h3>
+        <h3>RESTART: R</h3>
+      </div>
+      <div class="board" id="gameover">
+        <h2>GAME OVER</h2>
+        <h3 id="finalscore">Final Score</h3>
+      </div>
+      <div class ="board" id="winner">
+        <h2>YOU WON!</h2>
+        <h3 id="finalscore2">Final Score</h3>
+      </div>
+      <div id="enemy">
+        <!-- <img src="./img/1.png" alt="enemy" style="width:100px; height:100px" id="alien"> -->
+    
+          <div  class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien0" ></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien1" ></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien2" > </div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien3" > </div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien4" > </div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien5"> </div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien6" > </div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien7" > </div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien8" ></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien9"></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien10" ></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien11"></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien12"></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien13"></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien14"></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien15"></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien16"></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien17"> </div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien18"></div>
+          <div class="aliens"><img src="./resources/img/fly.png" alt="enemy" style="width:40px; height:40px" id="alien19"></div>
+      </div>
+      <div class = "spaceshipDiv">
+      <img src="./resources/img/spaceship.jpg" alt="" id="spaceship" />
+    </div>
+    <div class="spaceshipDiv" id="dragon"> 
+    </div>
+    </div>
+    <script src="/main.js"></script>
+  </body>
 </html>
