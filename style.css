@@ -10,6 +10,7 @@ body{
   background: url(./resources/img/stars.png)  repeat 0 0;
   animation: animate 80s infinite;
   animation-timing-function: linear;
+  overflow: hidden;
 }
 
  @keyframes animate{
@@ -66,6 +67,13 @@ h1{
   height: 600px;
   /* border: rgb(197, 15, 15) solid; */
   /* display: block; */
+  /* background-image: url("./resources/img/earth.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  mask-image: linear-gradient(to); */
+  /* background-image: url("./resources/img/cropped_earth.jpg"); */
+  /* background-size: cover; */
+  /* background-repeat: no-repeat; */
 }
 
 .characterSelect{
@@ -176,6 +184,7 @@ h2{
   bottom: 0;
   opacity: 0;
   transform: scale(0.9);
+  z-index: 3;
 
 }
 
@@ -186,6 +195,7 @@ h2{
   filter: drop-shadow(0.3rem 0.3rem 0.8rem rgba(52, 83, 59, 0.8));
   bottom: 0;
   opacity: 0;
+  z-index: 3;
 } 
 
 
@@ -222,4 +232,28 @@ h2{
   display: inline-block;
   width: 40px;
   height: 40px;
+}
+
+#earth{
+  background-image: url("./resources/img/cropped_earth.jpg");
+  /* display: flex; */
+  /* margin-top: -100px; */
+  /* opacity: 0.3; */
+  /* border-radius: 30%; */
+  /* z-index: -10; */
+  /* filter:blur(1px) */
+}
+
+.slideBanner{
+  /* margin-left: 25%;
+  margin-right: 25%; */
+  position: fixed;
+  left: 50%;
+  /* top: 35%; */
+  transform: translateX(-50% );
+
+  width: 1000px;
+  height: 200px;
+  background: url('./resources/img/earth_globe.png') 0 0 no-repeat, radial-gradient(ellipse at center, rgba(0,0,0,0) 10%,rgba(0,0,0,1) 90%);
+  background-blend-mode: multiply;
 }
