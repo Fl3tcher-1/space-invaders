@@ -419,7 +419,7 @@ function shoot(e) {
 }
 //
 document.addEventListener('keydown', shoot) //invoking the 'shoot' function
-  //
+//
 //stop, resume, restart menu
 function toggleMenu(){
   window.addEventListener(
