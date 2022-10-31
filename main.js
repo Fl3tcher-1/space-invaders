@@ -39,17 +39,16 @@ let shootPressed = false; //used to control firing
 let started = false; //game started
 let charChosen =false
 
-//used to allow multiple input keys (move and shoot)
-let move = {left:  0,
+let move = {left:  0, //used to allow multiple input keys (move and shoot)
             right: 0, 
             shoot: 0 };
-    let key; //inits key values
+  let key; //inits key values
             
 // SCORE  
 let score = 0;
     
 // TIMER 
-    let time = new Date().getTime()
+    let time = new Date().getTime()  //init time when project started to use as a counter-counter
     let seconds = 0;
     let minutes = 0;
     let clock = document.getElementById('timer');
@@ -65,11 +64,11 @@ var haveWon = new Audio("sounds/haveWon.ogg");
 var distantUFO = new Audio("sounds/distantUfoLights.ogg");
 //~~~~~~~~~~~~~~Sounds variables end~~~~~~~~~~~~
 
-let destroyed = false; 
-
 
 //      ENEMY 
-let aliens = Array.from(document.querySelectorAll(".aliens")); // all the aliens
+let aliens = Array.from(document.querySelectorAll(".aliens")); // creates an array from all aliens with class aliens
+let enemies = document.getElementsByClassName('aliens')
+let destroyed = false; 
 const enemy = document.getElementById("enemy");
 
 
@@ -78,6 +77,7 @@ let direction = true;
 let curentY = 0;
 let canFire = true;
 
+//on load sets users spaceship position --- only used for spaceship not for dragon
 window.addEventListener("load", () => {
   spaceship.style.position = "absolute";
   spaceship.style.left = playArea - middleOfSpaceShip + "px"; // center the Spaceship
@@ -90,31 +90,38 @@ let spaceshipStart = boundary.width/2 - spaceship.getBoundingClientRect().width
 document.addEventListener("keydown", (e) => {
   // console.log(key)
   key = e.key;
-  if(won){
+  //if user has won && key is r reloads game window-- used to fix a bug not restarting correctly
+  if(won){ 
     if (key === "r") {
       started = true;
       window.location.reload(true)
     }
   }
+  //selects playable character, sets position, removes charselect screen and makes instructions visibile
   if(key =='a'){
-    character =characters[0]
-    spaceship=dragon
+    character =characters[0] // sets char to dragon
+    spaceship=dragon //makes spaceship div = dragon div
     spaceship.style.left = playArea - middleOfSpaceShip + "px"; // center the Spaceship
     charSelectScreen.remove()
     instruction.style.opacity=1
-    charChosen =true
+    charChosen =true // used to only allow other menus to be accessed and game started after char is chosen
   }
-  if(key =='d'){
+  if(key =='d'){ //selects spaceship
     character=characters[1]
     charSelectScreen.remove()
     instruction.style.opacity=1
     charChosen=true
   }
-  if(!won && charChosen){
+
+  // WIN CONDITIONS, KEY SELECTOR AND ASSIGNMENT
+  // start game and play sound if char chosen and game not over
+  if(!won && charChosen){ 
     if (key === "Enter") {
       started = true;
       playDistantUFO()
-    } else if (key === "p") {
+
+  //pauses game and makes instructions appear
+    } else if (key === "p" && !gameOver) { 
       if(started){
       instruction.style.opacity = 1;
       spaceship.style.opacity = 0;
@@ -123,10 +130,13 @@ document.addEventListener("keydown", (e) => {
       started=false
       playDistantUFO()
     } 
+  //restart game 
   } else if (key === "r") {
     started = true;
     window.location.reload(true)
     // document.location.reload()
+
+  //assign movement keys to object
   } else if (key === "ArrowLeft") {
     move.left = 1;
   } else if (key === "ArrowRight") {
@@ -138,10 +148,9 @@ document.addEventListener("keydown", (e) => {
 }
 });
 
-
 //    KEYUP
 
-document.addEventListener("keyup", (e) => {
+document.addEventListener("keyup", (e) => { // sets values of keys that have been let go to nil
   key = e.key;
   
   if (key === "ArrowLeft") {
@@ -155,11 +164,13 @@ document.addEventListener("keyup", (e) => {
 });
 
 
+//make game assets
 if (started){
   spaceship.style.opacity = 1;
   enemy.style.opacity = 1;
 }
 
+//game bg music
 function playDistantUFO(){
   if(started){
     distantUFO.currentTime = 0;
@@ -169,53 +180,60 @@ function playDistantUFO(){
   }
 }
 
-
 //      TIMER 
-
+// creates a new timer when function called that is updated every call, to compare with default set value and calculkate elapsed seconds
 function timer(){
- let currentTime = new Date().getTime()
+    let currentTime = new Date().getTime() 
 
- if(currentTime - time >= 1000){   // 1000 mili sec = 1 sec  
-  time = currentTime     // reset time to curretTime 
-  seconds++     // add the second to the time 
- }
+    //  seconds
+    if(currentTime - time >= 1000){   // 1000 mili sec = 1 sec  
+      time = currentTime     // reset time to curretTime 
+      seconds++     // add the second to the time 
+    }
 
- if(seconds == 60){
-  minutes ++
-  seconds = 0;
- }
+    // minutes
+    if(seconds == 60){ 
+      minutes ++
+      seconds = 0;
+    }
 
- if(seconds < 10){
-  clock.innerHTML = `00:0${seconds}`
- }
- else if(seconds > 10 && minutes == 0){
-  clock.innerHTML  = `00:${seconds}`
-}
-if(minutes >10){
-  if (seconds <10){
- clock.innerText =  `${minutes}:0${seconds}` 
-} 
-else if(seconds >10){
- clock.innerText =  `${minutes}:${seconds}`
-}
+    //  seconds html display format
+    if(seconds < 10){
+      clock.innerHTML = `00:0${seconds}`
+    }
+    else if(seconds > 10 && minutes == 0){
+      clock.innerHTML  = `00:${seconds}`
+    }
 
-} else if (minutes >0){
- if (seconds <10){
- clock.innerText =  `0${minutes}:0${seconds}` 
-} 
-else if(seconds >10){
- clock.innerText =  `0${minutes}:${seconds}`
-}
-}
+    //minutes html display format
+    if(minutes >10){
+      if (seconds <10){
+    clock.innerText =  `${minutes}:0${seconds}` 
+    } else if(seconds >10){
+    clock.innerText =  `${minutes}:${seconds}`
+    }
+    // alternate minutes html display format
+    } else if (minutes >0){
+      if (seconds <10){
+        clock.innerText =  `0${minutes}:0${seconds}` 
+      } else if(seconds >10){
+        clock.innerText =  `0${minutes}:${seconds}`
+      }
+    }
 
-}
-
-
+    }
 
 //      MOVE ENEMY 
-
 function animateEnemy() {
-  position += 5;
+  position += 5; //increases x position
+
+  //check for boundary collisions to dictate movement direction
+  
+
+  // for(let i=0; i <enem.length; i ++){
+
+  // }
+
 
   if (enemy.getBoundingClientRect().right < container.getBoundingClientRect().right && direction) {
       enemy.style.transform = `translate(${position}px, ${curentY}px)`;
@@ -226,6 +244,7 @@ function animateEnemy() {
       enemy.style.transform = `translate(${position}px, ${curentY}px)`;
       direction = false;
     }
+    // reverse direction when boundary reached
     position -= 10;
     enemy.style.transform = `translate(${position}px, ${curentY}px)`;
     if (position < 4) {
@@ -235,67 +254,78 @@ function animateEnemy() {
       direction = true;
     }
   }
-  if (enemy.getBoundingClientRect().bottom >= spaceship.getBoundingClientRect().top){
-    let hearts = Array.from(document.getElementsByClassName('heart'))
-    // console.log(hearts.length);
-    
-    if(hearts == null || hearts.length ==1 ){
 
-      gameOver = true;
-      hearts[Array.length-1].remove()
-      spaceship.style.opacity= 0;
-      enemy.style.opacity= 0;
-      let gameover = document.getElementById('gameover')
-      let finalScore = document.getElementById('finalscore')
-      finalScore.innerHTML = `Final score: ${score}`
-      gameover.style.opacity = 1; 
-      distantUFO.pause()
-      endGame.currentTime = 0;
-      endGame.play();
-      cancelAnimationFrame(gameLoop) 
-      bullet.remove()
-      for(let i=0; i<1; i++){
-        // console.log({gameOver})
+  
+//CHECKS IF ENEMY HAS REACHED THE BOTTOM/SPACESHIP TO REMOVE LIFE AND CHANGE CORRESPONDING ELEMENTS
+    if (enemy.getBoundingClientRect().bottom >= spaceship.getBoundingClientRect().top){
+      let hearts = Array.from(document.getElementsByClassName('heart'))
+      // console.log(hearts.length);
+      
+       //if no hearts-- game is over
+      if(hearts == null || hearts.length ==1 ){ 
+        hearts[Array.length-1].remove()
+  
+        let gameover = document.getElementById('gameover')
+        let finalScore = document.getElementById('finalscore')
+
+        //changes game menu visibility to show gameover screen and final score
+        gameOver = true;
+        spaceship.style.opacity= 0;
+        enemy.style.opacity= 0;
+        finalScore.innerHTML = `Final score: ${score}`
+        gameover.style.opacity = 1; 
+        
+        //plays defeat music
+        distantUFO.pause()
+        endGame.currentTime = 0;
+        endGame.play();
+        cancelAnimationFrame(gameLoop) 
+        bullet.remove()
+        
+      }
+
+      //reset alien values
+      position =0 
+      curentY =0  
+        
+      //plays sound when life lost
+      if(hearts.length > 0){
+        hearts[Array.length-1].remove()
+        deadAngel.currentTime = 0;
+        deadAngel.play();
+     }
       }
     }
 
-    position =0
-    curentY =0  
-      
-    if(hearts.length > 0){
-      hearts[Array.length-1].remove()
-      deadAngel.currentTime = 0;
-      deadAngel.play();
-   }
-    }
-  }
-
-
-
 //      MOVE SPACESHIP
-
 function movePlayer(){
-  // console.log(spaceship.style.left)
 
+  //sets values to allow smooth animation
   let canAnimate = false
   let movingLeft =false
   let movingRight = false
 
+    //allow animation to take place
   if (counter >=1.75){
     counter = 0
     canAnimate = true
   }
 
+  //moving left
   if (move.left === 1){
     movingLeft = true
+
+    //checks if spaceship is not at boundary and updates x position
     if (spaceship.getBoundingClientRect().left >container.getBoundingClientRect().left){
       spaceshipStart -= spaceshipVelocity
       spaceship.style.left = parseInt(spaceship.style.left) - spaceshipVelocity + "px";
 
+      //if can animate, updates image from sprite sheet
       if(canAnimate){
-        // console.log("hello")
-           dragon.style.backgroundPosition = `-${playerIdleImgPos}px -${playerIdleImgPosyLeft }px`
-   
+ 
+           dragon.style.backgroundPosition = `-${playerIdleImgPos}px -${playerIdleImgPosyLeft }px` //sets x&y position of sprite sheet to use
+
+        // checks if at the end of sprite sheet and either reset or move position
        if(playerIdleImgPos <573){
            playerIdleImgPos = playerIdleImgPos +191
        } else{
@@ -305,11 +335,18 @@ function movePlayer(){
     }
     }
   }
+
+  //MOVING RIGHT
   if (move.right === 1) {
     movingRight =true
+        //checks if spaceship is not at boundary and updates x position
+
     if (spaceship.getBoundingClientRect().right < container.getBoundingClientRect().right) {
       spaceshipStart += spaceshipVelocity
       spaceship.style.left = parseInt(spaceship.style.left) + spaceshipVelocity + "px";
+
+            //if can animate, updates image from sprite sheet
+
       if (canAnimate){
                   
         dragon.style.backgroundPosition = `-${playerIdleImgPos}px -${playerIdleImgPosy}px` //gets dragon image and assigns x & y positions on sprite sheet 
@@ -324,6 +361,8 @@ function movePlayer(){
     }
     }
   }
+
+  //dragon idling animation 
   if(counter ==1 && !movingLeft && !movingRight) {
     dragon.style.backgroundPosition = `-${playerIdleImgPos}px 0px`
     
@@ -337,39 +376,36 @@ function movePlayer(){
 
 
 //    SHOOT BULLET 
-
 function shoot() {
   // console.log(move.shoot, canFire, started)
+
+  //if game started and can fire, create a bullet
   if(move.shoot && canFire && started){
     canFire = false;
     shootPressed = true;
-    
+
+    //CREATE BULLET
     let bullet = document.createElement("IMG");
-    bullet.src = "./resources/img/bullet.png";
+    bullet.src = "./resources/img/bullet.png"; //img for the bullet
     bullet.setAttribute("id", "laser");
     const body = document.querySelector("body");
-    // body.append(bullet);
-    // console.log({bulletStart}, {bulletVelocity})
-    
+
+    //UPDATE BULLET POSITIONS, add to document and play sound
     bullet.style.marginLeft=(spaceshipStart +(spaceship.getBoundingClientRect().width *0.75))+"px"
     bullet.style.bottom = bulletStart + "px";
     container.appendChild(bullet)
     piuPiu.currentTime = 0;
     piuPiu.play();
-    // console.log(bullet.style.bottom)
-    
-    // const bulletY = spaceship.getBoundingClientRect().top-13 + "px";
-    // const bulletX =(spaceship.getBoundingClientRect().right + spaceship.getBoundingClientRect().left)/2-13 +"px";
-
-    // bullet.style.bottom = bulletStart + "px";
-    // bullet.style.left = bulletX;
+   
   }
 
   let bullet = document.getElementById("laser");
 
+  //if a bullet is created, move it by a set amount every function call
   if (bullet != null){
     bullet.style.bottom = bulletVelocity + "px";
     bulletVelocity += 20;
+    //if bullet at boundary, remove bullet, reset position and allow to fire again
   if (bulletVelocity - spaceship.getBoundingClientRect().height / 2 >= container.getBoundingClientRect().height){
       bulletVelocity = bulletStart;
       bullet.remove();
@@ -380,36 +416,47 @@ function shoot() {
 
 
 //    COLLISION
-
 function collisionDetection(){
 
   let bullet = document.getElementById("laser")
   let aliens = Array.from(document.querySelectorAll(".aliens")); 
   // aliens[i].getBoundingClientRect().x   // getBoundingClient works for each element of the array 
 
+  //WIN SCREEN
+  // FOR EVERY ALIEN, CHECK IF THEY ARE ALL DESTROYED
   if(aliens.every(alien =>{
     !aliens.includes('aliens')
   })){  
-    spaceship.style.opacity=0
-    won = true
-    distantUFO.pause()
-    let win = document.getElementById('winner')
-    win.style.opacity =1
-    haveWon.currentTime = 0;
-    haveWon.play();
-    let finalScore = document.getElementById('finalscore2')
-    finalScore.innerHTML = `Final score: ${score}`
+    //play win sounds
     cancelAnimationFrame(gameLoop)
-    started= false
+    distantUFO.pause()
+    haveWon.play();
     bullet.remove()   
+
+    spaceship.style.opacity=0
+    let win = document.getElementById('winner')
+    let finalScore = document.getElementById('finalscore2')
+
+    //show winning on html
+    won = true
+    win.style.opacity =1
+    haveWon.currentTime = 0; //reset time
+    finalScore.innerHTML = `Final score: ${score}`
+    started= false
   }
+
+
+  //ALIENS STILL ALIVE and there is a bullet
   if (bullet != null){
 
+    //check every alien for hit detection
   for(i = 0; i < aliens.length; i++){
    // horizontal check ---  (alien.x < bullet.x + bullet.y  && alien.x + alien.width > bullet.x)
    if (aliens[i].getBoundingClientRect().x <( bullet.getBoundingClientRect().x + bullet.getBoundingClientRect().width) && (aliens[i].getBoundingClientRect().x + aliens[i].getBoundingClientRect().width) > bullet.getBoundingClientRect().x){ 
      // vertical check  --- (alien.y < bullet.y + bullet.height && alien.y + allien.height > bullet.y)
    if (aliens[i].getBoundingClientRect().y < bullet.getBoundingClientRect().y + bullet.getBoundingClientRect().height && aliens[i].getBoundingClientRect().y + aliens[i].getBoundingClientRect().height > bullet.getBoundingClientRect().y){
+
+    //chnge class name to dead
    if(aliens[i].className !== "dead"){
       //  console.log(i,aliens[i],aliens[i].className === "dead");
       aliens[i].className = "dead"
@@ -419,7 +466,7 @@ function collisionDetection(){
       bulletVelocity=bulletStart
       canFire = true; 
       score += 5
-      document.getElementById('score').innerHTML = score
+      document.getElementById('score').innerHTML = score //update score
           }
        }
       }
@@ -428,16 +475,18 @@ function collisionDetection(){
 }
 
 //      GAME LOOP 
-  
 function gameLoop() {
-  counter +=0.25
+  counter +=0.25 // used for animations
   if (started === true) {
+
+    //make game items appear
     if (started){
       spaceship.style.opacity = 1;
       enemy.style.opacity = 1;
       instruction.style.opacity = 0;
       scoreboard.style.opacity =1
     }
+    //if game has not ended run the game loop
   if (gameOver === false) {
     timer()
     animateEnemy();
@@ -448,8 +497,4 @@ function gameLoop() {
     }
   requestAnimationFrame(gameLoop);
   }
-
-
-
-
 window.requestAnimationFrame(gameLoop);
