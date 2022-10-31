@@ -1,28 +1,225 @@
-.BoundaryGrid{
-    /* height: 600px; */
-    /* background-color: aqua; */
-  display: grid;
-  margin-top: 150px;
-  border-style: solid;
-  border-color: aqua;
-  padding: 5px;
-     align-items: center;
-     justify-content: center;
-     size: 50px;
-     grid-template-columns: 150px 150px 150px 150px 150px;
-     grid-gap: 1rem;
-     color: aliceblue;
-     /* grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));  */
-     /*creates resposnsive layout that changes based on side of browser */
-
-}
+@import url('https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@200;300&family=Poppins:ital,wght@0,300;0,400;1,200&family=Roboto:ital,wght@1,100&family=Silkscreen&display=swap');
 
 
-
-.aliens{
-    background-color: rgb(255, 0, 0);
-}
+* {
+  padding: 0;
+  margin: 0;
+} 
 
 body{
-    background-color: black;
+  background: url(./resources/img/stars.png)  repeat 0 0;
+  animation: animate 80s infinite;
+  animation-timing-function: linear;
+}
+
+ @keyframes animate{
+  100% {
+    background-position: 1000px 1200px;
+  }
+
+} 
+
+h1{ 
+  color: rgb(226, 229, 233);
+  text-align: center;
+  margin-top: 0.5em;
+  font-family: 'Gemunu Libre', sans-serif;
+  font-size: 90px;
+  letter-spacing: 8px;
+  text-shadow: 0.4rem 0.4rem 1rem rgba(143, 141, 151, 0.8);
+}
+
+.scoreboard {
+  color: rgb(189, 220, 247);
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  text-align:center;
+  margin: 40px;
+  font-size: 23px;
+  letter-spacing: 5px;
+  font-family: 'Gemunu Libre', sans-serif;
+  opacity: 0;
+}
+
+
+
+.time .score .lives {
+  display: flex;
+}
+
+.lives {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* .heart {
+   filter: drop-shadow(0.4rem 0.4rem 1rem rgba(177, 5, 42, 0.8));
+} */
+
+#container {
+  position: relative ;
+  margin: auto;
+  width: 800px;
+  height: 600px;
+  /* border: rgb(197, 15, 15) solid; */
+  /* display: block; */
+}
+
+.characterSelect{
+  z-index: 1;
+  margin-top: -100px;
+  position: absolute;
+  color: aliceblue;
+  width: 800;
+}
+
+.title{
+  text-align: center;
+  font-size: 34px;
+  font-family: 'Gemunu Libre', sans-serif;
+}
+
+.division{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  width: 50%;
+  height: 600px;
+  width: 400px;
+  float: left;
+  background-image: linear-gradient( black, rgba(6, 9, 46, 0.432));
+  
+}
+
+h2{
+  margin-top:32.5px;
+  font-family: 'Gemunu Libre', sans-serif;
+  letter-spacing: 4px;
+}
+
+
+.centered >img{
+ 
+  margin-top: 100px;
+  width: 350px;
+  height: 250px;
+  border-radius: 20%;
+  border-style: solid;
+  border-width: 5px;
+  filter: drop-shadow(30px 10px 4px black);
+
+  border-bottom-color: rgb(1, 1, 253);
+  border-left-color: red;
+  border-right-color: blue;
+  border-top-color: red;
+  
+}
+.centered >img:hover{
+  transform: scale(1.2);
+}
+
+
+.board {
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(rgb(0, 0, 0),rgba(110, 104, 104, 0.178),rgb(0, 0, 0));
+  /* background-image: linear-gradient(rgb(0, 0, 0),rgba(110, 104, 104, 0.219),rgb(0, 0, 0)); */
+  background-color: rgba(143, 141, 151, 0.3);
+  margin-top: 0.5em;
+  font-family: 'Gemunu Libre', sans-serif;
+  font-size: 70px;
+  letter-spacing: 5px;
+  line-height: 1.8;
+  color:rgb(254,0,0,255);
+  text-shadow: 0.4rem 0.4rem 1rem rgb(90, 3, 3);
+  position: absolute;
+  border-radius: 0.5%;
+}
+
+
+#winner {
+  color: aliceblue;
+}
+
+#instruction{
+  opacity: 0;
+  font-size: 30px;
+  color: aliceblue;
+  display: flex;
+  justify-content: space-around;
+}
+
+
+
+#enemy {
+  position:absolute;
+  display: block;
+  opacity: 0;
+  width: 440px;
+  height: 88px;
+}
+
+#dragon{
+  position: absolute;
+  height: 150px;
+  width: 191px;
+  background-image: url("/resources/img/dragon_sprites.png");
+  filter: drop-shadow(0.3rem 0.3rem 0.8rem rgba(52, 83, 59, 0.8));
+  bottom: 0;
+  opacity: 0;
+  transform: scale(0.9);
+
+}
+
+#spaceship{
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  filter: drop-shadow(0.3rem 0.3rem 0.8rem rgba(52, 83, 59, 0.8));
+  bottom: 0;
+  opacity: 0;
+} 
+
+
+#laser{
+  z-index: 2;
+  background-image: url("./resources/img/bullet.png");
+  position: absolute;
+  width: 25px;
+  height: 30px;
+  opacity: 1;
+  /* background-image: url("./resources/img/bullet.png"); */
+}
+.laser{
+  z-index: 2;
+  background-image: url("./resources/img/bullet.png");
+  position: absolute;
+  width: 25px;
+  height: 30px;
+  opacity: 1;
+  /* background-image: url("./resources/img/bullet.png"); */
+}
+
+.aliens {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+
+}
+
+
+.dead {
+  opacity: 0;
+  z-index: -100;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
 }
