@@ -266,8 +266,8 @@ function animateEnemy() {
       started= false
       setTimeout(() => {
         started= true;
-        spaceship.style.left = playArea - middleOfSpaceShip + "px";
-      }, 1500)
+        // spaceship.style.left = playArea - middleOfSpaceShip + "px";
+      }, 1300)
       
       position =0 
       curentY =0  
