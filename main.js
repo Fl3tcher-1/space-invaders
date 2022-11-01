@@ -228,12 +228,6 @@ function animateEnemy() {
   position += 5; //increases x position
 
   //check for boundary collisions to dictate movement direction
-  
-
-  // for(let i=0; i <enem.length; i ++){
-
-  // }
-
 
   if (enemy.getBoundingClientRect().right < container.getBoundingClientRect().right && direction) {
       enemy.style.transform = `translate(${position}px, ${curentY}px)`;
@@ -257,10 +251,12 @@ function animateEnemy() {
 
   
   //CHECKS IF ENEMY HAS REACHED THE BOTTOM/SPACESHIP TO REMOVE LIFE AND CHANGE CORRESPONDING ELEMENTS
+
     if (enemy.getBoundingClientRect().bottom >= spaceship.getBoundingClientRect().top){
       // started = false;
       // wait 3 seconds before starting new play
       // setTimeout(started = true, 3000);
+      
 
       let hearts = Array.from(document.getElementsByClassName('heart'))
       started= false
@@ -272,8 +268,6 @@ function animateEnemy() {
       position =0 
       curentY =0  
       
-      
-      // console.log(hearts.length);
       
        //if no hearts-- game is over
       if(hearts == null || hearts.length ==1 ){ 
@@ -296,6 +290,14 @@ function animateEnemy() {
         cancelAnimationFrame(gameLoop) 
         bullet.remove()
         
+      }
+      let bullet = document.getElementById('laser')
+
+      if(bullet !='null'){
+          bullet.remove()
+          canFire = true
+          bulletVelocity = bulletStart
+
       }
   
       
